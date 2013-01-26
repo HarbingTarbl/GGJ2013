@@ -23,6 +23,7 @@ namespace GGJ2013
 	{
 
 		public static G Instance;
+		public static ContentManager ContentManager;
 		public static SpriteBatch SpriteBatch;
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
@@ -43,9 +44,16 @@ namespace GGJ2013
 			CollisionRenderer = new CollisionRenderer (GraphicsDevice);
 			StateManager = new StateManager ();
 			SpriteBatch = new SpriteBatch (GraphicsDevice);
+			ContentManager = Content;
 
 			var debug1 = new BaseMemoryState("Debug1", "Debug2", "None");
 			debug1.Texture = Content.Load<Texture2D>("Debug1");
+			debug1.NavMesh = new Polygon(
+				new Vector2(0, 0),
+				new Vector2(0, 5),
+				new Vector2(1, 7),
+				new Vector2(2, 9),
+				new Vector2(5, 14));
 
 			var item = new ReminderItem("Circle", Content.Load<Texture2D>("item1"));
 			item.CollisionData = new Circlegon(30);

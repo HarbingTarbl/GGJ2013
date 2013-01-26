@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using GGJ2013.Collision;
+using GGJ2013.Entities;
 using GGJ2013.Items;
 using Jammy;
 using Jammy.Collision;
@@ -24,6 +25,7 @@ namespace GGJ2013.States
 		{
 			Items = new List<ReminderItem>();
 			Hotspots = new List<ActivePolygon>();
+			Player = new Player();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Camera = new CameraSingle(G.Instance.GraphicsDevice.Viewport.Width,
@@ -59,7 +61,7 @@ namespace GGJ2013.States
 		public Texture2D Texture;
 		public Size Size;
 
-		public Sprite Player;
+		public Player Player;
 		public CameraSingle Camera; 
 
 		public MemoryItem Reward;
@@ -81,6 +83,8 @@ namespace GGJ2013.States
 			{
 				item.Draw(batch);
 			}
+
+			Player.Draw(batch);
 		}
 
 		public override void Update(GameTime gameTime)
@@ -93,8 +97,8 @@ namespace GGJ2013.States
 
 
 			//FIX: FIX ME
-			//Player.Update(gameTime);
-			//Camera.CenterOnPoint(Player.Location);
+			Player.Update(gameTime, NavMesh);
+			Camera.CenterOnPoint(Player.Location);
 		}
 
 		public void NextLevel()
