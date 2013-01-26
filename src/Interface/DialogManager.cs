@@ -47,7 +47,7 @@ namespace GGJ2013.Interface
 				{
 					for (var i = 0; i < msg.Lines.Length; i++)
 					{
-						batch.DrawString(Font, msg.Lines[i], new Vector2((MessageBounds.Width) /2f - msg.Width /1.8f, 0) + drawLocation,
+						batch.DrawString(Font, msg.Lines[i], msg.StaticLocation ? msg.Offset : msg.Offset + drawLocation,
 						                 Color.Lerp(msg.Color, new Color(msg.Color.R, msg.Color.G, msg.Color.B, 0), msg.FadeAmount));
 					}
 					drawLocation += new Vector2(0, msg.Height);
@@ -58,14 +58,39 @@ namespace GGJ2013.Interface
 		}
 
 
+		public void PostMessage(string message, Vector2 location, TimeSpan timeUntil, TimeSpan duration, Color? color)
+		{
+			var strMeasure = Font.MeasureString(message);
+			var msg = new Message
+			{
+				StaticLocation = true,
+				Duration = duration,
+				Width = strMeasure.X,
+				TimeUntil = timeUntil,
+				Offset = location,
+				Color = color.HasValue ? color.Value : Color.White
+			};
+
+			msg.Lines = SplitString(message, msg.Width);
+			msg.Height = msg.Lines.Length * (LinePadding + strMeasure.Y);
+
+
+			MessageQueue.Add(msg);
+
+
+			MessageQueue.Sort();
+		}
+
 		public void PostMessage(string message, TimeSpan timeUntil, TimeSpan duration, Color? color = null)
 		{
 			var strMeasure = Font.MeasureString(message);
 			var msg = new Message
 			{
+				StaticLocation = false,
 				Duration = duration,
 				Width = strMeasure.X,
 				TimeUntil = timeUntil,
+				Offset = new Vector2(MessageBounds.Width /2f - strMeasure.X /1.8f, 0),
 				Color = color.HasValue ? color.Value : Color.White
 			};
 
@@ -143,10 +168,14 @@ namespace GGJ2013.Interface
 			public TimeSpan TimeUntil;
 			public TimeSpan Duration;
 
+			public Vector2 Offset = Vector2.Zero;
+
 			public float FadeAmount;
 
 			public float Width;
 			public float Height;
+
+			public bool StaticLocation;
 
 			public Color Color;
 

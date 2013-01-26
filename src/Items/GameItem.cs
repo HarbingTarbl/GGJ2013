@@ -40,6 +40,8 @@ namespace GGJ2013.Items
 			return null;
 		}
 
+		public bool MouseHover;
+
 		public bool IsFound;
 
 		public bool CanPickup;

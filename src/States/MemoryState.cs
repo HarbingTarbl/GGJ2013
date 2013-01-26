@@ -106,6 +106,22 @@ namespace GGJ2013.States
 			if (G.DebugCollision)
 				DrawDebug();
 
+			var mouse = Mouse.GetState();
+			for (var i = 0; i < Items.Count; i++)
+			{
+
+				var item = Items[i];
+				if (!item.IsActive)
+					continue;
+
+				if ( //TODO this is buggy. Needs actual player collision
+					CollisionChecker.PointToPoly(new Vector2(mouse.X, mouse.Y), item.CollisionData))
+				{
+					G.DialogManager.PostMessage(item.Name, Vector2.Transform(item.CollisionData.Location + new Vector2(item.CollisionData.Width /2f, -10), Camera.Transformation), TimeSpan.Zero,
+					                            TimeSpan.Zero, Color.Gray);
+				}
+			}
+
 			G.InventoryManager.Draw(batch);
 			G.DialogManager.Draw(batch);
 
@@ -126,6 +142,30 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState();
 			var target = new Vector2(mouse.X, mouse.Y);
 
+
+			for (var i = 0; i < Items.Count; i++)
+			{
+				
+				var item = Items[i];
+				if (item.IsFound || !item.IsActive)
+					continue;
+
+				if ( //TODO this is buggy. Needs actual player collision
+					CollisionChecker.PointToPoly(target, item.CollisionData))
+				{
+					if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
+					{
+						OnItemFound(item);
+						if (item.CanPickup)
+						{
+							G.InventoryManager.CurrentItems.Add(item.Name);
+							Items.RemoveAt(i);
+						}
+					}
+					break;
+
+				}
+			}
 
 			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
@@ -168,25 +208,7 @@ namespace GGJ2013.States
 					Trace.WriteLine ("Did not click in a valid polygon");
 				}
 				
-				for (var i = 0; i < Items.Count; i++)
-				{
-					var item = Items[i];
-					if(item.IsFound || !item.IsActive)
-						continue;
-
-					if ( //TODO this is buggy. Needs actual player collision
-						CollisionChecker.PointToPoly(target, item.CollisionData))
-					{
-						OnItemFound(item);
-						if (item.CanPickup)
-						{
-							G.InventoryManager.CurrentItems.Add(item.Name);
-							Items.RemoveAt(i);
-						}
-						break;
-						
-					}
-				}
+				
 
 				foreach (var spot in Hotspots)
 				{
