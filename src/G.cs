@@ -64,19 +64,31 @@ namespace GGJ2013
 
 		private void LoadTestContent()
 		{
-			var debug1 = new BaseMemoryState ("Debug1", "Debug2", "None");
-			debug1.Texture = Content.Load<Texture2D> ("Debug1");
-			debug1.NavMesh = new Polygon (
-				new Vector2 (0, 0),
-				new Vector2 (0, 5),
-				new Vector2 (1, 7),
-				new Vector2 (2, 9),
-				new Vector2 (5, 14));
+			var debug1 = new BaseMemoryState("Debug1", "Debug2", "None");
+			debug1.Texture = Content.Load<Texture2D>("Debug1");
+			debug1.NavMesh = new Polygon(
+				new Vector2(100, 10),
+				new Vector2(200, 20),
+				new Vector2(300, 25),
+				new Vector2(400, 30),
+				new Vector2(400, 400), 
+				new Vector2(400, 500));
 
-			var item = new ReminderItem ("Circle", Content.Load<Texture2D> ("item1"));
-			item.CollisionData = new Circlegon (30);
-			item.Location = new Vector2 (250, 200);
-			debug1.Items.Add (item);
+			var item = new ReminderItem("Circle", Content.Load<Texture2D>("item1"));
+			item.CollisionData = new Circlegon(30);
+			item.Location = new Vector2(250, 200);
+			debug1.Items.Add(item);
+
+			var debug2 = new BaseMemoryState("Debug2", "Debug3", "Debug1");
+			debug2.Texture = Content.Load<Texture2D>("Debug2");
+
+			var debug3 = new BaseMemoryState("Debug3", "Debug1", "Debug2");
+			debug3.Texture = Content.Load<Texture2D>("Debug3");
+		
+			debug2.Hotspots.Add(new ActivePolygon(new Rectagon(60, 90, 100, 200), t => StateManager.Push(debug3)));
+			debug3.Hotspots.Add(new ActivePolygon(new Rectagon(10, 100, 50, 300), t => StateManager.Push(debug1)));
+
+			StateManager.Push(debug1);
 		}
 
 		protected override void UnloadContent()

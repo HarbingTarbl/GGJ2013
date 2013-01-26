@@ -28,7 +28,7 @@ namespace GGJ2013.States
 			Player = new Player();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
-			Camera = new CameraSingle(G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
+			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 			
 			NextState = nextState;
 		}
@@ -96,12 +96,21 @@ namespace GGJ2013.States
 		public override bool HandleInput(GameTime gameTime)
 		{
 			var cMouse = Mouse.GetState();
+			var target = new Vector2(cMouse.X, cMouse.Y);
+
 
 			if (cMouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
+				Player.Destination = target;
+
+
 				foreach (var item in Items)
 				{
-					if (!CollisionChecker.PointToPoly(Camera.ScreenToWorld(new Vector2(cMouse.X, cMouse.Y)), (Polygon) item.CollisionData)) continue;
+
+					if (Vector2.DistanceSquared(Player.Location, item.CollisionData.AbsoluteCenter) > 128
+					    && !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target),
+					                                     (Polygon) item.CollisionData)) continue;
+
 					if (item.IsFound) continue;
 
 					OnItemFound(item);
@@ -110,7 +119,8 @@ namespace GGJ2013.States
 
 				foreach (var spot in Hotspots)
 				{
-					if (!CollisionChecker.PointToPoly(Camera.ScreenToWorld(new Vector2(cMouse.X, cMouse.Y)), spot)) continue;
+					if (Vector2.DistanceSquared(Player.Location, spot.AbsoluteCenter) > 128
+						&& !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), spot)) continue;
 					spot.OnActivate(this);
 					break;
 				}
@@ -180,6 +190,7 @@ namespace GGJ2013.States
 			{
 				G.CollisionRenderer.DrawPolygon (hotspot, Color.Red);
 			}
+			G.CollisionRenderer.DrawPolygon (NavMesh, Color.Black);
 			G.CollisionRenderer.Stop ();
 		}
 	}
