@@ -26,26 +26,9 @@ namespace GGJ2013.States
 			Hotspots = new List<ActivePolygon>();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
-			Camera = new CameraSingle(G.Instance.GraphicsDevice.Viewport.Width,
-			                          G.Instance.GraphicsDevice.Viewport.Height);
+			Camera = new CameraSingle(G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 			
 			NextState = nextState;
-		}
-
-		public override void OnFocus()
-		{
-			G.Camera = Camera;
-			base.OnFocus();
-		}
-
-		public override void Load()
-		{
-			base.Load();
-		}
-
-		public override void PostLoad()
-		{
-			base.PostLoad();
 		}
 
 		public List<ReminderItem> Items;
@@ -73,24 +56,29 @@ namespace GGJ2013.States
 		public event Action<BaseMemoryState, ReminderItem> ItemFound;
 		public event Action<BaseMemoryState> LevelComplete;
 
-		public override void Draw(SpriteBatch batch)
+		public override void Draw (SpriteBatch batch)
 		{
-			batch.Draw(Texture, Vector2.Zero, Color.White);
+			batch.Begin (
+				SpriteSortMode.Deferred,
+			    BlendState.NonPremultiplied,
+			    SamplerState.PointClamp,
+			    DepthStencilState.Default,
+			    RasterizerState.CullCounterClockwise,
+			    null,
+				Camera.Transformation);
 
-			foreach (var item in Items)
-			{
-				item.Draw(batch);
-			}
+			batch.Draw (Texture, Vector2.Zero, Color.White);
+			Items.ForEach (i => i.Draw (batch));
+
+			batch.End();
+
+			if (G.DebugCollision)
+				DrawDebug();
 		}
 
 		public override void Update(GameTime gameTime)
 		{
-			foreach (var item in Items)
-			{
-				item.Update(gameTime);
-			}
-
-
+			Items.ForEach (i => i.Update (gameTime));
 
 			//FIX: FIX ME
 			//Player.Update(gameTime);
@@ -100,7 +88,7 @@ namespace GGJ2013.States
 		public void NextLevel()
 		{
 			G.StateManager.Pop();
-			G.StateManager.Push(NextState);
+			G.StateManager.Push (NextState);
 		}
 
 		public override bool HandleInput(GameTime gameTime)
@@ -141,7 +129,7 @@ namespace GGJ2013.States
 			return base.HandleInput(gameTime);
 		}
 
-		protected void OnItemFound(ReminderItem item)
+		protected void OnItemFound (ReminderItem item)
 		{
 			if (ItemsToLeave.Contains(item.Name))
 			{
@@ -176,8 +164,21 @@ namespace GGJ2013.States
 
 		}
 
-
 		private MouseState _oldMouse;
 		private KeyboardState _oldKey;
+
+		private void DrawDebug()
+		{
+			G.CollisionRenderer.Begin (Camera.Transformation);
+			foreach (var item in Items)
+			{
+				G.CollisionRenderer.Draw (item, Color.Lime);
+			}
+			foreach (var hotspot in Hotspots)
+			{
+				G.CollisionRenderer.DrawPolygon (hotspot, Color.Red);
+			}
+			G.CollisionRenderer.Stop ();
+		}
 	}
 }
