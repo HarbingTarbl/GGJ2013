@@ -83,7 +83,10 @@ namespace GGJ2013.States
 
 		public override void Update(GameTime gameTime)
 		{
-
+			foreach (var item in Items)
+			{
+				item.Update(gameTime);
+			}
 			//FIX: FIX ME
 			//Player.Update(gameTime);
 			//Camera.CenterOnPoint(Player.Location);

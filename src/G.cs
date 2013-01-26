@@ -48,7 +48,7 @@ namespace GGJ2013
 			debug1.Texture = Content.Load<Texture2D>("Debug1");
 
 			var item = new ReminderItem("Circle", Content.Load<Texture2D>("item1"));
-			item.CollisionData = new Circlegon(60);
+			item.CollisionData = new Circlegon(30);
 			item.Location = new Vector2(150, 200);
 			debug1.Items.Add(item);
 
