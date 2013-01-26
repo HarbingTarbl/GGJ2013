@@ -63,7 +63,7 @@ namespace GGJ2013
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 			SpriteBatch.Begin(SpriteSortMode.Deferred,
-				BlendState.Additive,
+				BlendState.NonPremultiplied,
 				SamplerState.PointClamp,
 				DepthStencilState.None,
 			    RasterizerState.CullNone,
