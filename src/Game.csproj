@@ -111,10 +111,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision\Hotspot.cs" />
-    <Compile Include="Dialog\DialogManager.cs" />
+    <Compile Include="Interface\DialogManager.cs" />
+    <Compile Include="Interface\ItemViewer.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Graphics\BloomComponent.cs" />
     <Compile Include="Graphics\BloomSettings.cs" />
+    <Compile Include="Interface\IventoryManager.cs" />
     <Compile Include="Items\LevelItem.cs" />
     <Compile Include="Items\MemoryItem.cs" />
     <Compile Include="Items\GameItem.cs" />

@@ -50,6 +50,8 @@ namespace GGJ2013.Items
 
 		public string Name;
 
+		public string Description;
+
 		public void Clicked(MemoryState ugh)
 		{
 			IsFound = true;

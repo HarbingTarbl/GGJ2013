@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.Collision;
-using GGJ2013.Dialog;
+using GGJ2013.Interface;
 using GGJ2013.Entities;
 using GGJ2013.Items;
 using Jammy;
@@ -234,7 +234,7 @@ namespace GGJ2013.States
 			};
 		}
 
-		protected  GameItem CreateItem (string name, string texturePath,
+		protected  GameItem CreateItem (string name, string description, string texturePath,
 			int radius, int x, int y)
 		{
 			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))

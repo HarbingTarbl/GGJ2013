@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GGJ2013.Dialog
+namespace GGJ2013.Interface
 {
 	public class DialogManager
 	{
