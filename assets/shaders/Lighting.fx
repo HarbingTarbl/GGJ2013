@@ -1,7 +1,7 @@
 
 
-sampler LightmaskSampler : register(0);
-sampler SceneSampler : register(1);
+sampler LightmaskSampler : register(s0);
+sampler SceneSampler : register(s1);
 
 float minIntensity;
 float maxIntensity;
@@ -9,11 +9,10 @@ float lerpValue;
 
 float minFlicker;
 float maxFlicker;
-float lerpValue;
 
 
 
-float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
+float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR0
 {
     // TODO: add your pixel shader code here.
 

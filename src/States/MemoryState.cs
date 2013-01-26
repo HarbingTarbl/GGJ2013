@@ -68,23 +68,10 @@ namespace GGJ2013.States
 
 		public override void Draw (SpriteBatch batch)
 		{
-<<<<<<< HEAD:src/States/BaseMemoryState.cs
 			G.BloomRenderer.BeginDraw();
 
-			batch.Begin (
-				SpriteSortMode.Deferred,
-			    BlendState.NonPremultiplied,
-			    SamplerState.PointClamp,
-			    DepthStencilState.Default,
-			    RasterizerState.CullCounterClockwise,
-			    null,
-				Camera.Transformation);
-
-			batch.Draw (Texture, Vector2.Zero, Color.White);
-=======
 			BeginDraw (batch, BlendState.NonPremultiplied);
 			batch.Draw (Background, Vector2.Zero, Color.White);
->>>>>>> 6e5fbb69ad5be00bbe83d97d4cc441429a472fd4:src/States/MemoryState.cs
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
 			batch.End();

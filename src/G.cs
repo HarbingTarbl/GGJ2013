@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GGJ2013.Collision;
-<<<<<<< HEAD
-using GGJ2013.Graphics;
-=======
 using GGJ2013.Entities;
->>>>>>> 6e5fbb69ad5be00bbe83d97d4cc441429a472fd4
+using GGJ2013.Graphics;
 using GGJ2013.Items;
 using GGJ2013.States;
 using Jammy;
@@ -36,16 +33,11 @@ namespace GGJ2013
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
 		public static GraphicsDeviceManager Graphics;
-<<<<<<< HEAD
 		public static BloomComponent BloomRenderer;
 		public static GameTime GameTime;
 		public static bool DebugCollision = false;
-=======
-		public static bool DebugCollision = true;
-		public static string LastScreen;
-		
+		public static string LastScreen;	
 		public static Player Player;
->>>>>>> 6e5fbb69ad5be00bbe83d97d4cc441429a472fd4
 
 		public static readonly int SCREEN_WIDTH = 1280;
 		public static readonly int SCREEN_HEIGHT = 720;
