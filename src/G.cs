@@ -30,18 +30,24 @@ namespace GGJ2013
 		public static GraphicsDeviceManager Graphics;
 		public static bool DebugCollision = false;
 
-		public G()
-		{
-			Graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Content";
-		}
+		public static readonly int SCREEN_WIDTH = 1280;
+		public static readonly int SCREEN_HEIGHT = 720;
 
 		protected override void LoadContent()
 		{
+			IsMouseVisible = true;
+			Content.RootDirectory = "Content";
+
+			Graphics = new GraphicsDeviceManager (this);
+			Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+			Graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+			Graphics.IsFullScreen = false;
+			Graphics.ApplyChanges();
+
 			Instance = this;
 			IsMouseVisible = true;
 			CollisionRenderer = new CollisionRenderer (GraphicsDevice);
-			StateManager = new StateManager ();
+			StateManager = new StateManager();
 			SpriteBatch = new SpriteBatch (GraphicsDevice);
 
 			var debug1 = new BaseMemoryState("Debug1", "Debug2", "None");
