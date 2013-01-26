@@ -24,6 +24,8 @@ namespace GGJ2013.States
 		{
 			Items = new List<ReminderItem>();
 			Hotspots = new List<ActivePolygon>();
+			ItemsToLeave = new List<string>();
+			ItemsToRemember = new List<string>();
 			Camera = new CameraSingle(LiterallyHitler.Instance.GraphicsDevice.Viewport.Width,
 			                          LiterallyHitler.Instance.GraphicsDevice.Viewport.Height);
 			NextState = nextState;
@@ -48,6 +50,9 @@ namespace GGJ2013.States
 		public List<ReminderItem> Items;
 		public List<ActivePolygon> Hotspots;
 
+		public List<string> ItemsToLeave;
+		public List<string> ItemsToRemember; 
+
 		public Texture2D Texture;
 		public Size Size;
 
@@ -57,12 +62,12 @@ namespace GGJ2013.States
 		public MemoryItem Reward;
 
 		public bool IsLevelComplete;
+		public bool CanLeaveLevel;
+
 		public string NextState;
 
-		public event Action<bool, ReminderItem> ItemFound;
+		public event Action<HitlerGameState, ReminderItem> ItemFound;
 		public event Action<HitlerGameState> LevelComplete;
-
-		public StaticParallax ParallaxLayer;
 
 		public override void Draw(SpriteBatch batch)
 		{
@@ -76,7 +81,8 @@ namespace GGJ2013.States
 
 		public override void Update(GameTime gameTime)
 		{
-
+			Player.Update(gameTime);
+			Camera.CenterOnPoint(Player.Location);
 		}
 
 		public void NextLevel()
@@ -119,15 +125,26 @@ namespace GGJ2013.States
 
 		protected void OnItemFound(ReminderItem item)
 		{
-			_foundItems++;
+			if (ItemsToLeave.Contains(item.Name))
+			{
+				ItemsToLeave.Remove(item.Name);
+			}
 
-			item.Clicked(_foundItems == Items.Count);
+			if (ItemsToRemember.Contains(item.Name))
+			{
+				ItemsToRemember.Remove(item.Name);
+			}
+
+			CanLeaveLevel = (ItemsToLeave.Count == 0);
+			IsLevelComplete = (ItemsToRemember.Count == 0);
+
+			item.Clicked(this);
 
 			var handler = ItemFound;
 			if (handler != null)
-				handler(_foundItems == Items.Count, item);
+				handler(this, item);
 
-			if (_foundItems == Items.Count)
+			if (IsLevelComplete)
 				OnLevelComplete();
 		}
 
