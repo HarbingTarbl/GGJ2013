@@ -32,11 +32,7 @@ namespace GGJ2013.States
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Lights = new List<Sprite>();
-			Dialog = new DialogManager()
-			{
-				MessageBounds = new Rectangle(15, 15, 300, 300),
-				Font = G.C.Load<SpriteFont>("fonts/debug"),
-			};
+
 			NextLevel = next;
 			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
@@ -50,7 +46,6 @@ namespace GGJ2013.States
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
 		public List<Sprite> Lights; 
-		public DialogManager Dialog;
 		
 
 		// I want to get rid of this whole chunk so bad
@@ -99,7 +94,7 @@ namespace GGJ2013.States
 				DrawDebug();
 
 			G.InventoryManager.Draw(batch);
-			Dialog.Draw(batch);
+			G.DialogManager.Draw(batch);
 
 		}
 
@@ -110,7 +105,7 @@ namespace GGJ2013.States
 			Player.Update(gameTime);
 			Camera.CenterOnPoint(Player.Location.X + Player.Texture.Width/2f, Background.Width/2f);
 
-			Dialog.Update(gameTime);
+			G.DialogManager.Update(gameTime);
 		}
 
 		public override bool HandleInput (GameTime gameTime)
@@ -127,8 +122,13 @@ namespace GGJ2013.States
 			{
 				if (G.InventoryManager.IsShown)
 				{
-					LastLevel = CurrentItem;
+					LastItem = CurrentItem;
 					CurrentItem = G.InventoryManager.SelectItemAt(target);
+					if (!string.IsNullOrEmpty(CurrentItem))
+					{
+						G.DialogManager.PostMessage(GameItem.ItemDictionary[CurrentItem].Description, TimeSpan.Zero, new TimeSpan(0, 0, 5),
+						                            Color.White);
+					}
 				}
 
 				if (G.Active)
@@ -258,7 +258,8 @@ namespace GGJ2013.States
 			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
 			{
 				CollisionData = new Circlegon (radius),
-				Location = new Vector2 (x, y)
+				Location = new Vector2 (x, y),
+				Description = description
 			};
 			return item;
 		}

@@ -27,7 +27,7 @@ namespace GGJ2013.Interface
 		{
 			point -= Bounds.Location;
 			var item = (int)(point.X/(100 + SlotPadding.X));
-			if (item > CurrentItems.Count)
+			if (item < CurrentItems.Count)
 				return CurrentItems[item];
 
 			return null;

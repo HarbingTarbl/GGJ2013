@@ -73,8 +73,8 @@ namespace GGJ2013
 						}
 						else
 						{
-							Dialog.PostMessage("I should put on some clothes... ", TimeSpan.Zero, new TimeSpan(0, 0, 5));
-							Dialog.PostMessage("and grab my flashlight.", new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 5));
+							G.DialogManager.PostMessage("I should put on some clothes... ", TimeSpan.Zero, new TimeSpan(0, 0, 5));
+							G.DialogManager.PostMessage("and grab my flashlight.", new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 5));
 						}
 					});
 
@@ -110,7 +110,7 @@ namespace GGJ2013
 
 		protected override void OnLevelComplete()
 		{
-			Dialog.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
+			G.DialogManager.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
 
 		}
 
@@ -138,7 +138,7 @@ namespace GGJ2013
 
 			if (Keyboard.GetState().IsKeyDown(Keys.Space))
 			{
-				Dialog.PostQueuedMessage("Spaaaaaace", new TimeSpan(0, 0, 5));
+				G.DialogManager.PostQueuedMessage("Spaaaaaace", new TimeSpan(0, 0, 5));
 			}
 
 			return base.HandleInput(gameTime);
