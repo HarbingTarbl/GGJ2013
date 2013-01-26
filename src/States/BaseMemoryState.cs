@@ -74,6 +74,8 @@ namespace GGJ2013.States
 
 		public override void Draw (SpriteBatch batch)
 		{
+			G.BloomRenderer.BeginDraw();
+
 			batch.Begin (
 				SpriteSortMode.Deferred,
 			    BlendState.NonPremultiplied,
@@ -87,6 +89,8 @@ namespace GGJ2013.States
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
 			batch.End();
+
+			G.BloomRenderer.Draw(G.GameTime);
 
 			if (G.DebugCollision)
 				DrawDebug();

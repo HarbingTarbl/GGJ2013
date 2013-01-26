@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="Collision\ActivePolygon.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Graphics\BloomComponent.cs" />
+    <Compile Include="Graphics\BloomSettings.cs" />
     <Compile Include="Items\LevelItem.cs" />
     <Compile Include="Items\MemoryItem.cs" />
     <Compile Include="Items\ReminderItem.cs" />

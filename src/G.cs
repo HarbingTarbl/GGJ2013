@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GGJ2013.Collision;
+using GGJ2013.Graphics;
 using GGJ2013.Items;
 using GGJ2013.States;
 using Jammy;
@@ -31,6 +32,8 @@ namespace GGJ2013
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
 		public static GraphicsDeviceManager Graphics;
+		public static BloomComponent BloomRenderer;
+		public static GameTime GameTime;
 		public static bool DebugCollision = false;
 
 		public static readonly int SCREEN_WIDTH = 1280;
@@ -45,11 +48,15 @@ namespace GGJ2013
 			Graphics.IsFullScreen = false;
 			Graphics.ApplyChanges();
 
+
 			IsMouseVisible = true;
 			CollisionRenderer = new CollisionRenderer (GraphicsDevice);
 			StateManager = new StateManager();
 			SpriteBatch = new SpriteBatch (GraphicsDevice);
 			C = Content;
+			BloomRenderer = new BloomComponent(this);
+			BloomRenderer.LoadContent();
+
 
 			LoadRealContent();
 			//LoadTestContent();
@@ -92,10 +99,40 @@ namespace GGJ2013
 
 		protected override void UnloadContent()
 		{
+			BloomRenderer.UnloadContent();
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
+			GameTime = gameTime;
+
+			BloomRenderer.Settings =
+				BloomSettings.PresetSettings[
+				                             Keyboard.GetState().IsKeyDown(Keys.NumPad0)
+					                             ? 0
+					                             : Keyboard.GetState().IsKeyDown(Keys.NumPad1)
+						                               ? 1
+						                               : Keyboard.GetState().IsKeyDown(Keys.NumPad2)
+							                                 ? 2
+							                                 : Keyboard.GetState().IsKeyDown(Keys.NumPad3)
+								                                   ? 3
+								                                   : Keyboard.GetState().IsKeyDown(Keys.NumPad4)
+									                                     ? 4
+									                                     : Keyboard.GetState().IsKeyDown(Keys.NumPad5) ? 5 : 0
+					];
+
+			if (Keyboard.GetState().IsKeyDown(Keys.F2))
+			{
+				BloomRenderer.ShowBuffer = BloomComponent.IntermediateBuffer.PreBloom;
+			}
+
+			if (Keyboard.GetState().IsKeyDown(Keys.F3))
+			{
+				BloomRenderer.ShowBuffer = BloomComponent.IntermediateBuffer.FinalResult;
+			}
+
+
+
 			StateManager.Update(gameTime);
 			base.Update(gameTime);
 		}
