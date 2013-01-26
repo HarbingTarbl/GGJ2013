@@ -25,7 +25,10 @@ namespace GGJ2013.States
 		{
 			Items = new List<ReminderItem>();
 			Hotspots = new List<ActivePolygon>();
-			Player = new Player();
+			Player = new Player()
+			{
+				Location = new Vector2(G.SCREEN_WIDTH/2f, G.SCREEN_HEIGHT/2f)
+			};
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
@@ -40,6 +43,17 @@ namespace GGJ2013.States
 		public List<string> ItemsToRemember;
 
 		public Polygon NavMesh;
+		public Polygon InsideMesh
+		{
+			get { return _insideMesh; }
+			set
+			{
+				_insideMesh = value;
+				OutsideMeshes = Polygon.Clip(new Rectagon(0, 0, G.SCREEN_WIDTH, G.SCREEN_HEIGHT), value);
+			}
+
+		}
+		public List<Polygon> OutsideMeshes;
 
 		public Texture2D Texture;
 		public Size Size;
@@ -101,7 +115,39 @@ namespace GGJ2013.States
 
 			if (cMouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
-				Player.Destination = target;
+
+				if (CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), InsideMesh))
+				{
+					Player.Destination = target;
+					Player.Direction = Player.Destination - Player.Location;
+					Player.Direction.Normalize();
+					var line = new Polygon(Player.Location, Player.Destination);
+					foreach (var poly in OutsideMeshes)
+					{
+						if (!CollisionChecker.PolyToPoly(line, poly)) //Use nav
+						{
+							var closest = 0;
+							var dist = Vector2.Distance(NavMesh.Vertices[0], Player.Location);
+							for (var i = 1; i < NavMesh.Vertices.Count; i++)
+							{
+								var testDist = Vector2.DistanceSquared(NavMesh.Vertices[i], Player.Location);
+								if(testDist < dist)
+								{
+									closest = i;
+									dist = testDist;
+								}
+							}
+
+
+							Player.Direction = Player.Location - NavMesh.Vertices[closest];
+							Player.Direction.Normalize();
+
+							break;
+						}
+					}
+
+
+				}
 
 
 				foreach (var item in Items)
@@ -127,7 +173,7 @@ namespace GGJ2013.States
 			}
 
 			var keystate = Keyboard.GetState();
-			Camera.Location += new Vector2((keystate.IsKeyDown(Keys.D) ? 1 : 0) - (keystate.IsKeyDown(Keys.A) ? 1 : 0),
+			Player.Location += new Vector2((keystate.IsKeyDown(Keys.D) ? 1 : 0) - (keystate.IsKeyDown(Keys.A) ? 1 : 0),
 			                               (keystate.IsKeyDown(Keys.S) ? 1 : 0 - (keystate.IsKeyDown(Keys.W) ? 1 : 0)));
 
 			if (keystate.IsKeyDown(Keys.F1)
@@ -178,6 +224,7 @@ namespace GGJ2013.States
 
 		private MouseState _oldMouse;
 		private KeyboardState _oldKey;
+		private Polygon _insideMesh;
 
 		private void DrawDebug()
 		{
@@ -191,6 +238,12 @@ namespace GGJ2013.States
 				G.CollisionRenderer.DrawPolygon (hotspot, Color.Red);
 			}
 			G.CollisionRenderer.DrawPolygon (NavMesh, Color.Black);
+			G.CollisionRenderer.DrawPolygon(InsideMesh, Color.Purple);
+
+			foreach (var poly in OutsideMeshes)
+			{
+				G.CollisionRenderer.DrawPolygon(poly, Color.Yellow);
+			}
 			G.CollisionRenderer.Stop ();
 		}
 	}

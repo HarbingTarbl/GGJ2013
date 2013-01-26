@@ -23,43 +23,9 @@ namespace GGJ2013.Entities
 
 		public void Update(GameTime gameTime, Polygon nav)
 		{
-			return;
-				var i = 1;
-				var oldDist = Vector2.Distance(Location, nav.Vertices[0] + nav.Location);
-				var index = 0;
-				for (; i < nav.Vertices.Count; i++)
-				{
-					var dist = Vector2.Distance(Location, nav.Vertices[i] + nav.Location);
-					if (dist < oldDist)
-					{
-						oldDist = dist;
-						index = i;
-					}
-				}
-				i = index;
-				if (Destination.X - Location.X > 0
-				    && i < nav.Vertices.Count - 1)
-				{
-					Destination = nav.Vertices[i + 1];
-					Direction = nav.Vertices[i + 1] - Location;
-					Direction.Normalize();
-				}
-				else if (i > 0
-				         && i < nav.Vertices.Count)
-				{
-					Destination = nav.Vertices[i - 1];
-					Direction = Location -  nav.Vertices[i - 1];
-					Direction.Normalize();
-				}
-				else
-				{
-					Destination = Location;
-					Direction = Vector2.Zero;
-				}
-
-				if(Vector2.Distance(Destination, Location) > 100)
-					Location += Direction*Speed*gameTime.ElapsedGameTime.Milliseconds;
-		
+			if (Vector2.Distance(Location, Destination) < 25)
+				Direction = Vector2.Zero;
+			Location += Direction*Speed*gameTime.ElapsedGameTime.Milliseconds;
 
 			Update(gameTime);
 		}
