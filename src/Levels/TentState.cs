@@ -36,10 +36,10 @@ namespace GGJ2013
 			Nav.Add (new PolyNode (p1));
 			#endregion
 
-			Blanket = CreateItem ("Blanket", "TentArea/blanket", 30, 300, 503);
-			Flash = CreateItem ("Flashlight", "TentArea/flashlight", 30, 587, 436);
-			Bag = CreateItem ("Bag", "TentArea/dufflebag", 30, 723, 444);
-			Sweater = CreateItem("Sweater", "TentArea/sweater", 30, 500, 550);
+			Blanket = CreateItem ("Blanket", "A warm blanket", "TentArea/blanket", 30, 300, 503);
+			Flash = CreateItem ("Flashlight", "A bright flashlight", "TentArea/flashlight", 30, 587, 436);
+			Bag = CreateItem ("Bag", "A bag", "TentArea/dufflebag", 30, 723, 444);
+			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", 30, 500, 550);
 
 			Blanket.OnClick += (t) =>
 			{

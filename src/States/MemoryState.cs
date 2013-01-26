@@ -51,6 +51,7 @@ namespace GGJ2013.States
 		public List<PolyNode> Nav;
 		public List<Sprite> Lights; 
 		public DialogManager Dialog;
+		
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -61,6 +62,9 @@ namespace GGJ2013.States
 
 		public string NextLevel;
 		public string LastLevel;
+
+		public string CurrentItem;
+		public string LastItem;
 
 		protected virtual void OnLevelStart(string LastScreen) { }
 		protected virtual void OnLevelComplete() { }
@@ -94,7 +98,9 @@ namespace GGJ2013.States
 			if (G.DebugCollision)
 				DrawDebug();
 
+			G.InventoryManager.Draw(batch);
 			Dialog.Draw(batch);
+
 		}
 
 		public override void Update(GameTime gameTime)
@@ -112,8 +118,19 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState();
 			var target = new Vector2(mouse.X, mouse.Y);
 
+			if (CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
+				G.InventoryManager.IsShown = true;
+			else G.InventoryManager.IsShown = false;
+
+
 			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
+				if (G.InventoryManager.IsShown)
+				{
+					LastLevel = CurrentItem;
+					CurrentItem = G.InventoryManager.SelectItemAt(target);
+				}
+
 				if (G.Active)
 				{
 					var t = Camera.ScreenToWorld (target);
@@ -153,6 +170,7 @@ namespace GGJ2013.States
 						OnItemFound(item);
 						if (item.CanPickup)
 						{
+							G.InventoryManager.CurrentItems.Add(item.Name);
 							Items.RemoveAt(i);
 						}
 						break;
