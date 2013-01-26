@@ -49,11 +49,12 @@ namespace GGJ2013
 			var debug1 = new BaseMemoryState("Debug1", "Debug2", "None");
 			debug1.Texture = Content.Load<Texture2D>("Debug1");
 			debug1.NavMesh = new Polygon(
-				new Vector2(0, 0),
-				new Vector2(0, 5),
-				new Vector2(1, 7),
-				new Vector2(2, 9),
-				new Vector2(5, 14));
+				new Vector2(100, 10),
+				new Vector2(200, 20),
+				new Vector2(300, 25),
+				new Vector2(400, 30),
+				new Vector2(400, 400), 
+				new Vector2(400, 500));
 
 			var item = new ReminderItem("Circle", Content.Load<Texture2D>("item1"));
 			item.CollisionData = new Circlegon(30);
@@ -67,14 +68,12 @@ namespace GGJ2013
 
 			var debug3 = new BaseMemoryState("Debug3", "Debug1", "Debug2");
 			debug3.Texture = Content.Load<Texture2D>("Debug3");
-			debug1.Hotspots.Add(new ActivePolygon(new Rectagon(30, 30, 50, 50), t => StateManager.Push(debug2)));
+		
 
 			debug2.Hotspots.Add(new ActivePolygon(new Rectagon(60, 90, 100, 200), t => StateManager.Push(debug3)));
 
 			debug3.Hotspots.Add(new ActivePolygon(new Rectagon(10, 100, 50, 300), t => StateManager.Push(debug1)));
 
-			StateManager.Push(debug3);
-			StateManager.Push(debug2);
 			StateManager.Push(debug1);
 
 		}
@@ -120,6 +119,7 @@ namespace GGJ2013
 				{
 					CollisionRenderer.DrawPolygon(hotspot, Color.Red);
 				}
+				CollisionRenderer.DrawPolygon(state.NavMesh, Color.Black);
 				CollisionRenderer.Stop();
 			}
 			base.Draw(gameTime);
