@@ -121,7 +121,7 @@
     <Compile Include="Items\LevelItem.cs" />
     <Compile Include="Items\MemoryItem.cs" />
     <Compile Include="Items\GameItem.cs" />
-    <Compile Include="Levels\TentState.cs" />
+    <Compile Include="States\TentState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="G.cs" />

@@ -32,14 +32,22 @@ namespace GGJ2013.States
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Lights = new List<Sprite>();
-			Dialog = new DialogManager()
-			{
-				MessageBounds = new Rectangle(15, 15, 300, 300),
-				Font = G.C.Load<SpriteFont>("fonts/debug"),
-			};
+
 			NextLevel = next;
 			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
+
+			InventoryOpen = new Hotspot( //Replace with Sprite
+				new Rectagon(10, 5, 30, 20),
+				t =>
+				{
+					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
+					InventoryOpen.Location.Y += G.InventoryManager.IsShown
+						                          ? G.InventoryManager.Bounds.Bottom
+						                          : -G.InventoryManager.Bounds.Bottom;
+				});
+
+			Hotspots.Add(InventoryOpen);
 		}
 
 		public Player Player;
@@ -49,8 +57,9 @@ namespace GGJ2013.States
 		public List<GameItem> Items;
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
-		public List<Sprite> Lights; 
-		public DialogManager Dialog;
+		public List<Sprite> Lights;
+
+		public Hotspot InventoryOpen;
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -97,9 +106,33 @@ namespace GGJ2013.States
 			if (G.DebugCollision)
 				DrawDebug();
 
+			ShowItemHint();
 			G.InventoryManager.Draw(batch);
-			Dialog.Draw(batch);
+			G.DialogManager.Draw(batch);
 
+		}
+
+		private void ShowItemHint()
+		{
+			var mouse = Mouse.GetState();
+			for (var i = 0; i < Items.Count; i++)
+			{
+				var item = Items[i];
+				if (!item.IsActive)
+				{
+					continue;
+				}
+
+				if ( //TODO this is buggy. Needs actual player collision
+					CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), item.CollisionData))
+				{
+					G.DialogManager.PostMessage (item.Name,
+					                             Vector2.Transform (
+						                             item.CollisionData.Location + new Vector2 (item.CollisionData.Width/2f, -10),
+						                             Camera.Transformation), TimeSpan.Zero,
+					                             TimeSpan.Zero, Color.Gray);
+				}
+			}
 		}
 
 		public override void Update(GameTime gameTime)
@@ -109,78 +142,82 @@ namespace GGJ2013.States
 			Player.Update(gameTime);
 			Camera.CenterOnPoint(Player.Location.X + Player.Texture.Width/2f, Background.Width/2f);
 
-			Dialog.Update(gameTime);
+			G.DialogManager.Update(gameTime);
 		}
 
-		public override bool HandleInput (GameTime gameTime)
+
+		public override bool HandleInput(GameTime gameTime)
 		{
-			var mouse = Mouse.GetState();
-			var target = new Vector2(mouse.X, mouse.Y);
+			if (!G.Active)
+				return false;
 
-			if (CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
-				G.InventoryManager.IsShown = true;
-			else G.InventoryManager.IsShown = false;
+			var mouse = Mouse.GetState ();
+			var target = new Vector2 (mouse.X, mouse.Y);
 
 
-			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
+			for (var i = 0; i < Items.Count; i++)
 			{
-				if (G.InventoryManager.IsShown)
+
+				var item = Items[i];
+				if (item.IsFound || !item.IsActive)
+					continue;
+
+				if ( //TODO this is buggy. Needs actual player collision
+					CollisionChecker.PointToPoly (target, item.CollisionData))
 				{
-					LastLevel = CurrentItem;
-					CurrentItem = G.InventoryManager.SelectItemAt(target);
-				}
+					if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
+					{
+						OnItemFound (item);
+						if (item.CanPickup)
+						{
+							G.InventoryManager.CurrentItems.Add (item.Name);
+							Items.RemoveAt (i);
+						}
+					}
+					break;
 
-				//TODO: take this out, only for development
-				if (G.Active)
+				}
+			}
+
+			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
+			{
+				if (G.InventoryManager.IsShown && CollisionChecker.PointToPoly (target, G.InventoryManager.Bounds))
 				{
-					var t = Camera.ScreenToWorld (target);
-					Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
+
+					LastItem = CurrentItem;
+					CurrentItem = G.InventoryManager.SelectItemAt (target);
+					if (!string.IsNullOrEmpty (CurrentItem))
+					{
+						G.DialogManager.PostMessage (GameItem.ItemDictionary[CurrentItem].Description, TimeSpan.Zero, new TimeSpan (0, 0, 5),
+													Color.White);
+					}
 				}
+				var t = Camera.ScreenToWorld (target);
+				Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
 
-				var myPoly = Nav.FirstOrDefault(node => CollisionChecker.PointToPoly (
-					Player.Location, node.Poly));
 
-				var targetPoly = Nav.FirstOrDefault(node => CollisionChecker.PointToPoly (
-					Camera.ScreenToWorld (target), node.Poly));
-				
+				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
+					Player.Location, node.Poly)).FirstOrDefault ();
+
+				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
+					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault ();
+
 				if (targetPoly != null)
 				{
-					if (targetPoly == myPoly)
-					{
-						Player.ClearMove();
+					if (targetPoly == myPoly) {
+						Player.ClearMove ();
 						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
 					} else {
 						// Clicked in a non direct polygon
-						throw new Exception();
+						throw new Exception ();
 					}
-				}
-				else {
+				} else {
 					Trace.WriteLine ("Did not click in a valid polygon");
-				}
-				
-				for (var i = 0; i < Items.Count; i++)
-				{
-					var item = Items[i];
-					if(item.IsFound || !item.IsActive)
-						continue;
-
-					if ( //TODO this is buggy. Needs actual player collision
-						CollisionChecker.PointToPoly(target, item.CollisionData))
-					{
-						OnItemFound(item);
-						if (item.CanPickup)
-						{
-							G.InventoryManager.CurrentItems.Add(item.Name);
-							Items.RemoveAt(i);
-						}
-						break;
-						
-					}
 				}
 
 				foreach (var spot in Hotspots)
 				{
-					bool hotSpotClicked = 
+					bool hotSpotClicked =
 						 CollisionChecker.PointToPoly (target, spot);
 
 					if (hotSpotClicked)
@@ -188,20 +225,21 @@ namespace GGJ2013.States
 				}
 			}
 
-			var keystate = Keyboard.GetState();
-			Player.Location += new Vector2((keystate.IsKeyDown(Keys.D) ? 1 : 0) - (keystate.IsKeyDown(Keys.A) ? 1 : 0),
-			                               (keystate.IsKeyDown(Keys.S) ? 1 : 0 - (keystate.IsKeyDown(Keys.W) ? 1 : 0)));
+			var keystate = Keyboard.GetState ();
+			Player.Location += new Vector2 ((keystate.IsKeyDown (Keys.D) ? 1 : 0) - (keystate.IsKeyDown (Keys.A) ? 1 : 0),
+										   (keystate.IsKeyDown (Keys.S) ? 1 : 0 - (keystate.IsKeyDown (Keys.W) ? 1 : 0)));
 
-			if (keystate.IsKeyDown(Keys.F1)
-			    && _oldKey.IsKeyUp(Keys.F1))
+			if (keystate.IsKeyDown (Keys.F1)
+				&& _oldKey.IsKeyUp (Keys.F1))
 			{
 				G.DebugCollision = !G.DebugCollision;
 			}
 
 			_oldKey = keystate;
 			_oldMouse = mouse;
-			return base.HandleInput(gameTime);
+			return base.HandleInput (gameTime);
 		}
+
 
 		private MouseState _oldMouse;
 		private KeyboardState _oldKey;
@@ -239,6 +277,8 @@ namespace GGJ2013.States
 			foreach (var polyNode in Nav) {
 				G.Debug.DrawPolygon (polyNode.Poly, Color.Yellow);
 			}
+			G.Debug.DrawPolygon(G.InventoryManager.Bounds, Color.Tomato);
+
 			G.Debug.Stop();
 		}
 
@@ -251,13 +291,14 @@ namespace GGJ2013.States
 			};
 		}
 
-		protected  GameItem CreateItem (string name, string description,
+		protected GameItem CreateItem (string name, string desc,
 			string texturePath, int x, int y, params Vector2[] verts)
 		{
 			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
 			{
 				CollisionData = new Polygon (verts),
-				Location = new Vector2 (x, y)
+				Location = new Vector2 (x, y),
+				Description = desc
 			};
 			return item;
 		}

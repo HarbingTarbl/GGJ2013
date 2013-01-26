@@ -36,6 +36,7 @@ namespace GGJ2013
 		public static GraphicsDeviceManager Graphics;
 		public static BloomComponent BloomRenderer;
 		public static InventoryManager InventoryManager;
+		public static DialogManager DialogManager;
 		public static GameTime GameTime;
 		public static bool DebugCollision = false;
 		public static string LastScreen;	
@@ -61,13 +62,18 @@ namespace GGJ2013
 			C = Content;
 			BloomRenderer = new BloomComponent(this);
 			BloomRenderer.LoadContent();
+			InventoryManager = new InventoryManager();
+
+			DialogManager = new DialogManager()
+			{
+				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, G.SCREEN_WIDTH, 300),
+				Font = G.C.Load<SpriteFont>("fonts/debug"),
+			};
 
 			Player = new Player();
 
 			StateManager.Add (new TentState());
 			StateManager.Set ("Tent");
-
-			InventoryManager = new InventoryManager();
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
