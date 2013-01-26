@@ -14,7 +14,7 @@ namespace GGJ2013.Entities
 	{
 		public Player()
 		{
-			Texture = G.C.Load<Texture2D>("player");
+			Texture = G.C.Load<Texture2D>("Player");
 		}
 
 		public Vector2 Destination;

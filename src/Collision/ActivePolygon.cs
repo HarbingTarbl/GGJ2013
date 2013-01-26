@@ -10,16 +10,16 @@ namespace GGJ2013.Collision
 	public class ActivePolygon
 		: Polygon
 	{
-		public ActivePolygon(Polygon verts, Action<BaseMemoryState> action)
+		public ActivePolygon(Polygon verts, Action<MemoryState> action)
 		{
 			Vertices.AddRange(verts.Vertices);
 			Location = verts.Location;
 			Activated += action;
 		}
 
-		public event Action<BaseMemoryState> Activated;
+		public event Action<MemoryState> Activated;
 
-		public void OnActivate(BaseMemoryState state)
+		public void OnActivate(MemoryState state)
 		{
 			var handler = Activated;
 			if (handler != null)

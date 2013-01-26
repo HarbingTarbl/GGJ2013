@@ -116,12 +116,12 @@
     <Compile Include="Graphics\BloomSettings.cs" />
     <Compile Include="Items\LevelItem.cs" />
     <Compile Include="Items\MemoryItem.cs" />
-    <Compile Include="Items\ReminderItem.cs" />
-    <Compile Include="Levels\Tent.cs" />
+    <Compile Include="Items\GameItem.cs" />
+    <Compile Include="Levels\TentState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="States\BaseMemoryState.cs" />
+    <Compile Include="States\MemoryState.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
