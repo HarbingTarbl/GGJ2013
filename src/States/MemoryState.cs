@@ -74,7 +74,7 @@ namespace GGJ2013.States
 
 		public override void Draw (SpriteBatch batch)
 		{
-			G.BloomRenderer.BeginDraw();
+			//G.BloomRenderer.BeginDraw();
 
 			BeginDraw (batch, BlendState.NonPremultiplied);
 			batch.Draw (Background, Vector2.Zero, Color.White);
@@ -89,7 +89,7 @@ namespace GGJ2013.States
 			}
 			batch.End();
 
-			G.BloomRenderer.Draw (G.GameTime);
+			//G.BloomRenderer.Draw (G.GameTime);
 
 			if (G.DebugCollision)
 				DrawDebug();
@@ -114,6 +114,7 @@ namespace GGJ2013.States
 
 			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
+				//TODO: take this out, only for development
 				if (G.Active)
 				{
 					var t = Camera.ScreenToWorld (target);

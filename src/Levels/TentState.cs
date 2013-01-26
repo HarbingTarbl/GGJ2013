@@ -32,14 +32,29 @@ namespace GGJ2013
 				new Vector2 (345, 644),
 				new Vector2 (159, 605));
 
-			Nav = new List<PolyNode>();
-			Nav.Add (new PolyNode (p1));
+			var p2 = new Polygon (
+				new Vector2 (106, 769),
+				new Vector2 (997, 780),
+				new Vector2 (896, 894),
+				new Vector2 (627, 946),
+				new Vector2 (345, 944),
+				new Vector2 (159, 905));
+
+			var p1n = new PolyNode (p1);
+			var p2n = new PolyNode (p2);
+
+			PolyLink.AttachLinks (3, 0, ref p1n, ref p2n);
+
+			Nav = new List<PolyNode> {
+				p1n,
+				p2n
+			};
 			#endregion
 
-			Blanket = CreateItem ("Blanket", "TentArea/blanket", 30, 300, 503);
-			Flash = CreateItem ("Flashlight", "TentArea/flashlight", 30, 587, 436);
-			Bag = CreateItem ("Bag", "TentArea/dufflebag", 30, 723, 444);
-			Sweater = CreateItem("Sweater", "TentArea/sweater", 30, 500, 550);
+			Blanket = CreateItem ("Blanket", "Desc", "TentArea/blanket", 30, 300, 503);
+			Flash = CreateItem ("Flashlight", "Desc", "TentArea/flashlight", 30, 587, 436);
+			Bag = CreateItem ("Bag", "Desc", "TentArea/dufflebag", 30, 723, 444);
+			Sweater = CreateItem("Sweater", "Desc", "TentArea/sweater", 30, 500, 550);
 
 			Blanket.OnClick += (t) =>
 			{
@@ -59,12 +74,12 @@ namespace GGJ2013
 
 			Exit = new Hotspot(
 				new Polygon(
-					new Vector2(665, 275),
-					new Vector2(657, 373),
-					new Vector2(625, 459),
-					new Vector2(696, 468),
-					new Vector2(726, 374),
-					new Vector2(707, 299)), t =>
+					new Vector2(600, 250),
+					new Vector2(607, 373),
+					new Vector2(575, 459),
+					new Vector2(650, 468),
+					new Vector2(675, 374),
+					new Vector2(657, 299)), t =>
 					{
 						if (CanLeaveLevel)
 						{
@@ -85,7 +100,7 @@ namespace GGJ2013
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
 
-			Hotspots.Add(new Hotspot(new Circlegon(545, 315, 16), t =>
+			Hotspots.Add(new Hotspot(new Circlegon(545, 315, 64), t =>
 			{
 				var that = this;
 				that.light1.IsVisible = false;
@@ -105,15 +120,12 @@ namespace GGJ2013
 			Lights.Add(light2);
 
 			Hotspots.Add(Exit);
-
 		}
 
 		protected override void OnLevelComplete()
 		{
 			Dialog.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
-
 		}
-
 
 		public override void Update(GameTime gameTime)
 		{

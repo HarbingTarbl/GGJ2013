@@ -113,6 +113,7 @@
     <Compile Include="Collision\Hotspot.cs" />
     <Compile Include="Interface\DialogManager.cs" />
     <Compile Include="Interface\ItemViewer.cs" />
+    <Compile Include="AStar.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Graphics\BloomComponent.cs" />
     <Compile Include="Graphics\BloomSettings.cs" />
