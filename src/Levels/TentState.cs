@@ -56,6 +56,7 @@ namespace GGJ2013
 			Flash.IsActive = true;
 			Flash.CanPickup = true;
 
+
 			Exit = new Hotspot(
 				new Polygon(
 					new Vector2(665, 275),
@@ -84,15 +85,24 @@ namespace GGJ2013
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
 
-			
+			Hotspots.Add(new Hotspot(new Circlegon(545, 315, 16), t =>
+			{
+				var that = this;
+				that.light1.IsVisible = false;
+				that.light2.IsVisible = true;
+			}));
 
-			light1.IsVisible = false;
+			light1.IsVisible = true;
 			light2.IsVisible = false;
 
 			Items.Add (Flash);
 			Items.Add (Bag);
 			Items.Add (Sweater);
 			Items.Add (Blanket);
+
+			Lights.Add(lantern);
+			Lights.Add(light1);
+			Lights.Add(light2);
 
 			Hotspots.Add(Exit);
 
@@ -104,17 +114,6 @@ namespace GGJ2013
 
 		}
 
-		public override void Draw(SpriteBatch batch)
-		{
- 			base.Draw(batch);
-
-			BeginDraw (batch, BlendState.AlphaBlend);
-			lantern.Draw (batch);
-			light1.Draw (batch);
-			light2.Draw (batch);
-			batch.End();
-
-		}
 
 		public override void Update(GameTime gameTime)
 		{

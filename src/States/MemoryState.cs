@@ -31,6 +31,7 @@ namespace GGJ2013.States
 			Hotspots = new List<Hotspot>();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
+			Lights = new List<Sprite>();
 			Dialog = new DialogManager()
 			{
 				MessageBounds = new Rectangle(15, 15, 300, 300),
@@ -48,6 +49,7 @@ namespace GGJ2013.States
 		public List<GameItem> Items;
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
+		public List<Sprite> Lights; 
 		public DialogManager Dialog;
 
 		// I want to get rid of this whole chunk so bad
@@ -78,6 +80,13 @@ namespace GGJ2013.States
 			batch.Draw (Background, Vector2.Zero, Color.White);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
+			batch.End();
+
+			BeginDraw(batch, BlendState.AlphaBlend);
+			foreach (var light in Lights)
+			{
+				light.Draw(batch);
+			}
 			batch.End();
 
 			G.BloomRenderer.Draw (G.GameTime);
