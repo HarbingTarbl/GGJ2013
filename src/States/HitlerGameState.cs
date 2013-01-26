@@ -28,6 +28,7 @@ namespace GGJ2013.States
 			ItemsToRemember = new List<string>();
 			Camera = new CameraSingle(LiterallyHitler.Instance.GraphicsDevice.Viewport.Width,
 			                          LiterallyHitler.Instance.GraphicsDevice.Viewport.Height);
+			
 			NextState = nextState;
 		}
 
@@ -81,8 +82,10 @@ namespace GGJ2013.States
 
 		public override void Update(GameTime gameTime)
 		{
-			Player.Update(gameTime);
-			Camera.CenterOnPoint(Player.Location);
+
+			//FIX: FIX ME
+			//Player.Update(gameTime);
+			//Camera.CenterOnPoint(Player.Location);
 		}
 
 		public void NextLevel()
@@ -118,7 +121,13 @@ namespace GGJ2013.States
 			Camera.Location += new Vector2((keystate.IsKeyDown(Keys.D) ? 1 : 0) - (keystate.IsKeyDown(Keys.A) ? 1 : 0),
 			                               (keystate.IsKeyDown(Keys.S) ? 1 : 0 - (keystate.IsKeyDown(Keys.W) ? 1 : 0)));
 
+			if (keystate.IsKeyDown(Keys.F1)
+			    && _oldKey.IsKeyUp(Keys.F1))
+			{
+				LiterallyHitler.DebugCollision = !LiterallyHitler.DebugCollision;
+			}
 
+			_oldKey = keystate;
 			_oldMouse = cMouse;
 			return base.HandleInput(gameTime);
 		}
@@ -160,6 +169,6 @@ namespace GGJ2013.States
 
 
 		private MouseState _oldMouse;
-		private int _foundItems;
+		private KeyboardState _oldKey;
 	}
 }

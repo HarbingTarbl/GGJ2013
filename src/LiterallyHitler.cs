@@ -29,6 +29,7 @@ namespace GGJ2013
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
 		public static CameraSingle Camera;
+		public static bool DebugCollision = false;
 
 
 
@@ -96,6 +97,8 @@ namespace GGJ2013
 			// Allows the game to exit
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
 				this.Exit();
+
+
 			StateManager.Update(gameTime);
 			// TODO: Add your update logic here
 
@@ -113,6 +116,31 @@ namespace GGJ2013
 			                  RasterizerState.CullNone, null, Camera.Transformation);
 			StateManager.Draw(SpriteBatch);
 			SpriteBatch.End();
+
+			if (DebugCollision)
+			{
+				var state = (HitlerGameState) StateManager.CurrentState;
+				if (state == null)
+					return;
+
+
+				CollisionRenderer.Begin(Camera.Transformation);
+
+
+				foreach(var item in state.Items)
+				{
+					CollisionRenderer.Draw(item, Color.Lime);
+				}
+
+				foreach (var hotspot in state.Hotspots)
+				{
+					CollisionRenderer.DrawPolygon(hotspot, Color.Red);
+				}
+
+				CollisionRenderer.Stop();
+
+
+			}
 			// TODO: Add your drawing code here
 
 			base.Draw(gameTime);
