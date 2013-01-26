@@ -16,25 +16,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GGJ2013.States
 {
-	public class HitlerGameState
+	public class BaseMemoryState
 		: BaseGameState
 	{
-		public HitlerGameState(string name, string nextState)
+		public BaseMemoryState(string name, string nextState)
 			: base(name)
 		{
 			Items = new List<ReminderItem>();
 			Hotspots = new List<ActivePolygon>();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
-			Camera = new CameraSingle(LiterallyHitler.Instance.GraphicsDevice.Viewport.Width,
-			                          LiterallyHitler.Instance.GraphicsDevice.Viewport.Height);
+			Camera = new CameraSingle(G.Instance.GraphicsDevice.Viewport.Width,
+			                          G.Instance.GraphicsDevice.Viewport.Height);
 			
 			NextState = nextState;
 		}
 
 		public override void OnFocus()
 		{
-			LiterallyHitler.Camera = Camera;
+			G.Camera = Camera;
 			base.OnFocus();
 		}
 
@@ -67,8 +67,8 @@ namespace GGJ2013.States
 
 		public string NextState;
 
-		public event Action<HitlerGameState, ReminderItem> ItemFound;
-		public event Action<HitlerGameState> LevelComplete;
+		public event Action<BaseMemoryState, ReminderItem> ItemFound;
+		public event Action<BaseMemoryState> LevelComplete;
 
 		public override void Draw(SpriteBatch batch)
 		{
@@ -90,8 +90,8 @@ namespace GGJ2013.States
 
 		public void NextLevel()
 		{
-			LiterallyHitler.StateManager.Pop();
-			LiterallyHitler.StateManager.Push(NextState);
+			G.StateManager.Pop();
+			G.StateManager.Push(NextState);
 		}
 
 		public override bool HandleInput(GameTime gameTime)
@@ -124,7 +124,7 @@ namespace GGJ2013.States
 			if (keystate.IsKeyDown(Keys.F1)
 			    && _oldKey.IsKeyUp(Keys.F1))
 			{
-				LiterallyHitler.DebugCollision = !LiterallyHitler.DebugCollision;
+				G.DebugCollision = !G.DebugCollision;
 			}
 
 			_oldKey = keystate;

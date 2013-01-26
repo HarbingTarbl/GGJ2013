@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", "src\src.csproj", "{5A9FA80D-8F64-4C1A-B073-97B2150D01AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", "src\Game.csproj", "{5A9FA80D-8F64-4C1A-B073-97B2150D01AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assets", "assets\assets.contentproj", "{819AB6FC-938F-48DB-84E2-8D773549DF39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jammy", "..\GameJamTools\src\Jammy\Jammy.csproj", "{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{9266AB42-7B62-4525-A78F-D183FF119187}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JammyContentExtension", "..\GameJamTools\src\JammyContentExtension\JammyContentExtension.csproj", "{DEE5F6BF-990F-44AF-9A99-658DB2A8A877}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jammy", "..\GameJamTools\src\Jammy\Jammy.csproj", "{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,16 +25,11 @@ Global
 		{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563}.Debug|x86.Build.0 = Debug|x86
 		{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563}.Release|x86.ActiveCfg = Release|x86
 		{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563}.Release|x86.Build.0 = Release|x86
-		{DEE5F6BF-990F-44AF-9A99-658DB2A8A877}.Debug|x86.ActiveCfg = Debug|x86
-		{DEE5F6BF-990F-44AF-9A99-658DB2A8A877}.Debug|x86.Build.0 = Debug|x86
-		{DEE5F6BF-990F-44AF-9A99-658DB2A8A877}.Release|x86.ActiveCfg = Debug|x86
-		{DEE5F6BF-990F-44AF-9A99-658DB2A8A877}.Release|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8C9FE739-00F8-42E1-B30A-3A0B2DFD5563} = {9266AB42-7B62-4525-A78F-D183FF119187}
-		{DEE5F6BF-990F-44AF-9A99-658DB2A8A877} = {9266AB42-7B62-4525-A78F-D183FF119187}
 	EndGlobalSection
 EndGlobal

@@ -17,11 +17,11 @@ namespace GGJ2013.Items
 
 		public bool IsFound;
 
-		public Action<HitlerGameState> OnClick;
+		public Action<BaseMemoryState> OnClick;
 
 		public string Name;
 
-		public void Clicked(HitlerGameState ugh)
+		public void Clicked(BaseMemoryState ugh)
 		{
 			var handler = OnClick;
 			if (handler != null)
