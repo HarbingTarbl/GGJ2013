@@ -22,13 +22,13 @@ namespace GGJ2013.States
 	public class MemoryState
 		: BaseGameState
 	{
-		public MemoryState(string name)
+		public MemoryState(string name, string next, string prev)
 			: base(name)
 		{
 			Player = G.Player;
 
 			Items = new List<GameItem>();
-			Hotspots = new List<ActivePolygon>();
+			Hotspots = new List<Hotspot>();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Dialog = new DialogManager()
@@ -36,6 +36,8 @@ namespace GGJ2013.States
 				MessageBounds = new Rectangle(15, 15, 300, 300),
 				Font = G.C.Load<SpriteFont>("fonts/debug"),
 			};
+			NextLevel = next;
+			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 		}
 
@@ -44,7 +46,7 @@ namespace GGJ2013.States
 
 		public Texture2D Background;
 		public List<GameItem> Items;
-		public List<ActivePolygon> Hotspots;
+		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
 		public DialogManager Dialog;
 
@@ -54,6 +56,9 @@ namespace GGJ2013.States
 		public bool IsLevelComplete;
 		public bool CanLeaveLevel;
 		public MemoryItem Reward;
+
+		public string NextLevel;
+		public string LastLevel;
 
 		protected virtual void OnLevelStart(string LastScreen) { }
 		protected virtual void OnLevelComplete() { }
@@ -127,21 +132,29 @@ namespace GGJ2013.States
 					Trace.WriteLine ("Did not click in a valid polygon");
 				}
 				
-				foreach (var item in Items)
+				for (var i = 0; i < Items.Count; i++)
 				{
+					var item = Items[i];
 					if(item.IsFound || !item.IsActive)
 						continue;
 
 					if ( //TODO this is buggy. Needs actual player collision
-					    CollisionChecker.PointToPoly(target, item.CollisionData))
-							OnItemFound(item);
-					break;
+						CollisionChecker.PointToPoly(target, item.CollisionData))
+					{
+						OnItemFound(item);
+						if (item.CanPickup)
+						{
+							Items.RemoveAt(i);
+						}
+						break;
+						
+					}
 				}
 
 				foreach (var spot in Hotspots)
 				{
-					bool hotSpotClicked = Vector2.DistanceSquared (Player.Location, spot.AbsoluteCenter) < 0
-						&& CollisionChecker.PointToPoly (target, spot);
+					bool hotSpotClicked = 
+						 CollisionChecker.PointToPoly (target, spot);
 
 					if (hotSpotClicked)
 						spot.OnActivate (this);

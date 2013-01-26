@@ -110,7 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collision\ActivePolygon.cs" />
+    <Compile Include="Collision\Hotspot.cs" />
     <Compile Include="Dialog\DialogManager.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Graphics\BloomComponent.cs" />

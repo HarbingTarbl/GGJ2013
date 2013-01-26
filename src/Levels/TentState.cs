@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GGJ2013.Collision;
 using GGJ2013.Items;
 using GGJ2013.States;
 using Jammy;
@@ -19,7 +20,7 @@ namespace GGJ2013
 		: MemoryState
 	{
 		public TentState()
-			: base ("Tent")
+			: base ("Tent", "Tent", "None")
 		{
 			Background = G.C.Load<Texture2D> ("TentArea/background");
 			#region NavMesh
@@ -52,9 +53,38 @@ namespace GGJ2013
 
 			Sweater.CanPickup = true;
 
+			Flash.IsActive = true;
+			Flash.CanPickup = true;
+
+			Exit = new Hotspot(
+				new Polygon(
+					new Vector2(665, 275),
+					new Vector2(657, 373),
+					new Vector2(625, 459),
+					new Vector2(696, 468),
+					new Vector2(726, 374),
+					new Vector2(707, 299)), t =>
+					{
+						if (CanLeaveLevel)
+						{
+							G.StateManager.Pop();
+							G.StateManager.Push(NextLevel);
+						}
+						else
+						{
+							Dialog.PostMessage("I should put on some clothes... ", TimeSpan.Zero, new TimeSpan(0, 0, 5));
+							Dialog.PostMessage("and grab my flashlight.", new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 5));
+						}
+					});
+
+			ItemsToLeave.Add("Sweater");
+			ItemsToLeave.Add("Flashlight");
+
 			lantern = CreateSprite ("TentArea/lantern", 520, 0);
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
+
+			
 
 			light1.IsVisible = false;
 			light2.IsVisible = false;
@@ -62,7 +92,15 @@ namespace GGJ2013
 			Items.Add (Flash);
 			Items.Add (Bag);
 			Items.Add (Sweater);
-			Items.Add(Blanket);
+			Items.Add (Blanket);
+
+			Hotspots.Add(Exit);
+
+		}
+
+		protected override void OnLevelComplete()
+		{
+			Dialog.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
 
 		}
 
@@ -86,7 +124,7 @@ namespace GGJ2013
 			{
 				CurrentBlanketMoveTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 				Blanket.Location = Vector2.SmoothStep(Blanket.Location, BlanketDestination, CurrentBlanketMoveTime / BlanketMoveTime);
-				if (CurrentBlanketMoveTime >= BlanketMoveTime)
+				if (CurrentBlanketMoveTime >= BlanketMoveTime - 3)
 				{
 					BlanketClicked = false;
 					Sweater.IsActive = true;
@@ -115,6 +153,8 @@ namespace GGJ2013
 		public GameItem Blanket;
 		public GameItem Bag;
 		public GameItem Flash;
+
+		public Hotspot Exit; 
 
 		public bool BlanketClicked;
 		public Vector2 BlanketDestination = new Vector2(103, 450);

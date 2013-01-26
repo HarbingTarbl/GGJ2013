@@ -7,10 +7,10 @@ using Jammy.Collision;
 
 namespace GGJ2013.Collision
 {
-	public class ActivePolygon
+	public class Hotspot
 		: Polygon
 	{
-		public ActivePolygon(Polygon verts, Action<MemoryState> action)
+		public Hotspot(Polygon verts, Action<MemoryState> action)
 		{
 			Vertices.AddRange(verts.Vertices);
 			Location = verts.Location;
