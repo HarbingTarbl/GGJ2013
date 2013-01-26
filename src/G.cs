@@ -30,7 +30,7 @@ namespace GGJ2013
 
 		public static ContentManager C;
 		public static SpriteBatch SpriteBatch;
-		public static CollisionRenderer CollisionRenderer;
+		public static CollisionRenderer Debug;
 		public static StateManager StateManager;
 		public static GraphicsDeviceManager Graphics;
 		public static BloomComponent BloomRenderer;
@@ -38,6 +38,7 @@ namespace GGJ2013
 		public static bool DebugCollision = false;
 		public static string LastScreen;	
 		public static Player Player;
+		public static bool Active;
 
 		public static readonly int SCREEN_WIDTH = 1280;
 		public static readonly int SCREEN_HEIGHT = 720;
@@ -51,20 +52,21 @@ namespace GGJ2013
 			Graphics.IsFullScreen = false;
 			Graphics.ApplyChanges();
 
-
 			IsMouseVisible = true;
-			CollisionRenderer = new CollisionRenderer (GraphicsDevice);
+			Debug = new CollisionRenderer (GraphicsDevice);
 			StateManager = new StateManager();
 			SpriteBatch = new SpriteBatch (GraphicsDevice);
 			C = Content;
 			BloomRenderer = new BloomComponent(this);
 			BloomRenderer.LoadContent();
 
-
 			Player = new Player();
 
 			StateManager.Add (new TentState());
 			StateManager.Set ("Tent");
+
+			Activated += (s, a) => Active = true;
+			Deactivated += (s, a) => Active = false;
 		}
 
 		protected override void UnloadContent()

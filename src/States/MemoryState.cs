@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.Collision;
@@ -38,18 +39,7 @@ namespace GGJ2013.States
 		public Texture2D Background;
 		public List<GameItem> Items;
 		public List<ActivePolygon> Hotspots;
-		public Polygon NavMesh;
-		public List<Polygon> OutsideMeshes;
-		public Polygon InsideMesh
-		{
-			get { return _insideMesh; }
-			set
-			{
-				_insideMesh = value;
-				OutsideMeshes = Polygon.Clip(new Rectagon(0, 0, G.SCREEN_WIDTH, G.SCREEN_HEIGHT), value);
-			}
-
-		}
+		public List<PolyNode> Nav;
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -76,7 +66,7 @@ namespace GGJ2013.States
 			Player.Draw (batch);
 			batch.End();
 
-			G.BloomRenderer.Draw(G.GameTime);
+			G.BloomRenderer.Draw (G.GameTime);
 
 			if (G.DebugCollision)
 				DrawDebug();
@@ -86,52 +76,48 @@ namespace GGJ2013.States
 		{
 			Items.ForEach (i => i.Update (gameTime));
 
-			Player.Update(gameTime, NavMesh);
+			Player.Update(gameTime);
 			Camera.CenterOnPoint (Player.Location);
 		}
 
 		public override bool HandleInput (GameTime gameTime)
 		{
-			var cMouse = Mouse.GetState();
-			var target = new Vector2(cMouse.X, cMouse.Y);
+			var mouse = Mouse.GetState();
+			var target = new Vector2(mouse.X, mouse.Y);
 
-			if (cMouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
+			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
-				if (CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), InsideMesh))
+				if (G.Active)
 				{
-					Player.Destination = target;
-					Player.Direction = Player.Destination - Player.Location;
-					Player.Direction.Normalize();
-					var line = new Polygon(Player.Location, Player.Destination);
-					foreach (var poly in OutsideMeshes)
+					var t = Camera.ScreenToWorld (target);
+					Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
+				}
+
+				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
+					Player.Location, node.Poly)).FirstOrDefault();
+
+				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
+					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault();
+
+				if (targetPoly != null)
+				{
+					if (targetPoly == myPoly)
 					{
-						if (CollisionChecker.PolyToPoly(line, poly)) //Use nav
-						{
-							var closest = 0;
-							var dist = Vector2.Distance(NavMesh.Vertices[0], Player.Location);
-							for (var i = 1; i < NavMesh.Vertices.Count; i++)
-							{
-								var testDist = Vector2.DistanceSquared(NavMesh.Vertices[i], Player.Location);
-								if(testDist < dist)
-								{
-									closest = i;
-									dist = testDist;
-								}
-							}
-
-							Player.Direction = NavMesh.Vertices[(closest + 1)%NavMesh.Vertices.Count] - NavMesh.Vertices[closest];
-							Player.Direction.Normalize();
-
-							break;
-						}
+						Player.ClearMove();
+						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
+					} else {
+						// Clicked in a non direct polygon
+						throw new Exception();
 					}
+				}
+				else {
+					Trace.WriteLine ("Did not click in a valid polygon");
 				}
 
 				foreach (var item in Items)
 				{
 					if (Vector2.DistanceSquared(Player.Location, item.CollisionData.AbsoluteCenter) > 128
-					    && !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target),
-					                                     (Polygon) item.CollisionData)) continue;
+					    && !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), item.CollisionData)) continue;
 
 					if (item.IsFound) continue;
 
@@ -160,7 +146,7 @@ namespace GGJ2013.States
 			}
 
 			_oldKey = keystate;
-			_oldMouse = cMouse;
+			_oldMouse = mouse;
 			return base.HandleInput(gameTime);
 		}
 
@@ -190,22 +176,21 @@ namespace GGJ2013.States
 
 		private void DrawDebug()
 		{
-			G.CollisionRenderer.Begin (Camera.Transformation);
+			G.Debug.Begin (Camera.Transformation);
 			foreach (var item in Items) {
-				G.CollisionRenderer.Draw (item, Color.Lime);
+				G.Debug.Draw (item, Color.Lime);
 			}
 			foreach (var hotspot in Hotspots) {
-				G.CollisionRenderer.DrawPolygon (hotspot, Color.Red);
+				G.Debug.DrawPolygon (hotspot, Color.Red);
 			}
-			foreach (var poly in OutsideMeshes) {
-				G.CollisionRenderer.DrawPolygon (poly, Color.Yellow);
+			foreach (var polyNode in Nav)
+			{
+				G.Debug.DrawPolygon (polyNode.Poly, Color.Yellow);
 			}
-			G.CollisionRenderer.DrawPolygon (NavMesh, Color.Yellow);
-			G.CollisionRenderer.DrawPolygon (InsideMesh, Color.Purple);
-			G.CollisionRenderer.Stop();
+			G.Debug.Stop();
 		}
 
-		protected Sprite CreateSprite(string texturePath, int x = 0, int y = 0)
+		protected Sprite CreateSprite (string texturePath, int x = 0, int y = 0)
 		{
 			return new Sprite
 			{
@@ -214,7 +199,7 @@ namespace GGJ2013.States
 			};
 		}
 
-		protected  GameItem CreateItem(string name, string texturePath,
+		protected  GameItem CreateItem (string name, string texturePath,
 			int radius, int x, int y)
 		{
 			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
@@ -225,7 +210,7 @@ namespace GGJ2013.States
 			return item;
 		}
 
-		protected void BeginDraw(SpriteBatch batch, BlendState state)
+		protected void BeginDraw (SpriteBatch batch, BlendState state)
 		{
 			batch.Begin (
 				SpriteSortMode.Deferred,

@@ -14,20 +14,49 @@ namespace GGJ2013.Entities
 	{
 		public Player()
 		{
-			Texture = G.C.Load<Texture2D>("Player");
+			Texture = G.C.Load<Texture2D> ("Player");
+			Origin = new Vector2 (38, 220);
 		}
 
-		public Vector2 Destination;
-		public Vector2 Direction;
-		public float Speed = 1; // px/ms
+		public Queue<Vector2> MoveQueue = new Queue<Vector2>();
 
-		public void Update(GameTime gameTime, Polygon nav)
+		public void ClearMove()
 		{
-			if (Vector2.Distance(Location, Destination) < 25)
-				Direction = Vector2.Zero;
-			Location += Direction*Speed*gameTime.ElapsedGameTime.Milliseconds;
-
-			Update(gameTime);
+			MoveQueue.Clear();
+			hasTarget = false;
 		}
+
+		public void Update (GameTime gameTime)
+		{
+			if (MoveQueue.Count == 0)
+				return;
+
+			// Grab the next target in our queue
+			if (MoveQueue.Count > 0 && !hasTarget)
+			{
+				start = new Vector2 (Location.X, Location.Y);
+				movePassed = 0;
+				moveTime = Vector2.Distance (MoveQueue.Peek(), Location)/SPEED;
+				hasTarget = true;
+			}
+
+			movePassed += gameTime.ElapsedGameTime.Milliseconds;
+			if (MathHelper.Clamp (movePassed, 0, moveTime) >= moveTime)
+			{
+				Location = Vector2.Lerp (start, MoveQueue.Peek(), 1f);
+				MoveQueue.Dequeue();
+				hasTarget = false;
+				return;
+			}
+
+			Location = Vector2.Lerp (start, MoveQueue.Peek(), movePassed/moveTime);
+			base.Update (gameTime);
+		}
+
+		private const float SPEED = 1; // pixel/ms
+		private bool hasTarget;
+		private float moveTime;
+		private float movePassed;
+		private Vector2 start;
 	}
 }
