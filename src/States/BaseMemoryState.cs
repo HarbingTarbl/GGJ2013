@@ -19,7 +19,7 @@ namespace GGJ2013.States
 	public class BaseMemoryState
 		: BaseGameState
 	{
-		public BaseMemoryState(string name, string nextState)
+		public BaseMemoryState(string name, string nextState, string lastState)
 			: base(name)
 		{
 			Items = new List<ReminderItem>();
@@ -65,6 +65,7 @@ namespace GGJ2013.States
 		public bool IsLevelComplete;
 		public bool CanLeaveLevel;
 
+		public string LastState;
 		public string NextState;
 
 		public event Action<BaseMemoryState, ReminderItem> ItemFound;
@@ -82,7 +83,10 @@ namespace GGJ2013.States
 
 		public override void Update(GameTime gameTime)
 		{
-
+			foreach (var item in Items)
+			{
+				item.Update(gameTime);
+			}
 			//FIX: FIX ME
 			//Player.Update(gameTime);
 			//Camera.CenterOnPoint(Player.Location);
@@ -102,7 +106,7 @@ namespace GGJ2013.States
 			{
 				foreach (var item in Items)
 				{
-					if (!CollisionChecker.PointToPoly(new Vector2(cMouse.X, cMouse.Y), (Polygon) item.CollisionData)) continue;
+					if (!CollisionChecker.PointToPoly(Camera.ScreenToWorld(new Vector2(cMouse.X, cMouse.Y)), (Polygon) item.CollisionData)) continue;
 					if (item.IsFound) continue;
 
 					OnItemFound(item);
@@ -111,8 +115,8 @@ namespace GGJ2013.States
 
 				foreach (var spot in Hotspots)
 				{
-					if (!CollisionChecker.PointToPoly(new Vector2(cMouse.X, cMouse.Y), spot)) continue;
-					spot.OnActivate();
+					if (!CollisionChecker.PointToPoly(Camera.ScreenToWorld(new Vector2(cMouse.X, cMouse.Y)), spot)) continue;
+					spot.OnActivate(this);
 					break;
 				}
 			}
