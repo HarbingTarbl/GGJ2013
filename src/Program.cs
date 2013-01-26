@@ -10,7 +10,7 @@ namespace GGJ2013
         /// </summary>
         static void Main(string[] args)
         {
-            using (LiterallyHitler game = new LiterallyHitler())
+            using (var game = LiterallyHitler.Instance)
             {
                 game.Run();
             }

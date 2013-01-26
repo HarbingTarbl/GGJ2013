@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Jammy.Collision;
+using Jammy.StateManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -18,9 +20,21 @@ namespace GGJ2013
 		: Game
 	{
 		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
 
-		public LiterallyHitler()
+		public static LiterallyHitler Instance;
+		public static SpriteBatch SpriteBatch;
+		public static CollisionRenderer CollisionRenderer;
+		public static StateManager StateManager;
+
+
+
+		static LiterallyHitler()
+		{
+			Instance = new LiterallyHitler();
+		}
+
+
+		private LiterallyHitler()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -35,6 +49,9 @@ namespace GGJ2013
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
+			CollisionRenderer = new CollisionRenderer(GraphicsDevice);
+			StateManager = new StateManager();
+			SpriteBatch = new SpriteBatch(GraphicsDevice);
 
 			base.Initialize();
 		}
@@ -46,7 +63,6 @@ namespace GGJ2013
 		protected override void LoadContent()
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
 		}
