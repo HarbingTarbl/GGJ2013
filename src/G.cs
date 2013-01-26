@@ -21,6 +21,11 @@ namespace GGJ2013
 	public partial class G 
 		: Game
 	{
+		public G()
+		{
+			Graphics = new GraphicsDeviceManager (this);
+		}
+
 		public static ContentManager C;
 		public static SpriteBatch SpriteBatch;
 		public static CollisionRenderer CollisionRenderer;
@@ -31,16 +36,10 @@ namespace GGJ2013
 		public static readonly int SCREEN_WIDTH = 1280;
 		public static readonly int SCREEN_HEIGHT = 720;
 
-		protected override void Initialize()
-		{
-			LoadContent();
-		}
-
 		protected override void LoadContent()
 		{
 			Content.RootDirectory = "Content";
 
-			Graphics = new GraphicsDeviceManager (this);
 			Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
 			Graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
 			Graphics.IsFullScreen = false;
@@ -103,8 +102,8 @@ namespace GGJ2013
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-			StateManager.Draw(SpriteBatch);
+			GraphicsDevice.Clear (Color.Black);
+			StateManager.Draw (SpriteBatch);
 
 			base.Draw(gameTime);
 		}
