@@ -8,25 +8,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GGJ2013.Items
 {
-	public class ReminderItem
+	public class GameItem
 		: Sprite
 	{
-		public ReminderItem(string name, Texture2D texture)
+		public GameItem (string name, Texture2D texture)
 		{
 			Name = name;
 			Texture = texture;
 			ItemDictionary.Add(name, this);
 		}
 
-		public static List<Tuple<string, string, ReminderItem>>  CraftingList = new List<Tuple<string, string, ReminderItem>> ();
-		public static Dictionary<string, ReminderItem> ItemDictionary = new Dictionary<string, ReminderItem>(); 
+		public static List<Tuple<string, string, GameItem>>  CraftingList = new List<Tuple<string, string, GameItem>> ();
+		public static Dictionary<string, GameItem> ItemDictionary = new Dictionary<string, GameItem>(); 
 
-		public static void AddCraftingRecipie(string item1, string item2, ReminderItem result)
+		public static void AddCraftingRecipie(string item1, string item2, GameItem result)
 		{
-			CraftingList.Add(new Tuple<string, string, ReminderItem>(item1, item2, result));
+			CraftingList.Add(new Tuple<string, string, GameItem>(item1, item2, result));
 		}
 
-		public ReminderItem AttemptCraft(ReminderItem other)
+		public GameItem AttemptCraft(GameItem other)
 		{
 			foreach (var tup in CraftingList)
 			{
@@ -42,11 +42,11 @@ namespace GGJ2013.Items
 
 		public bool IsFound;
 
-		public Action<BaseMemoryState> OnClick;
+		public Action<MemoryState> OnClick;
 
 		public string Name;
 
-		public void Clicked(BaseMemoryState ugh)
+		public void Clicked(MemoryState ugh)
 		{
 			IsFound = true;
 

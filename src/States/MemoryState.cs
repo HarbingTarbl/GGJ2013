@@ -17,59 +17,49 @@ using Microsoft.Xna.Framework.Input;
 
 namespace GGJ2013.States
 {
-	public class BaseMemoryState
+	public class MemoryState
 		: BaseGameState
 	{
-		public BaseMemoryState(string name, string nextState, string lastState)
+		public MemoryState(string name)
 			: base(name)
 		{
-			Items = new List<ReminderItem>();
+			Player = G.Player;
+
+			Items = new List<GameItem>();
+			
 			Hotspots = new List<ActivePolygon>();
-			Player = new Player();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
-			
-			NextState = nextState;
 		}
-
-		public List<ReminderItem> Items;
-		public List<ActivePolygon> Hotspots;
-
-		public List<string> ItemsToLeave;
-		public List<string> ItemsToRemember;
-
-		public Polygon NavMesh;
-
-		public Texture2D Texture;
-		public Size Size;
 
 		public Player Player;
 		public CameraSingle Camera; 
 
-		public MemoryItem Reward;
+		public Texture2D Background;
+		public List<GameItem> Items;
+		public List<ActivePolygon> Hotspots;
+		public Polygon NavMesh;
 
+		// I want to get rid of this whole chunk so bad
+		public List<string> ItemsToLeave;
+		public List<string> ItemsToRemember;
 		public bool IsLevelComplete;
 		public bool CanLeaveLevel;
+		public MemoryItem Reward;
 
-		public string LastState;
-		public string NextState;
+		protected virtual void OnLevelStart(string LastScreen) { }
+		protected virtual void OnLevelComplete() { }
 
-		public event Action<BaseMemoryState, ReminderItem> ItemFound;
-		public event Action<BaseMemoryState> LevelComplete;
+		public override void OnFocus()
+		{
+			OnLevelStart (G.LastScreen);
+		}
 
 		public override void Draw (SpriteBatch batch)
 		{
-			batch.Begin (
-				SpriteSortMode.Deferred,
-			    BlendState.NonPremultiplied,
-			    SamplerState.PointClamp,
-			    DepthStencilState.Default,
-			    RasterizerState.CullCounterClockwise,
-			    null,
-				Camera.Transformation);
-
-			batch.Draw (Texture, Vector2.Zero, Color.White);
+			BeginDraw (batch, BlendState.NonPremultiplied);
+			batch.Draw (Background, Vector2.Zero, Color.White);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
 			batch.End();
@@ -82,31 +72,20 @@ namespace GGJ2013.States
 		{
 			Items.ForEach (i => i.Update (gameTime));
 
-			//FIX: FIX ME
 			Player.Update(gameTime, NavMesh);
-			Camera.CenterOnPoint(Player.Location);
+			Camera.CenterOnPoint (Player.Location);
 		}
 
-		public void NextLevel()
-		{
-			G.StateManager.Pop();
-			G.StateManager.Push (NextState);
-		}
-
-		public override bool HandleInput(GameTime gameTime)
+		public override bool HandleInput (GameTime gameTime)
 		{
 			var cMouse = Mouse.GetState();
 			var target = new Vector2(cMouse.X, cMouse.Y);
 
-
 			if (cMouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
 				Player.Destination = target;
-
-
 				foreach (var item in Items)
 				{
-
 					if (Vector2.DistanceSquared(Player.Location, item.CollisionData.AbsoluteCenter) > 128
 					    && !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target),
 					                                     (Polygon) item.CollisionData)) continue;
@@ -119,10 +98,11 @@ namespace GGJ2013.States
 
 				foreach (var spot in Hotspots)
 				{
-					if (Vector2.DistanceSquared(Player.Location, spot.AbsoluteCenter) > 128
-						&& !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), spot)) continue;
-					spot.OnActivate(this);
-					break;
+					bool hotSpotClicked = Vector2.DistanceSquared (Player.Location, spot.AbsoluteCenter) < 128
+						&& CollisionChecker.PointToPoly (Camera.ScreenToWorld (target), spot);
+
+					if (hotSpotClicked)
+						spot.OnActivate (this);
 				}
 			}
 
@@ -141,15 +121,15 @@ namespace GGJ2013.States
 			return base.HandleInput(gameTime);
 		}
 
-		protected void OnItemFound (ReminderItem item)
+		private MouseState _oldMouse;
+		private KeyboardState _oldKey;
+
+		private void OnItemFound (GameItem item)
 		{
-			if (ItemsToLeave.Contains(item.Name))
-			{
+			if (ItemsToLeave.Contains(item.Name)) {
 				ItemsToLeave.Remove(item.Name);
 			}
-
-			if (ItemsToRemember.Contains(item.Name))
-			{
+			if (ItemsToRemember.Contains(item.Name)) {
 				ItemsToRemember.Remove(item.Name);
 			}
 
@@ -158,26 +138,11 @@ namespace GGJ2013.States
 
 			item.Clicked(this);
 
-			var handler = ItemFound;
-			if (handler != null)
-				handler(this, item);
-
-			if (IsLevelComplete)
+			if (IsLevelComplete) {
+				IsLevelComplete = true;
 				OnLevelComplete();
+			}
 		}
-
-		protected void OnLevelComplete()
-		{
-			IsLevelComplete = true;
-	
-			var handler = LevelComplete;
-			if (handler != null)
-				handler(this);
-
-		}
-
-		private MouseState _oldMouse;
-		private KeyboardState _oldKey;
 
 		private void DrawDebug()
 		{
@@ -190,8 +155,40 @@ namespace GGJ2013.States
 			{
 				G.CollisionRenderer.DrawPolygon (hotspot, Color.Red);
 			}
-			G.CollisionRenderer.DrawPolygon (NavMesh, Color.Black);
-			G.CollisionRenderer.Stop ();
+			G.CollisionRenderer.DrawPolygon (NavMesh, Color.Yellow);
+			G.CollisionRenderer.Stop();
+		}
+
+		protected Sprite CreateSprite(string texturePath, int x = 0, int y = 0)
+		{
+			return new Sprite
+			{
+				Texture = G.C.Load<Texture2D> (texturePath),
+				Location = new Vector2 (x, y)
+			};
+		}
+
+		protected  GameItem CreateItem(string name, string texturePath,
+			int radius, int x, int y)
+		{
+			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
+			{
+				CollisionData = new Circlegon (radius),
+				Location = new Vector2 (x, y)
+			};
+			return item;
+		}
+
+		protected void BeginDraw(SpriteBatch batch, BlendState state)
+		{
+			batch.Begin (
+				SpriteSortMode.Deferred,
+				state,
+				SamplerState.PointClamp,
+				DepthStencilState.Default,
+				RasterizerState.CullCounterClockwise,
+				null,
+				Camera.Transformation);
 		}
 	}
 }
