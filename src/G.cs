@@ -25,7 +25,6 @@ namespace GGJ2013
 		public static SpriteBatch SpriteBatch;
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
-		public static CameraSingle Camera;
 		public static GraphicsDeviceManager Graphics;
 		public static bool DebugCollision = false;
 
@@ -40,7 +39,6 @@ namespace GGJ2013
 		protected override void LoadContent()
 		{
 			Content.RootDirectory = "Content";
-			C = Content;
 
 			Graphics = new GraphicsDeviceManager (this);
 			Graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
@@ -52,6 +50,7 @@ namespace GGJ2013
 			CollisionRenderer = new CollisionRenderer (GraphicsDevice);
 			StateManager = new StateManager();
 			SpriteBatch = new SpriteBatch (GraphicsDevice);
+			C = Content;
 
 			LoadRealContent();
 			//LoadTestContent();
@@ -67,25 +66,17 @@ namespace GGJ2013
 		{
 			var debug1 = new BaseMemoryState ("Debug1", "Debug2", "None");
 			debug1.Texture = Content.Load<Texture2D> ("Debug1");
+			debug1.NavMesh = new Polygon (
+				new Vector2 (0, 0),
+				new Vector2 (0, 5),
+				new Vector2 (1, 7),
+				new Vector2 (2, 9),
+				new Vector2 (5, 14));
 
 			var item = new ReminderItem ("Circle", Content.Load<Texture2D> ("item1"));
 			item.CollisionData = new Circlegon (30);
 			item.Location = new Vector2 (250, 200);
 			debug1.Items.Add (item);
-
-			var debug2 = new BaseMemoryState ("Debug2", "Debug3", "Debug1");
-			debug2.Texture = Content.Load<Texture2D> ("Debug2");
-
-			var debug3 = new BaseMemoryState ("Debug3", "Debug1", "Debug2");
-			debug3.Texture = Content.Load<Texture2D> ("Debug3");
-
-			debug1.Hotspots.Add (new ActivePolygon (new Rectagon (30, 30, 50, 50), t => StateManager.Push (debug2)));
-			debug2.Hotspots.Add (new ActivePolygon (new Rectagon (60, 90, 100, 200), t => StateManager.Push (debug3)));
-			debug3.Hotspots.Add (new ActivePolygon (new Rectagon (10, 100, 50, 300), t => StateManager.Push (debug1)));
-
-			StateManager.Push (debug3);
-			StateManager.Push (debug2);
-			StateManager.Push (debug1);
 		}
 
 		protected override void UnloadContent()
