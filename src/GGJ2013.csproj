@@ -116,6 +116,14 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GameJamTools\src\JammyContentExtension\JammyContentExtension.csproj">
+      <Project>{dee5f6bf-990f-44af-9a99-658db2a8a877}</Project>
+      <Name>JammyContentExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GameJamTools\src\Jammy\Jammy.csproj">
+      <Project>{8c9fe739-00f8-42e1-b30a-3a0b2dfd5563}</Project>
+      <Name>Jammy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\assets\GGJ2013Content.contentproj">
       <Name>GGJ2013Content %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
