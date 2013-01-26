@@ -24,10 +24,15 @@ namespace GGJ2013.States
 		{
 			Items = new List<ReminderItem>();
 			Hotspots = new List<ActivePolygon>();
-			ParallaxLayer = new StaticParallax();
 			Camera = new CameraSingle(LiterallyHitler.Instance.GraphicsDevice.Viewport.Width,
 			                          LiterallyHitler.Instance.GraphicsDevice.Viewport.Height);
 			NextState = nextState;
+		}
+
+		public override void OnFocus()
+		{
+			LiterallyHitler.Camera = Camera;
+			base.OnFocus();
 		}
 
 		public override void Load()
@@ -43,6 +48,8 @@ namespace GGJ2013.States
 		public List<ReminderItem> Items;
 		public List<ActivePolygon> Hotspots;
 
+		public Texture2D Texture;
+		public Size Size;
 
 		public Sprite Player;
 		public CameraSingle Camera; 
@@ -59,7 +66,7 @@ namespace GGJ2013.States
 
 		public override void Draw(SpriteBatch batch)
 		{
-			ParallaxLayer.Draw(batch);
+			batch.Draw(Texture, Vector2.Zero, Color.White);
 
 			foreach (var item in Items)
 			{
@@ -69,7 +76,6 @@ namespace GGJ2013.States
 
 		public override void Update(GameTime gameTime)
 		{
-
 
 		}
 
@@ -98,8 +104,14 @@ namespace GGJ2013.States
 				{
 					if (!CollisionChecker.PointToPoly(new Vector2(cMouse.X, cMouse.Y), spot)) continue;
 					spot.OnActivate();
+					break;
 				}
 			}
+
+			var keystate = Keyboard.GetState();
+			Camera.Location += new Vector2((keystate.IsKeyDown(Keys.D) ? 1 : 0) - (keystate.IsKeyDown(Keys.A) ? 1 : 0),
+			                               (keystate.IsKeyDown(Keys.S) ? 1 : 0 - (keystate.IsKeyDown(Keys.W) ? 1 : 0)));
+
 
 			_oldMouse = cMouse;
 			return base.HandleInput(gameTime);

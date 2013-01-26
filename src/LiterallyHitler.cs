@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GGJ2013.States;
+using Jammy;
 using Jammy.Collision;
+using Jammy.Parallax;
 using Jammy.StateManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -25,6 +28,7 @@ namespace GGJ2013
 		public static SpriteBatch SpriteBatch;
 		public static CollisionRenderer CollisionRenderer;
 		public static StateManager StateManager;
+		public static CameraSingle Camera;
 
 
 
@@ -64,6 +68,12 @@ namespace GGJ2013
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
 
+			var state = new HitlerGameState("InterTest", "InterTest");
+
+			state.Texture = (Content.Load<Texture2D>("tent_interior_concept_sketch"));
+			StateManager.Push(state);
+
+
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -86,7 +96,7 @@ namespace GGJ2013
 			// Allows the game to exit
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
 				this.Exit();
-
+			StateManager.Update(gameTime);
 			// TODO: Add your update logic here
 
 			base.Update(gameTime);
@@ -99,7 +109,10 @@ namespace GGJ2013
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
-
+			SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.PointClamp, DepthStencilState.None,
+			                  RasterizerState.CullNone, null, Camera.Transformation);
+			StateManager.Draw(SpriteBatch);
+			SpriteBatch.End();
 			// TODO: Add your drawing code here
 
 			base.Draw(gameTime);
