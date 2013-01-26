@@ -139,6 +139,9 @@ namespace GGJ2013.States
 
 		public override bool HandleInput (GameTime gameTime)
 		{
+			if (!G.Active)
+				return false;
+
 			var mouse = Mouse.GetState();
 			var target = new Vector2(mouse.X, mouse.Y);
 
@@ -180,12 +183,9 @@ namespace GGJ2013.States
 						                            Color.White);
 					}
 				}
-
-				if (G.Active)
-				{
-					var t = Camera.ScreenToWorld (target);
-					Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
-				}
+				var t = Camera.ScreenToWorld (target);
+				Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
+			
 
 				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Player.Location, node.Poly)).FirstOrDefault();
