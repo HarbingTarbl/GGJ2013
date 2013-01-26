@@ -35,6 +35,7 @@ namespace GGJ2013
 				new Vector2 (71.0f, 10.0f), new Vector2 (16.0f, 12.0f), new Vector2 (14.0f, 16.0f), new Vector2 (12.0f, 20.0f),
 				new Vector2 (5.0f, 25.0f), new Vector2 (19.0f, 28.0f));
 			NavMesh.Location = new Vector2 (150, 50);
+			InsideMesh = NavMesh;
 			#endregion
 
 			var blanket = CreateItem ("Blanket", "TentArea/blanket", 30, 104, 503);
