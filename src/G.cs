@@ -66,7 +66,7 @@ namespace GGJ2013
 
 			DialogManager = new DialogManager()
 			{
-				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, 300, 300),
+				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, G.SCREEN_WIDTH, 300),
 				Font = G.C.Load<SpriteFont>("fonts/debug"),
 			};
 

@@ -36,6 +36,18 @@ namespace GGJ2013.States
 			NextLevel = next;
 			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
+
+			InventoryOpen = new Hotspot( //Replace with Sprite
+				new Rectagon(10, 5, 30, 20),
+				t =>
+				{
+					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
+					InventoryOpen.Location.Y += G.InventoryManager.IsShown
+						                          ? G.InventoryManager.Bounds.Bottom
+						                          : -G.InventoryManager.Bounds.Bottom;
+				});
+
+			Hotspots.Add(InventoryOpen);
 		}
 
 		public Player Player;
@@ -45,8 +57,9 @@ namespace GGJ2013.States
 		public List<GameItem> Items;
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
-		public List<Sprite> Lights; 
-		
+		public List<Sprite> Lights;
+
+		public Hotspot InventoryOpen;
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -113,15 +126,12 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState();
 			var target = new Vector2(mouse.X, mouse.Y);
 
-			if (CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
-				G.InventoryManager.IsShown = true;
-			else G.InventoryManager.IsShown = false;
-
 
 			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
-				if (G.InventoryManager.IsShown)
+				if (G.InventoryManager.IsShown && CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
 				{
+
 					LastItem = CurrentItem;
 					CurrentItem = G.InventoryManager.SelectItemAt(target);
 					if (!string.IsNullOrEmpty(CurrentItem))
@@ -240,6 +250,8 @@ namespace GGJ2013.States
 			{
 				G.Debug.DrawPolygon (polyNode.Poly, Color.Yellow);
 			}
+			G.Debug.DrawPolygon(G.InventoryManager.Bounds, Color.Tomato);
+
 			G.Debug.Stop();
 		}
 

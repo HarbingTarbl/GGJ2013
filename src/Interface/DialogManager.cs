@@ -40,14 +40,14 @@ namespace GGJ2013.Interface
 		public void Draw(SpriteBatch batch)
 		{
 			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
-			var drawLocation = new Vector2(MessageBounds.X + SidePadding, MessageBounds.Y + LinePadding);
+			var drawLocation = new Vector2(MessageBounds.X, MessageBounds.Y + LinePadding);
 			foreach (var msg in MessageQueue)
 			{
 				if (msg.IsShown)
 				{
 					for (var i = 0; i < msg.Lines.Length; i++)
 					{
-						batch.DrawString(Font, msg.Lines[i], drawLocation,
+						batch.DrawString(Font, msg.Lines[i], new Vector2((MessageBounds.Width) /2f - msg.Width /1.8f, 0) + drawLocation,
 						                 Color.Lerp(msg.Color, new Color(msg.Color.R, msg.Color.G, msg.Color.B, 0), msg.FadeAmount));
 					}
 					drawLocation += new Vector2(0, msg.Height);
