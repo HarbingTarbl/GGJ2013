@@ -51,10 +51,25 @@ namespace GGJ2013
 			};
 			#endregion
 
-			Blanket = CreateItem ("Blanket", "Desc", "TentArea/blanket", 30, 300, 503);
-			Flash = CreateItem ("Flashlight", "Desc", "TentArea/flashlight", 30, 587, 436);
-			Bag = CreateItem ("Bag", "Desc", "TentArea/dufflebag", 30, 723, 444);
-			Sweater = CreateItem("Sweater", "Desc", "TentArea/sweater", 30, 500, 550);
+			Blanket = CreateItem ("Blanket", "A warm blanket", "TentArea/blanket", 300, 503, 				
+				new Vector2 (0, 41),
+				new Vector2 (256, -6),
+				new Vector2 (419, 91),
+				new Vector2 (296, 153));
+
+			Flash = CreateItem ("Flashlight", "A bright flashlight", "TentArea/flashlight", 587, 436,
+				new Vector2 (568 - 587, 493 - 436),
+				new Vector2 (575 - 587, 427 - 436),
+				new Vector2 (630 - 587, 433 - 436),
+				new Vector2 (634 - 587, 484 - 436));
+
+			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", 500, 550,
+				new Vector2 (426 - 500, 563 - 550),
+				new Vector2 (513 - 500, 551 - 550),
+				new Vector2 (653 - 500, 559 - 550),
+				new Vector2 (639 - 500, 594 - 550),
+				new Vector2 (566 - 500, 615 - 550),
+				new Vector2 (496 - 500, 603 - 550));
 
 			Blanket.OnClick += (t) =>
 			{
@@ -71,20 +86,31 @@ namespace GGJ2013
 			Flash.IsActive = true;
 			Flash.CanPickup = true;
 
+			Bag = new Hotspot (
+				new Polygon (
+					new Vector2 (757, 443),
+					new Vector2 (883, 417),
+					new Vector2 (902, 489),
+					new Vector2 (776, 507),
+					new Vector2 (745, 483)
+					), t =>
+					{
+						// something should happen here?
+					});
 
 			Exit = new Hotspot(
 				new Polygon(
-					new Vector2(600, 250),
-					new Vector2(607, 373),
-					new Vector2(575, 459),
-					new Vector2(650, 468),
-					new Vector2(675, 374),
-					new Vector2(657, 299)), t =>
+					new Vector2 (620 + 90, 250),
+					new Vector2 (607 + 90, 373),
+					new Vector2 (575 + 90, 459),
+					new Vector2 (650 + 90, 468),
+					new Vector2 (675 + 90, 374),
+					new Vector2 (657 + 90, 299)), t =>
 					{
 						if (CanLeaveLevel)
 						{
 							G.StateManager.Pop();
-							G.StateManager.Push(NextLevel);
+							G.StateManager.Push (NextLevel);
 						}
 						else
 						{
@@ -111,7 +137,6 @@ namespace GGJ2013
 			light2.IsVisible = false;
 
 			Items.Add (Flash);
-			Items.Add (Bag);
 			Items.Add (Sweater);
 			Items.Add (Blanket);
 
@@ -120,6 +145,7 @@ namespace GGJ2013
 			Lights.Add(light2);
 
 			Hotspots.Add(Exit);
+			Hotspots.Add(Bag);
 		}
 
 		protected override void OnLevelComplete()
@@ -162,10 +188,10 @@ namespace GGJ2013
 
 		public GameItem Sweater;
 		public GameItem Blanket;
-		public GameItem Bag;
 		public GameItem Flash;
 
-		public Hotspot Exit; 
+		public Hotspot Exit;
+		public Hotspot Bag;
 
 		public bool BlanketClicked;
 		public Vector2 BlanketDestination = new Vector2(103, 450);

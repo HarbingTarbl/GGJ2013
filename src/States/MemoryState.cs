@@ -62,6 +62,9 @@ namespace GGJ2013.States
 		public string NextLevel;
 		public string LastLevel;
 
+		public string CurrentItem;
+		public string LastItem;
+
 		protected virtual void OnLevelStart(string LastScreen) { }
 		protected virtual void OnLevelComplete() { }
 
@@ -94,7 +97,9 @@ namespace GGJ2013.States
 			if (G.DebugCollision)
 				DrawDebug();
 
+			G.InventoryManager.Draw(batch);
 			Dialog.Draw(batch);
+
 		}
 
 		public override void Update(GameTime gameTime)
@@ -112,8 +117,19 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState();
 			var target = new Vector2(mouse.X, mouse.Y);
 
+			if (CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
+				G.InventoryManager.IsShown = true;
+			else G.InventoryManager.IsShown = false;
+
+
 			if (mouse.LeftButton.WasButtonPressed(_oldMouse.LeftButton))
 			{
+				if (G.InventoryManager.IsShown)
+				{
+					LastLevel = CurrentItem;
+					CurrentItem = G.InventoryManager.SelectItemAt(target);
+				}
+
 				//TODO: take this out, only for development
 				if (G.Active)
 				{
@@ -121,11 +137,11 @@ namespace GGJ2013.States
 					Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
 				}
 
-				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
-					Player.Location, node.Poly)).FirstOrDefault();
+				var myPoly = Nav.FirstOrDefault(node => CollisionChecker.PointToPoly (
+					Player.Location, node.Poly));
 
-				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
-					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault();
+				var targetPoly = Nav.FirstOrDefault(node => CollisionChecker.PointToPoly (
+					Camera.ScreenToWorld (target), node.Poly));
 				
 				if (targetPoly != null)
 				{
@@ -154,6 +170,7 @@ namespace GGJ2013.States
 						OnItemFound(item);
 						if (item.CanPickup)
 						{
+							G.InventoryManager.CurrentItems.Add(item.Name);
 							Items.RemoveAt(i);
 						}
 						break;
@@ -214,13 +231,12 @@ namespace GGJ2013.States
 		{
 			G.Debug.Begin (Camera.Transformation);
 			foreach (var item in Items) {
-				G.Debug.Draw (item, Color.Lime);
+				G.Debug.Draw (item, Color.Blue);
 			}
 			foreach (var hotspot in Hotspots) {
 				G.Debug.DrawPolygon (hotspot, Color.Red);
 			}
-			foreach (var polyNode in Nav)
-			{
+			foreach (var polyNode in Nav) {
 				G.Debug.DrawPolygon (polyNode.Poly, Color.Yellow);
 			}
 			G.Debug.Stop();
@@ -235,12 +251,12 @@ namespace GGJ2013.States
 			};
 		}
 
-		protected  GameItem CreateItem (string name, string description, string texturePath,
-			int radius, int x, int y)
+		protected  GameItem CreateItem (string name, string description,
+			string texturePath, int x, int y, params Vector2[] verts)
 		{
 			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
 			{
-				CollisionData = new Circlegon (radius),
+				CollisionData = new Polygon (verts),
 				Location = new Vector2 (x, y)
 			};
 			return item;

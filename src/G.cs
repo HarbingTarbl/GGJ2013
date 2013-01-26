@@ -4,6 +4,7 @@ using System.Linq;
 using GGJ2013.Collision;
 using GGJ2013.Entities;
 using GGJ2013.Graphics;
+using GGJ2013.Interface;
 using GGJ2013.Items;
 using GGJ2013.States;
 using Jammy;
@@ -34,6 +35,7 @@ namespace GGJ2013
 		public static StateManager StateManager;
 		public static GraphicsDeviceManager Graphics;
 		public static BloomComponent BloomRenderer;
+		public static InventoryManager InventoryManager;
 		public static GameTime GameTime;
 		public static bool DebugCollision = false;
 		public static string LastScreen;	
@@ -64,6 +66,8 @@ namespace GGJ2013
 
 			StateManager.Add (new TentState());
 			StateManager.Set ("Tent");
+
+			InventoryManager = new InventoryManager();
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
