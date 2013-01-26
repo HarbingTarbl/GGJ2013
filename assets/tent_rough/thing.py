@@ -41,12 +41,10 @@ for p in points:
 avgx /= len(points)
 avgy /= len(points)
 
-newp = []
-for p  in points:
-    newp.append((p[0] - avgx, p[1] - avgy))
+newp = points;
 
 path = ImagePath.Path(newp)
-path.compact(6)
+path.compact(10)
 
 f = file(name + ".tex", "w")
 for p in path:
