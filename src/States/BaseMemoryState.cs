@@ -124,7 +124,7 @@ namespace GGJ2013.States
 					var line = new Polygon(Player.Location, Player.Destination);
 					foreach (var poly in OutsideMeshes)
 					{
-						if (!CollisionChecker.PolyToPoly(line, poly)) //Use nav
+						if (CollisionChecker.PolyToPoly(line, poly)) //Use nav
 						{
 							var closest = 0;
 							var dist = Vector2.Distance(NavMesh.Vertices[0], Player.Location);
@@ -139,7 +139,7 @@ namespace GGJ2013.States
 							}
 
 
-							Player.Direction = Player.Location - NavMesh.Vertices[closest];
+							Player.Direction = NavMesh.Vertices[(closest + 1)%NavMesh.Vertices.Count] - NavMesh.Vertices[closest];
 							Player.Direction.Normalize();
 
 							break;

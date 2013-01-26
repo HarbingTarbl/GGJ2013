@@ -17,8 +17,26 @@ namespace GGJ2013
 		{
 			var tent = new BaseMemoryState ("Tent", "", "");
 			tent.Texture = C.Load<Texture2D> ("TentArea/background");
-			tent.InsideMesh = new Circlegon(tent.Texture.Width/2f, tent.Texture.Height/2f, 300f);
-			tent.NavMesh = new Circlegon(tent.Texture.Width/2f, tent.Texture.Height/2f, 100f);
+			//tent.InsideMesh = new Circlegon(tent.Texture.Width/2f, tent.Texture.Height/2f, 300f);
+			//tent.NavMesh = new Circlegon(tent.Texture.Width/2f, tent.Texture.Height/2f, 100f);
+
+			var half = new Vector2(tent.Texture.Width/2f, tent.Texture.Height/2f);
+
+			tent.InsideMesh = new Polygon(
+				half + new Vector2(100, 100),
+				half + new Vector2(100, -100),
+				half + new Vector2(-100, -100),
+				half + new Vector2(-100, 100),
+				half + new Vector2(-200, 100),
+				half + new Vector2(-200, -200),
+				half + new Vector2(200, -200),
+				half + new Vector2(200, 200));
+
+			tent.NavMesh = new Polygon(
+				half + new Vector2(150, 150),
+				half + new Vector2(150, -150),
+				half + new Vector2(-150, -150),
+				half + new Vector2(-150, 150));
 
 			var lantern = new ReminderItem ("Lantern", Content.Load<Texture2D>("TentArea/lantern"));
 			lantern.CollisionData = new Circlegon(30);
