@@ -117,8 +117,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\assets\GGJ2013Content.contentproj">
-      <Name>GGJ2013Content</Name>
+      <Name>GGJ2013Content %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{819AB6FC-938F-48DB-84E2-8D773549DF39}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
