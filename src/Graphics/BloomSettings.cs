@@ -38,7 +38,7 @@ namespace GGJ2013.Graphics
         public readonly float BaseIntensity;
 
 
-        // Independently control the color saturation of the bloom and
+        // Independently control the Color saturation of the bloom and
         // base images. Zero is totally desaturated, 1.0 leaves saturation
         // unchanged, while higher values increase the saturation level.
         public readonly float BloomSaturation;

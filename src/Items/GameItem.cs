@@ -42,6 +42,10 @@ namespace GGJ2013.Items
 
 		public bool IsFound;
 
+		public bool CanPickup;
+
+		public bool IsActive;
+
 		public Action<MemoryState> OnClick;
 
 		public string Name;

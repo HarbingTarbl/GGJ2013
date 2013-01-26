@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.Collision;
+using GGJ2013.Dialog;
 using GGJ2013.Entities;
 using GGJ2013.Items;
 using Jammy;
@@ -30,6 +31,11 @@ namespace GGJ2013.States
 			Hotspots = new List<ActivePolygon>();
 			ItemsToLeave = new List<string>();
 			ItemsToRemember = new List<string>();
+			Dialog = new DialogManager()
+			{
+				MessageBounds = new Rectangle(15, 15, 300, 300),
+				Font = G.C.Load<SpriteFont>("fonts/debug"),
+			};
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 		}
 
@@ -40,6 +46,7 @@ namespace GGJ2013.States
 		public List<GameItem> Items;
 		public List<ActivePolygon> Hotspots;
 		public List<PolyNode> Nav;
+		public DialogManager Dialog;
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -54,6 +61,8 @@ namespace GGJ2013.States
 		public override void OnFocus()
 		{
 			OnLevelStart (G.LastScreen);
+			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
+			Camera.UseBounds = true;
 		}
 
 		public override void Draw (SpriteBatch batch)
@@ -70,6 +79,8 @@ namespace GGJ2013.States
 
 			if (G.DebugCollision)
 				DrawDebug();
+
+			Dialog.Draw(batch);
 		}
 
 		public override void Update(GameTime gameTime)
@@ -77,7 +88,9 @@ namespace GGJ2013.States
 			Items.ForEach (i => i.Update (gameTime));
 
 			Player.Update(gameTime);
-			Camera.CenterOnPoint (Player.Location);
+			Camera.CenterOnPoint(Player.Location.X + Player.Texture.Width/2f, Background.Width/2f);
+
+			Dialog.Update(gameTime);
 		}
 
 		public override bool HandleInput (GameTime gameTime)
@@ -98,7 +111,7 @@ namespace GGJ2013.States
 
 				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault();
-
+				
 				if (targetPoly != null)
 				{
 					if (targetPoly == myPoly)
@@ -113,22 +126,22 @@ namespace GGJ2013.States
 				else {
 					Trace.WriteLine ("Did not click in a valid polygon");
 				}
-
+				
 				foreach (var item in Items)
 				{
-					if (Vector2.DistanceSquared(Player.Location, item.CollisionData.AbsoluteCenter) > 128
-					    && !CollisionChecker.PointToPoly(Camera.ScreenToWorld(target), item.CollisionData)) continue;
+					if(item.IsFound || !item.IsActive)
+						continue;
 
-					if (item.IsFound) continue;
-
-					OnItemFound(item);
+					if ( //TODO this is buggy. Needs actual player collision
+					    CollisionChecker.PointToPoly(target, item.CollisionData))
+							OnItemFound(item);
 					break;
 				}
 
 				foreach (var spot in Hotspots)
 				{
-					bool hotSpotClicked = Vector2.DistanceSquared (Player.Location, spot.AbsoluteCenter) < 128
-						&& CollisionChecker.PointToPoly (Camera.ScreenToWorld (target), spot);
+					bool hotSpotClicked = Vector2.DistanceSquared (Player.Location, spot.AbsoluteCenter) < 0
+						&& CollisionChecker.PointToPoly (target, spot);
 
 					if (hotSpotClicked)
 						spot.OnActivate (this);

@@ -40,7 +40,7 @@ namespace GGJ2013.Entities
 				hasTarget = true;
 			}
 
-			movePassed += gameTime.ElapsedGameTime.Milliseconds;
+			movePassed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 			if (MathHelper.Clamp (movePassed, 0, moveTime) >= moveTime)
 			{
 				Location = Vector2.Lerp (start, MoveQueue.Peek(), 1f);
@@ -53,7 +53,7 @@ namespace GGJ2013.Entities
 			base.Update (gameTime);
 		}
 
-		private const float SPEED = 1; // pixel/ms
+		private const float SPEED = 120; // pixel/sec
 		private bool hasTarget;
 		private float moveTime;
 		private float movePassed;

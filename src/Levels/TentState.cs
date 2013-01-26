@@ -11,6 +11,7 @@ using Jammy.Sprites;
 using Jammy.StateManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace GGJ2013
 {
@@ -34,10 +35,22 @@ namespace GGJ2013
 			Nav.Add (new PolyNode (p1));
 			#endregion
 
-			var blanket = CreateItem ("Blanket", "TentArea/blanket", 30, 104, 503);
-			var flash = CreateItem ("Flashlight", "TentArea/flashlight", 30, 587, 436);
-			var bag = CreateItem ("Bag", "TentArea/dufflebag", 30, 723, 444);
-			var sweater = CreateItem ("Sweater", "TentArea/sweater", 30, 380, 555);
+			Blanket = CreateItem ("Blanket", "TentArea/blanket", 30, 300, 503);
+			Flash = CreateItem ("Flashlight", "TentArea/flashlight", 30, 587, 436);
+			Bag = CreateItem ("Bag", "TentArea/dufflebag", 30, 723, 444);
+			Sweater = CreateItem("Sweater", "TentArea/sweater", 30, 500, 550);
+
+			Blanket.OnClick += (t) =>
+			{
+				var that = this;
+				that.BlanketClicked = true;
+				that.Blanket.IsActive = false;
+			};
+
+			Blanket.IsActive = true;
+			Blanket.CanPickup = false;
+
+			Sweater.CanPickup = true;
 
 			lantern = CreateSprite ("TentArea/lantern", 520, 0);
 			light1 = CreateSprite ("TentArea/light1");
@@ -46,10 +59,11 @@ namespace GGJ2013
 			light1.IsVisible = false;
 			light2.IsVisible = false;
 
-			Items.Add (blanket);
-			Items.Add (flash);
-			Items.Add (bag);
-			Items.Add (sweater);
+			Items.Add (Flash);
+			Items.Add (Bag);
+			Items.Add (Sweater);
+			Items.Add(Blanket);
+
 		}
 
 		public override void Draw(SpriteBatch batch)
@@ -61,11 +75,54 @@ namespace GGJ2013
 			light1.Draw (batch);
 			light2.Draw (batch);
 			batch.End();
+
+		}
+
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+
+			if (BlanketClicked)
+			{
+				CurrentBlanketMoveTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+				Blanket.Location = Vector2.SmoothStep(Blanket.Location, BlanketDestination, CurrentBlanketMoveTime / BlanketMoveTime);
+				if (CurrentBlanketMoveTime >= BlanketMoveTime)
+				{
+					BlanketClicked = false;
+					Sweater.IsActive = true;
+				}
+			}
+
+		}
+
+		public override bool HandleInput(GameTime gameTime)
+		{
+			
+
+			if (Keyboard.GetState().IsKeyDown(Keys.Space))
+			{
+				Dialog.PostQueuedMessage("Spaaaaaace", new TimeSpan(0, 0, 5));
+			}
+
+			return base.HandleInput(gameTime);
 		}
 
 		private Sprite lantern;
 		private Sprite light1;
 		private Sprite light2;
+
+		public GameItem Sweater;
+		public GameItem Blanket;
+		public GameItem Bag;
+		public GameItem Flash;
+
+		public bool BlanketClicked;
+		public Vector2 BlanketDestination = new Vector2(103, 450);
+
+
+		public float BlanketMoveTime = 6; //Move time in seconds ish
+		public float CurrentBlanketMoveTime;
+
 
 		protected override void OnLevelStart (string LastScreen)
 		{
