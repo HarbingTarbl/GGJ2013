@@ -52,7 +52,9 @@ namespace GGJ2013.States
 		public List<ActivePolygon> Hotspots;
 
 		public List<string> ItemsToLeave;
-		public List<string> ItemsToRemember; 
+		public List<string> ItemsToRemember;
+
+		public Polygon NavMesh;
 
 		public Texture2D Texture;
 		public Size Size;
@@ -87,6 +89,9 @@ namespace GGJ2013.States
 			{
 				item.Update(gameTime);
 			}
+
+
+
 			//FIX: FIX ME
 			//Player.Update(gameTime);
 			//Camera.CenterOnPoint(Player.Location);
