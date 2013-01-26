@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GGJ2013.Collision;
 using GGJ2013.Items;
 using Jammy;
 using Jammy.Collision;
 using Jammy.Parallax;
 using Jammy.Helpers;
+using Jammy.Sprites;
 using Jammy.StateManager;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +23,10 @@ namespace GGJ2013.States
 			: base(name)
 		{
 			Items = new List<ReminderItem>();
+			Hotspots = new List<ActivePolygon>();
 			ParallaxLayer = new StaticParallax();
+			Camera = new CameraSingle(LiterallyHitler.Instance.GraphicsDevice.Viewport.Width,
+			                          LiterallyHitler.Instance.GraphicsDevice.Viewport.Height);
 			NextState = nextState;
 		}
 
@@ -36,7 +41,14 @@ namespace GGJ2013.States
 		}
 
 		public List<ReminderItem> Items;
+		public List<ActivePolygon> Hotspots;
+
+
+		public Sprite Player;
+		public CameraSingle Camera; 
+
 		public MemoryItem Reward;
+
 		public bool IsLevelComplete;
 		public string NextState;
 
@@ -47,6 +59,8 @@ namespace GGJ2013.States
 
 		public override void Draw(SpriteBatch batch)
 		{
+			ParallaxLayer.Draw(batch);
+
 			foreach (var item in Items)
 			{
 				item.Draw(batch);
@@ -61,7 +75,8 @@ namespace GGJ2013.States
 
 		public void NextLevel()
 		{
-
+			LiterallyHitler.StateManager.Pop();
+			LiterallyHitler.StateManager.Push(NextState);
 		}
 
 		public override bool HandleInput(GameTime gameTime)
@@ -73,9 +88,16 @@ namespace GGJ2013.States
 				foreach (var item in Items)
 				{
 					if (!CollisionChecker.PointToPoly(new Vector2(cMouse.X, cMouse.Y), (Polygon) item.CollisionData)) continue;
+					if (item.IsFound) continue;
 
-					item.Clicked(false);
-					
+					OnItemFound(item);
+					break;
+				}
+
+				foreach (var spot in Hotspots)
+				{
+					if (!CollisionChecker.PointToPoly(new Vector2(cMouse.X, cMouse.Y), spot)) continue;
+					spot.OnActivate();
 				}
 			}
 
@@ -86,6 +108,8 @@ namespace GGJ2013.States
 		protected void OnItemFound(ReminderItem item)
 		{
 			_foundItems++;
+
+			item.Clicked(_foundItems == Items.Count);
 
 			var handler = ItemFound;
 			if (handler != null)

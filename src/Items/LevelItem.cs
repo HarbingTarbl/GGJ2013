@@ -5,12 +5,10 @@ using System.Text;
 
 namespace GGJ2013.Items
 {
-	public class MemoryItem
+	public class LevelItem
 	{
-		public void Show()
-		{
-			
-		}
+
+
 
 	}
 }

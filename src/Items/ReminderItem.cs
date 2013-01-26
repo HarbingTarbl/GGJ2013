@@ -9,8 +9,16 @@ namespace GGJ2013.Items
 	public class ReminderItem
 		: Sprite
 	{
+		public ReminderItem(string name)
+		{
+			Name = name;
+		}
+
 		public bool IsFound;
+
 		public Action<bool> OnClick;
+
+		public string Name;
 
 		public void Clicked(bool ugh)
 		{

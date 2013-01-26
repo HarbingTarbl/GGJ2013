@@ -107,6 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collision\ActivePolygon.cs" />
+    <Compile Include="Items\LevelItem.cs" />
     <Compile Include="Items\MemoryItem.cs" />
     <Compile Include="Items\ReminderItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
