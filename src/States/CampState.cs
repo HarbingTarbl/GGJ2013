@@ -172,6 +172,7 @@ namespace GGJ2013.States
 			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
 			{
 				GameItem.ItemDictionary["Flashlight"].Description = "A flashlight, it's batteries are fully charged";
+				GameItem.ItemDictionary["Flashlight"].InventoryIcon = G.C.Load<Texture2D>("UI/Icons/flashlight_on");
 				G.InventoryManager.CurrentItems.Remove("Batteries");
 			});
 

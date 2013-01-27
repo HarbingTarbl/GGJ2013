@@ -109,7 +109,7 @@ namespace GGJ2013.States
 			if (HeldItem != null
 			    && !WasReleased)
 			{
-				var vec = Vector2.Transform(new Vector2(m.X, m.Y) - new Vector2(50,50), Camera.Transformation);
+				var vec = Camera.ScreenToWorld(new Vector2(m.X, m.Y) - new Vector2(50, 50));
 				batch.Draw(HeldItem.InventoryIcon, new Rectangle((int)vec.X, (int)vec.Y, 100, 100), Color.White);
 
 			}
@@ -217,8 +217,7 @@ namespace GGJ2013.States
 				Player.Target = null;
 
 				//TODO: take out later
-				var t = Camera.ScreenToWorld(target);
-				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", t.X, t.Y));
+				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", target.X, target.Y));
 
 				var myPoly = Nav.Where(node => CollisionChecker.PointToPoly(
 					Player.Location, node.Poly)).FirstOrDefault();
