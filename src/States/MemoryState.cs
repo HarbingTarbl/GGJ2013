@@ -420,8 +420,9 @@ namespace GGJ2013.States
 				CollisionData = new Polygon(verts),
 				Location = new Vector2(x, y),
 				Description = desc,
-				InventoryIcon = G.C.Load<Texture2D>(iconPath)
+				InventoryIcon = G.C.Load<Texture2D> (iconPath)
 			};
+
 			return item;
 		}
 

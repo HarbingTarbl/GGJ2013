@@ -307,8 +307,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ForestArea\cover bush.png">
-      <Name>cover bush</Name>
+    <Compile Include="ForestArea\coverbush.png">
+      <Name>coverbush</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -335,8 +335,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ForestArea\thorn bush.png">
-      <Name>thorn bush</Name>
+    <Compile Include="ForestArea\thornbush.png">
+      <Name>thornbush</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -73,6 +73,7 @@ namespace GGJ2013.States
 			};
 			#endregion
 
+			
 			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
 			                           DepthFormat.None);
 			Flashlight = CreateSprite("flashlight_beam", 0, 0);
@@ -85,9 +86,33 @@ namespace GGJ2013.States
 			pixel = new Texture2D(G.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
 			pixel.SetData<Color>(new Color[] {Color.White});
 
-
-
 			//Shoe = CreateItem("Shoe");
+			Foreground = CreateSprite ("ForestArea/foreground");
+
+			Shoe = CreateItem ("Sarah's Shoe", "", "ForestArea/shoe", "UI/Icons/papers", 326, 467,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+
+			Branch = CreateItem ("Bloody Broken Branch", "", "ForestArea/branch", "UI/Icons/papers", 784, 410,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+
+			ThornBush = CreateItem ("Bush of Thorns", "", "ForestArea/thornbush", "UI/Icons/papers", 830, 283,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+
+			CoverBrush1 = CreateItem ("CB1", "", "ForestArea/coverbush", "UI/Icons/papers", 1230, 489,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+			CoverBrush2 = CreateItem ("CB2", "", "ForestArea/coverbush", "UI/Icons/papers", 1463, 486,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+			CoverBrush3 = CreateItem ("CB13", "", "ForestArea/coverbush", "UI/Icons/papers", 1666, 493,
+				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+
+			Items.Add (Shoe);
+			Items.Add (Branch);
+			Items.Add (ThornBush);
+			Items.Add (CoverBrush1);
+			Items.Add (CoverBrush2);
+			Items.Add (CoverBrush3);
+
+			Lights.Add (Foreground);
 		}
 
 		public override void Draw(SpriteBatch batch)
@@ -136,13 +161,16 @@ namespace GGJ2013.States
 
 		}
 
+		public Sprite Foreground;
+
 		public Sprite Flashlight;
 		public Sprite Lightmask;
 
-		public Sprite CoverBrush;
-		public Sprite Branch;
-		public Sprite ThornBush;
-
+		public GameItem CoverBrush1;
+		public GameItem CoverBrush2;
+		public GameItem CoverBrush3;
+		public GameItem ThornBush;
+		public GameItem Branch;
 		public GameItem Shoe;
 
 		public Hotspot CampEntrance;
