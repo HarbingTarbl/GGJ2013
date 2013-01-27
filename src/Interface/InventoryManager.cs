@@ -64,7 +64,6 @@ namespace GGJ2013.Interface
 			}
 			
 			G.Debug.Stop();
-
 		}
 
 
