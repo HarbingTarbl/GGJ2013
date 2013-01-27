@@ -36,10 +36,11 @@ namespace GGJ2013.States
 				new Vector2(2, 717));
 
 			var p3 = new Polygon (
-				new Vector2 (871, 404),
-				new Vector2 (1500, 409),
-				new Vector2 (1500, 712),
-				new Vector2 (906, 713));
+				new Vector2 (1090 - 225, 406),
+				new Vector2 (1563 - 225, 414),
+				new Vector2 (1573 - 225, 533),
+				new Vector2 (1300 - 225, 715),
+				new Vector2 (1128 - 225, 714));
 
 			var p4 = new Polygon (
 				new Vector2(936, 398),
@@ -109,28 +110,35 @@ namespace GGJ2013.States
 					G.StateManager.Push(LastLevel);
 				});
 
-			CampExit = new Hotspot("Camp Exit",
-			                       new Polygon(),
-			                       t =>
-			                       {
-				                       if (CanLeaveLevel)
-				                       {
-					                       G.StateManager.Pop();
-					                       G.StateManager.Push(NextLevel);
-										   
-				                       }
-				                       else
-				                       {
-					                       G.DialogManager.PostQueuedMessage("[Can't leave message]");
-				                       }
-			                       });
+			CampExit = new Hotspot(
+				"Camp Exit",
+			    new Polygon(
+				new Vector2(1087, 281),
+				new Vector2(1075, 110),
+				new Vector2(1277, 114),
+				new Vector2(1268, 301)),
+			    t =>
+			    {
+				    if (CanLeaveLevel)
+				    {
+					    G.StateManager.Pop();
+					    G.StateManager.Push(NextLevel); 
+				    }
+				    else
+				    {
+					    G.DialogManager.PostQueuedMessage("TODO: [Can't leave message]");
+				    }
+			    });
 
 			Firepit = new Hotspot(
 				"Light Fire Pit",
 				new	Polygon(new Vector2(57, 497),
-					new Vector2(176, 463),
-					new Vector2(286, 480),
-					new Vector2(190, 510)),
+					new Vector2(50, 465),
+					new Vector2(184, 412),
+					new Vector2 (307, 458),
+					new Vector2 (290, 503),
+					new Vector2(194, 526),
+					new Vector2(97, 518)),
 				t =>
 				{
 					if (G.InventoryManager.CurrentItems.Contains("Matches"))
@@ -166,11 +174,12 @@ namespace GGJ2013.States
 				Backpack
 			});
 
-			/*Lights.AddRange(new[]
+			Lights.AddRange(new[]
 			{
-				FirepitLight,
-				TentLight
-			});*/
+				CreateSprite ("CampArea/foreground")
+				//FirepitLight,
+				//TentLight
+			});
 
 			Hotspots.AddRange(new[]
 			{
@@ -211,7 +220,7 @@ namespace GGJ2013.States
 				case null:
 				case "Tent":
 					Player.Location = new Vector2 (188, 283);
-					MediaPlayer.Play (G.Chirping);
+					MediaPlayer.Play (G.C.Load<Song> ("sfx/Chirping"));
 					MediaPlayer.Volume = 0.25f;
 					MediaPlayer.IsRepeating = true;
 					break;
