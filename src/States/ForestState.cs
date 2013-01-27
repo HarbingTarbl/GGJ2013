@@ -65,10 +65,10 @@ namespace GGJ2013.States
 			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
 			                           DepthFormat.None);
 			Flashlight = CreateSprite("flashlight_beam", 0, 0);
-			Lightmask = new Sprite()
+			Lightmask = new Sprite
 			{
 				IsVisible = true,
-				Texture = (Texture2D) light,
+				Texture = light,
 			};
 
 

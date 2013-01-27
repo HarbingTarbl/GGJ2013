@@ -17,7 +17,7 @@ namespace GGJ2013.States
 		: MemoryState
 	{
 		public CampState()
-			: base("Camp", "Woods", "Tent")
+			: base("Camp", "Forest", "Tent")
 		{
 			Background = G.C.Load<Texture2D>("CampArea/background");
 			#region NavMesh
@@ -131,7 +131,7 @@ namespace GGJ2013.States
 						G.FadeOut.Finished += () =>
 						{
 							G.FadeOut.Reset ();
-							G.StateManager.Set (NextLevel);
+							G.StateManager.Set ("Forest");
 							G.FadeIn.TriggerStart ();
 						};
 						G.FadeOut.TriggerStart ();
