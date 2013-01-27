@@ -78,6 +78,8 @@ namespace GGJ2013.Entities
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
 			CollisionData.Location = Location - Origin;
+
+
 			if (MoveQueue.Count == 0)
 			{
 				if(AnimationManager.CurrentAnimation.Name == "Walk")
@@ -92,27 +94,30 @@ namespace GGJ2013.Entities
 				AnimationManager.SetAnimation("Walk");
 			}
 
-
-
-			// Grab the next target in our queue
-			if (MoveQueue.Count > 0 && !hasTarget)
+			if (AnimationManager.CurrentAnimation.Name == "Walk")
 			{
-				start = new Vector2 (Location.X, Location.Y);
-				movePassed = 0;
-				moveTime = Vector2.Distance (MoveQueue.Peek(), Location)/SPEED;
-				hasTarget = true;
-			}
 
-			movePassed += (float)gameTime.ElapsedGameTime.TotalSeconds;
-			if (MathHelper.Clamp (movePassed, 0, moveTime) >= moveTime)
-			{
-				Location = Vector2.Lerp (start, MoveQueue.Peek(), 1f);
-				MoveQueue.Dequeue();
-				hasTarget = false;
-				return;
-			}
+				// Grab the next target in our queue
+				if (MoveQueue.Count > 0
+				    && !hasTarget)
+				{
+					start = new Vector2(Location.X, Location.Y);
+					movePassed = 0;
+					moveTime = Vector2.Distance(MoveQueue.Peek(), Location)/SPEED;
+					hasTarget = true;
+				}
 
-			Location = Vector2.Lerp (start, MoveQueue.Peek(), movePassed/moveTime);
+				movePassed += (float) gameTime.ElapsedGameTime.TotalSeconds;
+				if (MathHelper.Clamp(movePassed, 0, moveTime) >= moveTime)
+				{
+					Location = Vector2.Lerp(start, MoveQueue.Peek(), 1f);
+					MoveQueue.Dequeue();
+					hasTarget = false;
+					return;
+				}
+
+				Location = Vector2.Lerp(start, MoveQueue.Peek(), movePassed/moveTime);
+			}
 		}
 
 		private const float SPEED = 120; // pixel/sec
