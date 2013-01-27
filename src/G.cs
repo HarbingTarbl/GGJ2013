@@ -75,7 +75,7 @@ namespace GGJ2013
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());
 			StateManager.Add (new ForestState());
-			StateManager.Set ("Camp");
+			StateManager.Set ("Forest");
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
