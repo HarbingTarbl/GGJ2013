@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GGJ2013.Collision;
+using GGJ2013.Items;
+using GGJ2013.States;
 using Jammy.Collision;
 using Jammy.Sprites;
 using Microsoft.Xna.Framework;
@@ -51,9 +54,12 @@ namespace GGJ2013.Entities
 		{
 			_IHateRectangles.Width = 125;
 			_IHateRectangles.Height = 250;
+
+
+
 			Origin = new Vector2(125, 500);
 			AnimationManager.SetAnimation("Idle");
-			CollisionData = new Rectagon(0, 0, 250, 500);
+			CollisionData = new Rectagon(125, 250, 95, 250);
 
 		}
 
@@ -77,13 +83,23 @@ namespace GGJ2013.Entities
 			AnimationManager.Update(gameTime);
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
-			CollisionData.Location = Location - Origin;
+			CollisionData.Location = Location - Origin + new Vector2(75, 250);
 
 
 			if (MoveQueue.Count == 0)
 			{
-				if(AnimationManager.CurrentAnimation.Name == "Walk")
+				if (AnimationManager.CurrentAnimation.Name == "Walk")
+				{
 					AnimationManager.SetAnimation("Idle");
+					if (Target != null)
+					{
+						var state = (MemoryState) G.StateManager.CurrentState;
+						if (TargerIsItem)
+							state.OnItemFound((GameItem) Target);
+						else
+							((Hotspot) Target).OnActivate(state);
+					}
+				}
 
 				return;				
 			}
@@ -119,6 +135,9 @@ namespace GGJ2013.Entities
 				Location = Vector2.Lerp(start, MoveQueue.Peek(), movePassed/moveTime);
 			}
 		}
+
+		public object Target;
+		public bool TargerIsItem;
 
 		private const float SPEED = 120; // pixel/sec
 		private bool hasTarget;
