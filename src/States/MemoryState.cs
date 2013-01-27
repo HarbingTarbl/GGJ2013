@@ -92,7 +92,7 @@ namespace GGJ2013.States
 		public override void OnFocus()
 		{
 
-			OnLevelStart (LastLevel);
+			OnLevelStart (G.LastScreen);
 			Camera.Location = new Vector2(0, 0);
 			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
 			Camera.UseBounds = true;

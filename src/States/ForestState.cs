@@ -16,7 +16,7 @@ namespace GGJ2013.States
 		: MemoryState
 	{
 		public ForestState()
-			: base("Forest", "WinRwar", "Camp")
+			: base("Forest", "Camp", "Camp")
 		{
 			Background = G.C.Load<Texture2D>("ForestArea/background");
 
@@ -93,7 +93,10 @@ namespace GGJ2013.States
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
 
 			Branch = CreateItem ("Bloody Broken Branch", "", "ForestArea/branch", "UI/Icons/papers", 784, 410,
-				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
+			    new Vector2 (815 - 784, 383 - 410),
+			    new Vector2 (761 - 784, 501 - 410),
+			    new Vector2 (814 - 784, 511 - 410),
+			    new Vector2 (916 - 784, 435 - 410));
 
 			ThornBush = CreateItem ("Bush of Thorns", "", "ForestArea/thornbush", "UI/Icons/papers", 830, 283,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
@@ -105,12 +108,46 @@ namespace GGJ2013.States
 			CoverBrush3 = CreateItem ("CB13", "", "ForestArea/coverbush", "UI/Icons/papers", 1666, 493,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
 
+			Shoe.IsActive = true;
+			Shoe.CanPickup = true;
+
+			Branch.IsActive = true;
+			Branch.CanPickup = true;
+
+			ThornBush.IsActive = true;
+			ThornBush.CanPickup = false;
+
+			CoverBrush1.IsActive = false;
+			CoverBrush2.IsActive = false;
+			CoverBrush3.IsActive = false;
+
+			ForestExit = new Hotspot (
+				"Tent Entrance",
+				new Polygon (
+				new Vector2(4, 271),
+				new Vector2(3, 4),
+				new Vector2(330, 114),
+				new Vector2(205, 258)),
+				(t, i) =>
+				{
+					G.LastScreen = "Forest";
+					G.FadeOut.Finished = () =>
+					{
+						G.FadeOut.Reset ();
+						G.StateManager.Set ("Camp");
+						G.FadeIn.TriggerStart();
+					};
+					G.FadeOut.TriggerStart();
+				}) { WalkLocation = new Vector2 (170, 279) };
+
 			Items.Add (Shoe);
 			Items.Add (Branch);
 			Items.Add (ThornBush);
 			Items.Add (CoverBrush1);
 			Items.Add (CoverBrush2);
 			Items.Add (CoverBrush3);
+
+			Hotspots.Add (ForestExit);
 
 			Lights.Add (Foreground);
 		}
@@ -172,6 +209,7 @@ namespace GGJ2013.States
 		public GameItem ThornBush;
 		public GameItem Branch;
 		public GameItem Shoe;
+		public Hotspot ForestExit;
 
 		public Hotspot CampEntrance;
 		public Hotspot DeadyBody;
