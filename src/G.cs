@@ -43,6 +43,9 @@ namespace GGJ2013
 		public static Player Player;
 		public static bool Active;
 
+		public static ColorTransition FadeOut;
+		public static ColorTransition FadeIn;
+
 		public static readonly int SCREEN_WIDTH = 1280;
 		public static readonly int SCREEN_HEIGHT = 720;
 
@@ -75,10 +78,13 @@ namespace GGJ2013
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());
 			StateManager.Add (new ForestState());
-			StateManager.Set ("Camp");
+			StateManager.Set ("Tent");
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
+
+			FadeIn = new ColorTransition (Graphics.GraphicsDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 1f, Color.Black, Color.Transparent);
+			FadeOut = new ColorTransition (Graphics.GraphicsDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 1f, Color.Transparent, Color.Black);
 		}
 
 		protected override void UnloadContent()

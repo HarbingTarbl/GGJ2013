@@ -119,8 +119,7 @@ namespace GGJ2013
 						{
 							G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
 							G.LastScreen = "Tent";
-							G.StateManager.Pop();
-							G.StateManager.Push(NextLevel);
+							G.StateManager.Set (NextLevel);
 						}
 						else
 						{

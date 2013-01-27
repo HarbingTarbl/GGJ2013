@@ -189,8 +189,9 @@ namespace GGJ2013.States
 
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
-
 				Player.Target = null;
+
+				//TODO: take out later
 				var t = Camera.ScreenToWorld(target);
 				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", t.X, t.Y));
 

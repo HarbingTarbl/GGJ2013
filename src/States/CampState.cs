@@ -7,6 +7,7 @@ using GGJ2013.Items;
 using Jammy.Collision;
 using Jammy.Sprites;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
@@ -106,8 +107,7 @@ namespace GGJ2013.States
 				new Vector2(2, 107)),
 				t =>
 				{
-					G.StateManager.Pop();
-					G.StateManager.Push(LastLevel);
+					G.StateManager.Set ("Tent", G.FadeOut, G.FadeIn);
 				});
 
 			CampExit = new Hotspot(
