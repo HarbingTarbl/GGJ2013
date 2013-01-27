@@ -39,9 +39,12 @@ namespace GGJ2013
 		public static DialogManager DialogManager;
 		public static GameTime GameTime;
 		public static bool DebugCollision = false;
-		public static string LastScreen;	
+		public static string LastScreen = "None";
 		public static Player Player;
 		public static bool Active;
+
+		public static ColorTransition FadeOut;
+		public static ColorTransition FadeIn;
 
 		public static readonly int SCREEN_WIDTH = 1280;
 		public static readonly int SCREEN_HEIGHT = 720;
@@ -79,6 +82,9 @@ namespace GGJ2013
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
+
+			FadeIn = new ColorTransition (Graphics.GraphicsDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 0.45f, Color.Black, Color.Transparent);
+			FadeOut = new ColorTransition (Graphics.GraphicsDevice, SCREEN_WIDTH, SCREEN_HEIGHT, 0.45f, Color.Transparent, Color.Black);
 		}
 
 		protected override void UnloadContent()
@@ -116,6 +122,8 @@ namespace GGJ2013
 
 
 			StateManager.Update(gameTime);
+			FadeOut.Update (gameTime);
+			FadeIn.Update (gameTime);
 			base.Update(gameTime);
 		}
 
@@ -123,6 +131,9 @@ namespace GGJ2013
 		{
 			GraphicsDevice.Clear (Color.Black);
 			StateManager.Draw (SpriteBatch);
+
+			FadeOut.Draw (SpriteBatch);
+			FadeIn.Draw (SpriteBatch);
 
 			base.Draw(gameTime);
 		}

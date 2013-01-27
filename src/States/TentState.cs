@@ -115,12 +115,17 @@ namespace GGJ2013
 					new Vector2(675 + 90, 374),
 					new Vector2(657 + 90, 299)), (t,i) =>
 					{
+						CanLeaveLevel = true;
 						if (CanLeaveLevel)
 						{
 							G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
-							G.LastScreen = "Tent";
-							G.StateManager.Pop();
-							G.StateManager.Push(NextLevel);
+							G.FadeOut.Finished = () => {
+								G.FadeOut.Reset();
+								G.LastScreen = "Tent";
+								G.StateManager.Set (NextLevel);
+								G.FadeIn.TriggerStart();
+							};
+							G.FadeOut.TriggerStart();
 						}
 						else
 						{
@@ -192,7 +197,7 @@ namespace GGJ2013
 					break;
 				case "Camp":
 					G.Player.Location = new Vector2(696, 511);
-					MediaPlayer.Play (G.C.Load<Song> ("sfx/Chirping"));
+					MediaPlayer.Play (G.C.Load<Song> ("sfx/Zipper"));
 					MediaPlayer.Volume = 0.25f;
 					MediaPlayer.IsRepeating = true;
 					break;
