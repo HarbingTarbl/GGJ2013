@@ -43,7 +43,7 @@ namespace GGJ2013
 				new Vector2 (419, 91),
 				new Vector2 (296, 153));
 
-			Flash = CreateItem ("Flashlight", "A bright flashlight", "TentArea/flashlight","UI/Icons/flashlight_off", 587, 436,
+			Flash = CreateItem ("Flashlight", "A dead flashlight, it's missing batteries", "TentArea/flashlight","UI/Icons/flashlight_off", 587, 436,
 				new Vector2 (568 - 587, 493 - 436),
 				new Vector2 (575 - 587, 427 - 436),
 				new Vector2 (630 - 587, 433 - 436),
@@ -96,24 +96,24 @@ namespace GGJ2013
 			Exit = new Hotspot(
 				"Tent Exit",
 				new Polygon(
-					new Vector2 (620 + 90, 250),
-					new Vector2 (607 + 90, 373),
-					new Vector2 (575 + 90, 459),
-					new Vector2 (650 + 90, 468),
-					new Vector2 (675 + 90, 374),
-					new Vector2 (657 + 90, 299)), t =>
+					new Vector2(620 + 90, 250),
+					new Vector2(607 + 90, 373),
+					new Vector2(575 + 90, 459),
+					new Vector2(650 + 90, 468),
+					new Vector2(675 + 90, 374),
+					new Vector2(657 + 90, 299)), t =>
 					{
 						if (CanLeaveLevel)
 						{
 							G.StateManager.Pop();
-							G.StateManager.Push (NextLevel);
+							G.StateManager.Push(NextLevel);
 						}
 						else
 						{
 							G.DialogManager.PostMessage("I should put on some clothes... ", TimeSpan.Zero, new TimeSpan(0, 0, 5));
 							G.DialogManager.PostMessage("and grab my flashlight.", new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 5));
 						}
-					});
+					}) { WalkLocation = new Vector2(706, 486)};
 
 			ItemsToLeave.Add("Sweater");
 			ItemsToLeave.Add("Flashlight");
@@ -170,7 +170,7 @@ namespace GGJ2013
 
 		protected override void OnLevelStart (string LastScreen)
 		{
-			if (String.IsNullOrEmpty (LastScreen))
+			if (LastScreen == "None")
 				RunIntroCinematics();
 		}
 

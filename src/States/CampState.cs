@@ -146,6 +146,7 @@ namespace GGJ2013.States
 				                       {
 					                       G.StateManager.Pop();
 					                       G.StateManager.Push(NextLevel);
+										   
 				                       }
 				                       else
 				                       {
@@ -177,8 +178,13 @@ namespace GGJ2013.States
 					}
 				});
 
-			ItemsToLeave.Add("Papers");
-			ItemsToLeave.Add("Backpack");
+			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
+			{
+				GameItem.ItemDictionary["Flashlight"].Description = "A flashlight, it's batteries are fully charged";
+				G.InventoryManager.CurrentItems.Remove("Batteries");
+			});
+
+			ItemsToLeave.Add("Flashlight_lit");
 
 			Items.AddRange(new[]
 			{
@@ -231,6 +237,7 @@ namespace GGJ2013.States
 		{
 			if (LastScreen == "Tent")
 				Player.Location = new Vector2 (188, 283);
+			base.OnLevelStart(LastScreen);
 		}
 	}
 }

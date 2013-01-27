@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GGJ2013.States;
 using Jammy.Collision;
+using Microsoft.Xna.Framework;
 
 namespace GGJ2013.Collision
 {
@@ -24,6 +25,8 @@ namespace GGJ2013.Collision
 
 		public bool Enabled = true;
 		public bool EnforceDistance = true;
+
+		public Vector2 WalkLocation; 
 
 		public void OnActivate(MemoryState state)
 		{
