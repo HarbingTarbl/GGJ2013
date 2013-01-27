@@ -57,7 +57,7 @@ namespace GGJ2013
 				new Vector2 (419, 91),
 				new Vector2 (296, 153));
 
-			Flash = CreateItem ("Flashlight", "A bright flashlight", "TentArea/flashlight", 587, 436,
+			Flash = CreateItem ("Flashlight", "A bright flashlight", "TentArea/flashlight","UI/Icons/flashlight_off", 587, 436,
 				new Vector2 (568 - 587, 493 - 436),
 				new Vector2 (575 - 587, 427 - 436),
 				new Vector2 (630 - 587, 433 - 436),
@@ -71,7 +71,7 @@ namespace GGJ2013
 				new Vector2 (566 - 500, 615 - 550),
 				new Vector2 (496 - 500, 603 - 550));
 
-			Matches = CreateItem ("Matches", "A set of matches", "TentArea/matches", 850, 500,
+			Matches = CreateItem ("Matches", "A set of matches", "TentArea/matches", "UI/Icons/matches", 850, 500,
 				new Vector2 (830 - 850, 505 - 500),
 				new Vector2 (892 - 850, 491 - 500),
 				new Vector2 (905 - 850, 516 - 500),

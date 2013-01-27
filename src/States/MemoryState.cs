@@ -37,16 +37,16 @@ namespace GGJ2013.States
 			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 
-			InventoryOpen = new Hotspot ( //Replace with Sprite
+			InventoryOpen = new Hotspot( //Replace with Sprite
 				"Open Inventory",
 				new Rectagon(10, 5, 30, 20),
 				t =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
 					InventoryOpen.Location.Y += G.InventoryManager.IsShown
-						                          ? G.InventoryManager.Bounds.Bottom
-						                          : -G.InventoryManager.Bounds.Bottom;
-				});
+						                            ? G.InventoryManager.Bounds.Bottom
+						                            : -G.InventoryManager.Bounds.Bottom;
+				}) {EnforceDistance = false};
 
 			Hotspots.Add(InventoryOpen);
 		}
@@ -160,33 +160,37 @@ namespace GGJ2013.States
 			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
 
 
-			for (var i = 0; i < Items.Count; i++)
-			{
-
-				var item = Items[i];
-				if (item.IsFound || !item.IsActive)
-					continue;
-
-				if ( //TODO this is buggy. Needs actual player collision
-					CollisionChecker.PointToPoly (target, item.CollisionData))
-				{
-					if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
-					{
-						OnItemFound (item);
-						if (item.CanPickup)
-						{
-							G.InventoryManager.CurrentItems.Add (item.Name);
-							Items.RemoveAt (i);
-							Player.AnimationManager.SetAnimation("Pick Up");
-						}
-					}
-					break;
-
-				}
-			}
+			
 
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
+
+				for (var i = 0; i < Items.Count; i++)
+				{
+
+					var item = Items[i];
+					if (item.IsFound || !item.IsActive)
+						continue;
+
+					if (CollisionChecker.PointToPoly(target, item.CollisionData))
+						if (CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData))
+						{
+							OnItemFound(item);
+							if (item.CanPickup)
+							{
+								G.InventoryManager.CurrentItems.Add(item.Name);
+								Items.RemoveAt(i);
+								Player.AnimationManager.SetAnimation("Pick Up");
+							}
+						}
+						else
+						{
+							
+						}
+					break;
+				}
+
+
 				if (G.InventoryManager.IsShown && CollisionChecker.PointToPoly (target, G.InventoryManager.Bounds))
 				{
 
@@ -224,8 +228,9 @@ namespace GGJ2013.States
 
 				foreach (var spot in Hotspots)
 				{
-					bool hotSpotClicked =
-						 CollisionChecker.PointToPoly (target, spot);
+					bool hotSpotClicked = spot.Enabled &&
+						CollisionChecker.PointToPoly(target, spot) &&
+						(spot.EnforceDistance == false || CollisionChecker.PolyToPoly(Player.CollisionData, spot));
 
 					if (hotSpotClicked)
 						spot.OnActivate (this);
@@ -298,16 +303,23 @@ namespace GGJ2013.States
 			};
 		}
 
+		protected GameItem CreateItem(string name, string desc,
+		                              string texturePath, string iconPath, int x, int y, params Vector2[] verts)
+		{
+			var item = new GameItem(name, G.C.Load<Texture2D>(texturePath))
+			{
+				CollisionData = new Polygon(verts),
+				Location = new Vector2(x, y),
+				Description = desc,
+				InventoryIcon = G.C.Load<Texture2D>(iconPath)
+			};
+			return item;
+		}
+
 		protected GameItem CreateItem (string name, string desc,
 			string texturePath, int x, int y, params Vector2[] verts)
 		{
-			var item = new GameItem (name, G.C.Load<Texture2D> (texturePath))
-			{
-				CollisionData = new Polygon (verts),
-				Location = new Vector2 (x, y),
-				Description = desc
-			};
-			return item;
+			return CreateItem(name, desc, texturePath, texturePath, x, y, verts);
 		}
 
 		protected void BeginDraw (SpriteBatch batch, BlendState state)

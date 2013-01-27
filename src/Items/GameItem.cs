@@ -40,6 +40,8 @@ namespace GGJ2013.Items
 			return null;
 		}
 
+		public Texture2D InventoryIcon;
+
 		public bool MouseHover;
 
 		public bool IsFound;

@@ -86,7 +86,7 @@ namespace GGJ2013.States
 
 			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 0, 0, new Vector2(0, 0));
 
-			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", 0, 0,
+			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 0, 0,
 			                       new Vector2(0, 0));
 
 			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", 0, 0, new Vector2(0, 0));
@@ -94,7 +94,7 @@ namespace GGJ2013.States
 			BrokenWineBottle = CreateItem("Broken Wine Bottle", "The neck of the bottle has been broken, likely due to a fall",
 			                              "CampArea/win2", 0, 0, new Vector2(0, 0));
 
-			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", 0, 0, new Vector2(0, 0));
+			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 0, 0, new Vector2(0, 0));
 
 
 			Backpack.IsActive = false;
