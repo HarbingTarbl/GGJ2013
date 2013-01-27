@@ -167,11 +167,6 @@ namespace GGJ2013
 			Hotspots.Add (Bag);
 		}
 
-		public override void Update(GameTime gameTime)
-		{
-			base.Update(gameTime);
-		}
-
 		public override bool HandleInput(GameTime gameTime)
 		{
 			if (Keyboard.GetState().IsKeyDown(Keys.Space))
@@ -197,14 +192,6 @@ namespace GGJ2013
 		public Hotspot Exit;
 		public Hotspot Bag;
 
-		public bool BlanketClicked;
-		public Vector2 BlanketDestination = new Vector2(103, 450);
-
-
-		public float BlanketMoveTime = 6; //Move time in seconds ish
-		public float CurrentBlanketMoveTime;
-
-
 		protected override void OnLevelStart (string LastScreen)
 		{
 			if (String.IsNullOrEmpty (LastScreen))
@@ -213,7 +200,7 @@ namespace GGJ2013
 
 		private void RunIntroCinematics()
 		{
-			G.Player.Location = new Vector2 (530, 495);
+			G.Player.Location = new Vector2 (440, 495);
 			//TODO: Put player in laying down animation
 			//TODO: fade in?
 			//TODO: Wait for player to play stand up animation
