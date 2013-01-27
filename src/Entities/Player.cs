@@ -19,25 +19,40 @@ namespace GGJ2013.Entities
 				       new Animation("Idle",
 							new []
 							{
-								new Rectangle(0, 0, 250, 500)
-							}),
+								new Rectangle(0, 0, 250, 500),
+								new Rectangle(250, 0, 250, 500),
+								new Rectangle(500, 0, 250, 500),
+								new Rectangle(750, 0, 250, 500)
+							}, Looping:false),
 					   
 					   new Animation("Walk",
 							new[]
 							{
-								new Rectangle(0, 0, 250, 500),
-								new Rectangle(250, 0, 250, 500),
-								new Rectangle(500, 0, 250, 500),
-								new Rectangle(750, 0, 250, 500),
-								new Rectangle(1000, 0, 250, 500),
-								new Rectangle(1250, 0, 250, 500),
-								new Rectangle(1500, 0, 250, 500),
-								new Rectangle(1750, 0, 250, 500),
-							})
+								new Rectangle(0, 500, 250, 500),
+								new Rectangle(250, 500, 250, 500),
+								new Rectangle(500, 500, 250, 500),
+								new Rectangle(750, 500, 250, 500),
+								new Rectangle(1000, 500, 250, 500),
+								new Rectangle(1250, 500, 250, 500),
+								new Rectangle(1500, 500, 250, 500),
+								new Rectangle(1750, 500, 250, 500),
+							}),
+						new Animation("Pick Up",
+							new []
+							{
+								new Rectangle(0, 1000, 250, 500),
+								new Rectangle(250, 1000, 250, 500),
+								new Rectangle(500, 1000, 250, 500),
+								new Rectangle(500, 1000, 250, 500),
+								new Rectangle(250, 1000, 250, 500),
+								new Rectangle(0, 1000, 250, 500),
+							}, Looping:false) { NextAnim = "Idle" }
 			       })
 		{
-			Origin = new Vector2(250, 500);
-
+			_IHateRectangles.Width = 125;
+			_IHateRectangles.Height = 250;
+			Origin = new Vector2(125, 500);
+			AnimationManager.SetAnimation("Idle");
 		}
 
 		public Queue<Vector2> MoveQueue = new Queue<Vector2>();
@@ -48,18 +63,33 @@ namespace GGJ2013.Entities
 			hasTarget = false;
 		}
 
+		public void Draw(SpriteBatch batch)
+		{
+			batch.Draw(Texture, _IHateRectangles, AnimationManager.Bounding, Color.White, Rotation, Origin,
+				MoveQueue.Count > 0 ?  MoveQueue.Peek().X - _IHateRectangles.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+		}
+
 		public void Update (GameTime gameTime)
 		{
+			AnimationManager.Update(gameTime);
+			_IHateRectangles.X = (int)Location.X;
+			_IHateRectangles.Y = (int)Location.Y;
 			if (MoveQueue.Count == 0)
 			{
-				AnimationManager.SetAnimation("Idle");
+				if(AnimationManager.CurrentAnimation.Name == "Walk")
+					AnimationManager.SetAnimation("Idle");
+
 				return;				
 			}
-			
-			if (AnimationManager.CurrentAnimation.Name != "Walk")
+
+
+			if (AnimationManager.CurrentAnimation.Name == "Idle")
 			{
 				AnimationManager.SetAnimation("Walk");
 			}
+
+
 
 			// Grab the next target in our queue
 			if (MoveQueue.Count > 0 && !hasTarget)
@@ -80,11 +110,11 @@ namespace GGJ2013.Entities
 			}
 
 			Location = Vector2.Lerp (start, MoveQueue.Peek(), movePassed/moveTime);
-			base.Update (gameTime);
 		}
 
 		private const float SPEED = 120; // pixel/sec
 		private bool hasTarget;
+		private bool frozen = false;
 		private float moveTime;
 		private float movePassed;
 		private Vector2 start;

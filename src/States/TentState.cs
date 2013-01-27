@@ -167,10 +167,7 @@ namespace GGJ2013
 			Hotspots.Add (Bag);
 		}
 
-		protected override void OnLevelComplete()
-		{
-			//G.DialogManager.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
-		}
+
 
 		public override void Update(GameTime gameTime)
 		{

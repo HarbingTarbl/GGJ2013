@@ -123,7 +123,7 @@ namespace GGJ2013.States
 			if (item != null)
 			{
 				G.DialogManager.PostMessage (item.Name, Vector2.Transform (
-					item.CollisionData.Location + new Vector2 (item.CollisionData.Width / 2f, -10),
+					item.CollisionData.Location + new Vector2(item.CollisionData.Left, item.CollisionData.Top) + new Vector2 (item.CollisionData.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 				return;
 			}
@@ -134,7 +134,7 @@ namespace GGJ2013.States
 			if (hotspot != null)
 			{
 				G.DialogManager.PostMessage (hotspot.Name, Vector2.Transform (
-					hotspot.Location + new Vector2 (hotspot.Width / 2f, -10),
+					hotspot.Location + new Vector2(hotspot.Left, hotspot.Top) + new Vector2 (hotspot.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 			}
 		}
@@ -176,6 +176,7 @@ namespace GGJ2013.States
 						{
 							G.InventoryManager.CurrentItems.Add (item.Name);
 							Items.RemoveAt (i);
+							Player.AnimationManager.SetAnimation("Pick Up");
 						}
 					}
 					break;
@@ -196,6 +197,7 @@ namespace GGJ2013.States
 													Color.White);
 					}
 				}
+
 				var t = Camera.ScreenToWorld (target);
 				Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
 
@@ -206,7 +208,7 @@ namespace GGJ2013.States
 				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault ();
 
-				if (targetPoly != null)
+				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
 				{
 					if (targetPoly == myPoly) {
 						Player.ClearMove ();
