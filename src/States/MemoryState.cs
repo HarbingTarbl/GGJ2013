@@ -109,7 +109,7 @@ namespace GGJ2013.States
 			if (HeldItem != null
 			    && !WasReleased)
 			{
-				var vec = Vector2.Transform(new Vector2(m.X, m.Y) - new Vector2(50,50), Camera.Transformation);
+				var vec = Camera.ScreenToWorld(new Vector2(m.X, m.Y) - new Vector2(50, 50));
 				batch.Draw(HeldItem.InventoryIcon, new Rectangle((int)vec.X, (int)vec.Y, 100, 100), Color.White);
 
 			}
