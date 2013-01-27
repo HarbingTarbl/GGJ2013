@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GGJ2013.Items;
 using GGJ2013.States;
 using Jammy.Collision;
 using Microsoft.Xna.Framework;
@@ -13,7 +14,7 @@ namespace GGJ2013.Collision
 	{
 		public string Name;
 
-		public Hotspot(string name, Polygon verts, Action<MemoryState> action)
+		public Hotspot(string name, Polygon verts, Action<MemoryState, GameItem> action)
 		{
 			Name = name;
 			Vertices.AddRange(verts.Vertices);
@@ -21,18 +22,18 @@ namespace GGJ2013.Collision
 			Activated += action;
 		}
 
-		public event Action<MemoryState> Activated;
+		public event Action<MemoryState, GameItem> Activated;
 
 		public bool Enabled = true;
 		public bool EnforceDistance = true;
 
 		public Vector2 WalkLocation; 
 
-		public void OnActivate(MemoryState state)
+		public void OnActivate(MemoryState state, GameItem draggedItem)
 		{
 			var handler = Activated;
 			if (handler != null)
-				Activated(state);
+				Activated(state, draggedItem);
 		}
 
 	}

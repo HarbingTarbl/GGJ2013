@@ -101,14 +101,14 @@ namespace GGJ2013.States
 			TentEntrance = new Hotspot(
 				"Tent Entrance",
 				new Polygon(new Vector2(3, 277),
-				new Vector2(333, 247),
-				new Vector2(83, 107),
-				new Vector2(2, 107)),
-				t =>
+				            new Vector2(333, 247),
+				            new Vector2(83, 107),
+				            new Vector2(2, 107)),
+				(t, i) =>
 				{
 					G.StateManager.Pop();
 					G.StateManager.Push(LastLevel);
-				});
+				})  {WalkLocation = new Vector2(215, 309)};
 
 			CampExit = new Hotspot(
 				"Camp Exit",
@@ -117,7 +117,7 @@ namespace GGJ2013.States
 				new Vector2(1075, 110),
 				new Vector2(1277, 114),
 				new Vector2(1268, 301)),
-			    t =>
+			    (t,i) =>
 			    {
 				    if (CanLeaveLevel)
 				    {
@@ -139,9 +139,9 @@ namespace GGJ2013.States
 					new Vector2 (290, 503),
 					new Vector2(194, 526),
 					new Vector2(97, 518)),
-				t =>
+				(t,i) =>
 				{
-					if (G.InventoryManager.CurrentItems.Contains("Matches"))
+					if (i != null && i.Name == "Matches")
 					{
 						G.DialogManager.PostMessage("You have used the matches", TimeSpan.Zero, new TimeSpan(0, 0, 3));
 						G.InventoryManager.CurrentItems.Remove("Matches");

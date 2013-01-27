@@ -40,7 +40,7 @@ namespace GGJ2013.States
 			InventoryOpen = new Hotspot( //Replace with Sprite
 				"Open Inventory",
 				new Rectagon(10, 5, 18, 55),
-				t =>
+				(t,i) =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
 					InventoryOpen.Rotation = G.InventoryManager.IsShown ? -MathHelper.PiOver2 : MathHelper.PiOver2;
@@ -101,11 +101,13 @@ namespace GGJ2013.States
 		public override void Draw (SpriteBatch batch)
 		{
 			//G.BloomRenderer.BeginDraw();
-
+			var m = Mouse.GetState();
 			BeginDraw (batch, BlendState.NonPremultiplied);
 			batch.Draw (Background, Vector2.Zero, Color.White);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
+			if (HeldItem != null && !WasReleased)
+				batch.Draw(HeldItem.InventoryIcon, new Rectangle(m.X - 50, m.Y - 50, 100, 100), Color.White);
 			batch.End();
 
 			BeginDraw(batch, BlendState.AlphaBlend);
@@ -187,9 +189,26 @@ namespace GGJ2013.States
 			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
 			var screen = new Vector2(mouse.X, mouse.Y);
 
-			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
+			if (mouse.LeftButton == ButtonState.Pressed && WasReleased)
 			{
+				if(CollisionChecker.PointToPoly(screen, G.InventoryManager.Bounds)
+			    && G.InventoryManager.IsShown)
+					{
+						WasReleased = false;
 
+						var item = G.InventoryManager.SelectItemAt(screen);
+						if (item != null)
+							HeldItem = GameItem.ItemDictionary[item];
+
+					}
+
+			}
+				
+
+
+			if (mouse.LeftButton.WasButtonRelease(_oldMouse.LeftButton))
+			{
+				WasReleased = true;
 				Player.Target = null;
 				var t = Camera.ScreenToWorld(target);
 				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", t.X, t.Y));
@@ -226,32 +245,23 @@ namespace GGJ2013.States
 				if (G.InventoryManager.IsShown
 				    && CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
 				{
-					CurrentItem = G.InventoryManager.SelectItemAt(screen);
 
-					if (!string.IsNullOrEmpty(CurrentItem))
+					var item  = G.InventoryManager.SelectItemAt(screen);
+					if (item != null)
+					{
+						if (HeldItem == null
+						    || HeldItem.Name == item)
 						{
-
-						if (G.InventoryManager.SelectedItem1 == null)
-						{
-							G.InventoryManager.SelectedItem1 = CurrentItem;
+							G.DialogManager.PostMessage(GameItem.ItemDictionary[item].Description, TimeSpan.Zero,
+							                            new TimeSpan(0, 0, 5),
+							                            Color.White);
 						}
-						else if (G.InventoryManager.SelectedItem2 == null)
+						else
 						{
-							G.InventoryManager.SelectedItem2 = CurrentItem;
+							HeldItem.AttemptCraft(GameItem.ItemDictionary[item]);
 						}
-						
-
-
-						G.DialogManager.PostMessage(GameItem.ItemDictionary[CurrentItem].Description, TimeSpan.Zero, new TimeSpan(0, 0, 5),
-						                            Color.White);
 					}
-				}
-				else
-				{
-					LastItem = null;
-					CurrentItem = null;
-					G.InventoryManager.SelectedItem1 = null;
-					G.InventoryManager.SelectedItem2 = null;
+
 				}
 
 
@@ -265,7 +275,7 @@ namespace GGJ2013.States
 					{
 						if (!spot.EnforceDistance)
 						{
-							spot.OnActivate(this);
+							spot.OnActivate(this, HeldItem);
 						}
 						else if (!CollisionChecker.PolyToPoly(spot, Player.CollisionData))
 						{
@@ -277,12 +287,14 @@ namespace GGJ2013.States
 						}
 						else
 						{
-							spot.OnActivate(this);
+							spot.OnActivate(this, HeldItem);
 
 						}
 					}
 
 				}
+
+
 
 
 				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
@@ -335,6 +347,9 @@ namespace GGJ2013.States
 			return base.HandleInput (gameTime);
 		}
 
+
+		public GameItem HeldItem;
+		public bool WasReleased = false;
 
 		protected MouseState _oldMouse;
 		private KeyboardState _oldKey;

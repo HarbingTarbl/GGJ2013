@@ -98,7 +98,7 @@ namespace GGJ2013
 					new Vector2 (902, 489),
 					new Vector2 (776, 507),
 					new Vector2 (745, 483)
-					), t =>
+					), (t,i) =>
 					   {
 						   Matches.IsVisible = true;
 						   Matches.IsActive = true;
@@ -113,7 +113,7 @@ namespace GGJ2013
 					new Vector2(575 + 90, 459),
 					new Vector2(650 + 90, 468),
 					new Vector2(675 + 90, 374),
-					new Vector2(657 + 90, 299)), t =>
+					new Vector2(657 + 90, 299)), (t,i) =>
 					{
 						if (CanLeaveLevel)
 						{
@@ -139,7 +139,7 @@ namespace GGJ2013
 			border = CreateSprite ("TentArea/border");
 
 			LanternSpot = new Hotspot("Unlit Lantern",
-				new Circlegon(545, 315, 64), t =>
+				new Circlegon(545, 315, 64), (t,i) =>
 			{
 				LanternSpot.Name = "Lit Lantern";
 				light1.IsVisible = false;
@@ -185,13 +185,25 @@ namespace GGJ2013
 		protected override void OnLevelStart (string LastScreen)
 		{
 			MediaPlayer.Stop();
-			if (LastScreen == "None")
-				RunIntroCinematics();
+			switch (LastScreen)
+			{
+				case "None":
+					G.Player.Location = new Vector2 (440, 495);
+					break;
+				case "Camp":
+					G.Player.Location = new Vector2(696, 511);
+					MediaPlayer.Play (G.C.Load<Song> ("sfx/Chirping"));
+					MediaPlayer.Volume = 0.25f;
+					MediaPlayer.IsRepeating = true;
+					break;
+
+
+			}		
 		}
 
 		private void RunIntroCinematics()
 		{
-			G.Player.Location = new Vector2 (440, 495);
+			
 			//TODO: Put player in laying down animation
 			//TODO: fade in?
 			//TODO: Wait for player to play stand up animation

@@ -99,7 +99,7 @@ namespace GGJ2013.Entities
 							Trace.WriteLine(((GameItem) Target).Location);
 						}
 						else
-							((Hotspot) Target).OnActivate(state);
+							((Hotspot) Target).OnActivate(state, state.HeldItem);
 					}
 				}
 
