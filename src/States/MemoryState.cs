@@ -123,7 +123,7 @@ namespace GGJ2013.States
 			if (item != null)
 			{
 				G.DialogManager.PostMessage (item.Name, Vector2.Transform (
-					item.CollisionData.Location + new Vector2 (item.CollisionData.Width / 2f, -10),
+					new Vector2(item.CollisionData.Left, item.CollisionData.Top) + new Vector2 (item.CollisionData.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 				return;
 			}
@@ -134,7 +134,7 @@ namespace GGJ2013.States
 			if (hotspot != null)
 			{
 				G.DialogManager.PostMessage (hotspot.Name, Vector2.Transform (
-					hotspot.Location + new Vector2 (hotspot.Width / 2f, -10),
+					new Vector2(hotspot.Left, hotspot.Top) + new Vector2 (hotspot.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 			}
 		}
