@@ -82,34 +82,38 @@ namespace GGJ2013.States
 		{
 			base.Draw(batch);
 
-			G.Graphics.GraphicsDevice.SetRenderTarget(null);
-			//G.Graphics.GraphicsDevice.Clear(Color.Transparent);
+			var lightRect = new Rectangle (0, 0, Flashlight.Texture.Width, Flashlight.Texture.Height);
+			GeomHelpers.CenterRectangle (ref lightRect, Flashlight.Location);
 
-			var screen = new Rectangle(0, 0, G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
-			var blocks = new Rectangle[4];
+			var r1 = new Rectangle(0, 
+				0,
+				G.SCREEN_WIDTH,
+				lightRect.Top);
 
-				//screen.Subtract(new Rectangle((int)Flashlight.Location.X, (int)Flashlight.Location.Y, Flashlight.Texture.Width,
-				//						  Flashlight.Texture.Height));
+			var r2 = new Rectangle(0,
+				0,
+			    lightRect.Left,
+			    G.SCREEN_HEIGHT);
 
-			blocks[0] = new Rectangle(0, (int) Flashlight.Location.Y, (int) Flashlight.Location.X, Flashlight.Texture.Height);
-			blocks[1] = new Rectangle((int)Flashlight.Location.X + Flashlight.Texture.Width, (int) Flashlight.Location.Y,
-			                          G.SCREEN_WIDTH - (int) Flashlight.Location.X + Flashlight.Texture.Width,
-			                          Flashlight.Texture.Height);
+			var r3 = new Rectangle(
+				lightRect.Right,
+				0,
+				G.SCREEN_WIDTH - lightRect.Right,
+				G.SCREEN_HEIGHT);
 
-			blocks[2] = new Rectangle(0, 0, G.SCREEN_WIDTH, (int) Flashlight.Location.Y);
-			blocks[3] = new Rectangle(0, (int) Flashlight.Location.Y, G.SCREEN_WIDTH,
-			                          G.SCREEN_HEIGHT - (int) Flashlight.Location.Y + Flashlight.Texture.Height);
+			var r4 = new Rectangle (
+				0,
+				lightRect.Bottom,
+				G.SCREEN_WIDTH,
+				G.SCREEN_HEIGHT + lightRect.Bottom);
 
 			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
-			for (var i = 3; i < blocks.Length; i++)
-			{
-				batch.Draw(pixel, blocks[i], Color.Black);
-			}
-			batch.Draw(Flashlight.Texture, Flashlight.Location - new Vector2(Flashlight.Texture.Width/2f, Flashlight.Texture.Height/2f), Color.White);
-			
-			batch.End();	
-			G.Graphics.GraphicsDevice.SetRenderTarget(null);
-
+			batch.Draw (pixel, r1, Color.Black);
+			batch.Draw (pixel, r2, Color.Black);
+			batch.Draw (pixel, r3, Color.Black);
+			batch.Draw (pixel, r4, Color.Black);
+			batch.Draw (Flashlight.Texture, lightRect, Color.White);
+			batch.End();
 		}
 
 		public override bool HandleInput(GameTime gameTime)
