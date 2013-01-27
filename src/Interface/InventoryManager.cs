@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using GGJ2013.Items;
 using Jammy.Collision;
+using Jammy.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -14,13 +15,16 @@ namespace GGJ2013.Interface
 		public InventoryManager()
 		{
 			CurrentItems = new List<string>();
+			_upArrow = G.C.Load<Texture2D>("UI/arrow_up");
+			_downArrow = G.C.Load<Texture2D>("UI/arrow_down");
+			_comparts = G.C.Load<Texture2D>("UI/compartments");
 		}
 
 		public List<string> CurrentItems;
 
 		public Rectagon Bounds = new Rectagon(10, 5, G.SCREEN_WIDTH, 100);
 		public bool IsShown;
-		public Vector2 SlotPadding = new Vector2(10, 0);
+		public Vector2 SlotPadding = new Vector2(20, 0);
 
 		public string SelectItemAt(Vector2 point)
 		{
@@ -34,38 +38,50 @@ namespace GGJ2013.Interface
 		
 		public void Draw(SpriteBatch batch)
 		{
-			if (!IsShown || CurrentItems.Count == 0)
-				return;
-
 			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
-			var offset = Bounds.Location;
-
-			_itemSlot.X = (int)offset.X;
-			_itemSlot.Y = (int)offset.Y;
-			foreach (var str in CurrentItems)
+			batch.Draw(IsShown ? _upArrow : _downArrow, IsShown ? _arrowSlot + new Vector2(0, 100) : _arrowSlot, Color.White);
+		
+			if (IsShown)
 			{
-				var item = GameItem.ItemDictionary[str];
 
-				batch.Draw(item.InventoryIcon, _itemSlot, Color.White);
-				_itemSlot.X += (int)SlotPadding.X + _itemSlot.Width;
+				var offset = Bounds.Location;
+				//batch.Draw(_comparts, offset, Color.White);
+				
+				_itemSlot.X = (int) offset.X;
+				_itemSlot.Y = (int) offset.Y;
+				foreach (var str in CurrentItems)
+				{
+					var item = GameItem.ItemDictionary[str];
+
+					batch.Draw(item.InventoryIcon, _itemSlot, Color.White);
+					_itemSlot.X += (int) SlotPadding.X + _itemSlot.Width;
+				}
+
+
+				offset = Bounds.Location;
+
+				G.Debug.Begin(Matrix.Identity);
+				_itemFrame.Location = offset;
+
+				for(var i = 0; i < 10; i++)
+				{
+					G.Debug.DrawPolygon(_itemFrame, Color.Gray);
+
+					_itemFrame.Location.X += SlotPadding.X + _itemFrame.Width;
+				}
+
+				G.Debug.Stop();
 			}
 			batch.End();
 
-			offset = Bounds.Location;
-
-			G.Debug.Begin(Matrix.Identity);
-			_itemFrame.Location = offset;
-
-			foreach (var str in CurrentItems)
-			{
-				G.Debug.DrawPolygon(_itemFrame, Color.Gray);
-
-				_itemFrame.Location.X += SlotPadding.X + _itemFrame.Width;
-			}
-			
-			G.Debug.Stop();
 		}
 
+
+		private Texture2D _upArrow;
+		private Texture2D _downArrow;
+		private Texture2D _comparts;
+
+		private Vector2 _arrowSlot = new Vector2(10, 5);
 
 		private Rectangle _itemSlot = new Rectangle(0, 0, 100, 100);
 		private Rectagon _itemFrame = new Rectagon(0, 0, 100, 100);

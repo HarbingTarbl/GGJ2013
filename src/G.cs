@@ -74,8 +74,7 @@ namespace GGJ2013
 
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());
-			G.LastScreen = "Tent";
-			StateManager.Set ("Camp");
+			StateManager.Set ("Tent");
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;

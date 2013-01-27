@@ -39,13 +39,18 @@ namespace GGJ2013.States
 
 			InventoryOpen = new Hotspot( //Replace with Sprite
 				"Open Inventory",
-				new Rectagon(10, 5, 30, 20),
+				new Rectagon(10, 5, 18, 55),
 				t =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
+					InventoryOpen.Rotation = G.InventoryManager.IsShown ? -MathHelper.PiOver2 : MathHelper.PiOver2;
+
 					InventoryOpen.Location.Y += G.InventoryManager.IsShown
-						                            ? G.InventoryManager.Bounds.Bottom
-						                            : -G.InventoryManager.Bounds.Bottom;
+						                            ? G.InventoryManager.Bounds.Bottom + 25
+						                            : -G.InventoryManager.Bounds.Bottom - 25;
+
+					InventoryOpen.Name = G.InventoryManager.IsShown ? "Close Inventory" : "Open Inventory";
+
 				}) {EnforceDistance = false};
 
 			Hotspots.Add(InventoryOpen);
@@ -161,6 +166,10 @@ namespace GGJ2013.States
 
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
+
+				Player.Target = null;
+
+
 				for (var i = 0; i < Items.Count; i++)
 				{
 					var item = Items[i];
@@ -168,19 +177,15 @@ namespace GGJ2013.States
 						continue;
 
 					if (CollisionChecker.PointToPoly(target, item.CollisionData))
-						if (CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData))
+						if (!CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData))
 						{
-							OnItemFound(item);
-							if (item.CanPickup)
-							{
-								G.InventoryManager.CurrentItems.Add(item.Name);
-								Items.RemoveAt(i);
-								Player.AnimationManager.SetAnimation("Pick Up");
-							}
+							Player.Target = item;
+							Player.TargerIsItem = true;
 						}
 						else
 						{
-							// Huh, what should go here? - Jason
+							OnItemFound(item);
+
 						}
 					break;
 				}
@@ -227,11 +232,26 @@ namespace GGJ2013.States
 				foreach (var spot in Hotspots)
 				{
 					bool hotSpotClicked = spot.Enabled &&
-						CollisionChecker.PointToPoly(target, spot) &&
-						(spot.EnforceDistance == false || CollisionChecker.PolyToPoly(Player.CollisionData, spot));
+					                      CollisionChecker.PointToPoly(target, spot);
 
 					if (hotSpotClicked)
-						spot.OnActivate (this);
+					{
+						if (!spot.EnforceDistance)
+						{
+							spot.OnActivate(this);
+						}
+						else if (!CollisionChecker.PolyToPoly(spot, Player.CollisionData))
+						{
+							Player.Target = spot;
+							Player.TargerIsItem = false;
+						}
+						else
+						{
+							spot.OnActivate(this);
+
+						}
+					}
+
 				}
 			}
 
@@ -255,8 +275,16 @@ namespace GGJ2013.States
 		private KeyboardState _oldKey;
 		private Polygon _insideMesh;
 
-		private void OnItemFound (GameItem item)
+		public void OnItemFound (GameItem item)
 		{
+			if (item.CanPickup)
+			{
+				G.InventoryManager.CurrentItems.Add(item.Name);
+				Items.Remove(item);
+				Player.AnimationManager.SetAnimation("Pick Up");
+			}
+
+
 			if (ItemsToLeave.Contains(item.Name)) {
 				ItemsToLeave.Remove(item.Name);
 			}
@@ -288,6 +316,7 @@ namespace GGJ2013.States
 				G.Debug.DrawPolygon (polyNode.Poly, Color.Yellow);
 			}
 			G.Debug.DrawPolygon(G.InventoryManager.Bounds, Color.Tomato);
+			G.Debug.DrawPolygon(Player.CollisionData, Color.Lime);
 
 			G.Debug.Stop();
 		}
