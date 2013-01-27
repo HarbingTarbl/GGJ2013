@@ -8,6 +8,7 @@ using Jammy.Collision;
 using Jammy.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Jammy.Helpers;
 
 namespace GGJ2013.States
 {
@@ -71,24 +72,43 @@ namespace GGJ2013.States
 				Texture = light,
 			};
 
+			pixel = new Texture2D(G.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+			pixel.SetData<Color>(new Color[] {Color.White});
+
 
 		}
 
 		public override void Draw(SpriteBatch batch)
 		{
-			G.Graphics.GraphicsDevice.SetRenderTarget(light);
-			G.Graphics.GraphicsDevice.Clear(Color.Black);
-
-			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
-			batch.Draw(Flashlight.Texture, Flashlight.Location - new Vector2(Flashlight.Texture.Width/2f, Flashlight.Texture.Height/2f), Color.White);
-			batch.End();
-			G.Graphics.GraphicsDevice.SetRenderTarget(null);
-
 			base.Draw(batch);
 
-			batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-			batch.Draw(light, Vector2.Zero, Color.White);
-			batch.End();
+			G.Graphics.GraphicsDevice.SetRenderTarget(null);
+			//G.Graphics.GraphicsDevice.Clear(Color.Transparent);
+
+			var screen = new Rectangle(0, 0, G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
+			var blocks = new Rectangle[4];
+
+				//screen.Subtract(new Rectangle((int)Flashlight.Location.X, (int)Flashlight.Location.Y, Flashlight.Texture.Width,
+				//						  Flashlight.Texture.Height));
+
+			blocks[0] = new Rectangle(0, (int) Flashlight.Location.Y, (int) Flashlight.Location.X, Flashlight.Texture.Height);
+			blocks[1] = new Rectangle((int)Flashlight.Location.X + Flashlight.Texture.Width, (int) Flashlight.Location.Y,
+			                          G.SCREEN_WIDTH - (int) Flashlight.Location.X + Flashlight.Texture.Width,
+			                          Flashlight.Texture.Height);
+
+			blocks[2] = new Rectangle(0, 0, G.SCREEN_WIDTH, (int) Flashlight.Location.Y);
+			blocks[3] = new Rectangle(0, (int) Flashlight.Location.Y, G.SCREEN_WIDTH,
+			                          G.SCREEN_HEIGHT - (int) Flashlight.Location.Y + Flashlight.Texture.Height);
+
+			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+			for (var i = 3; i < blocks.Length; i++)
+			{
+				batch.Draw(pixel, blocks[i], Color.Black);
+			}
+			batch.Draw(Flashlight.Texture, Flashlight.Location - new Vector2(Flashlight.Texture.Width/2f, Flashlight.Texture.Height/2f), Color.White);
+			
+			batch.End();	
+			G.Graphics.GraphicsDevice.SetRenderTarget(null);
 
 		}
 
@@ -116,5 +136,6 @@ namespace GGJ2013.States
 		}
 
 		private RenderTarget2D light;
+		private Texture2D pixel;
 	}
 }
