@@ -66,10 +66,10 @@ namespace GGJ2013.States
 			};
 			#endregion
 
-			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 900, 500,
+			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 734, 410,
 			                      new Rectagon(0, 0, 111, 59).Vertices.ToArray());
 
-			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 761, 549,
+			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 761, 480,
 								new Rectagon(0, 0, 78, 32).Vertices.ToArray());
 
 			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", 137, 574,
@@ -79,6 +79,22 @@ namespace GGJ2013.States
 										  "CampArea/win2", 422, 615, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
 			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 1134, 456, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
+
+			Boulder = CreateItem ("Boulder", "A heavy rock", "CampArea/boulder", "UI/Icons/papers", 480, 313);
+			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", "UI/Icons/papers", 560, 420,
+				new Vector2 (485 - 560, 388-420),
+				new Vector2 (555 - 560, 314 - 420),
+				new Vector2 (626 - 560, 315 - 420),
+				new Vector2 (676 - 560, 384 - 420),
+				new Vector2 (673 - 560, 431 - 420),
+				new Vector2 (589 - 560, 474 - 420),
+				new Vector2 (484 - 560, 441 - 420));
+
+			Boulder.IsActive = true;
+			Boulder.CanPickup = false;
+
+			Machete.IsActive = false;
+			Machete.CanPickup = true;
 
 			Backpack.IsActive = false;
 			Backpack.CanPickup = false;
@@ -184,7 +200,9 @@ namespace GGJ2013.States
 				EmptyWineBottle,
 				BrokenWineBottle,
 				Papers, 
-				Backpack
+				Backpack,
+				Machete,
+				Boulder
 			});
 
 			Lights.AddRange(new[]
@@ -214,6 +232,8 @@ namespace GGJ2013.States
 		public GameItem EmptyWineBottle;
 		public GameItem BrokenWineBottle;
 		public GameItem Papers;
+		public GameItem Boulder;
+		public GameItem Machete;
 
 		//State Changers
 		public Hotspot TentEntrance;
