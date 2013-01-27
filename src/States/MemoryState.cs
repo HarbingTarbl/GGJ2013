@@ -193,6 +193,7 @@ namespace GGJ2013.States
 						continue;
 
 					if (CollisionChecker.PointToPoly(target, item.CollisionData))
+					{
 						if (!CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData))
 						{
 							Player.Target = item;
@@ -203,7 +204,8 @@ namespace GGJ2013.States
 							OnItemFound(item);
 
 						}
-					break;
+						break;
+					}
 				}
 
 
