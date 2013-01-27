@@ -69,7 +69,6 @@ namespace GGJ2013.Entities
 		{
 			batch.Draw(Texture, _IHateRectangles, AnimationManager.Bounding, Color.White, Rotation, Origin,
 				MoveQueue.Count > 0 ?  MoveQueue.Peek().X - _IHateRectangles.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
 		}
 
 		public override void Update (GameTime gameTime)
@@ -78,7 +77,6 @@ namespace GGJ2013.Entities
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
 			CollisionData.Location = Location - Origin;
-
 
 			if (MoveQueue.Count == 0)
 			{

@@ -159,15 +159,10 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState ();
 			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
 
-
-			
-
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
-
 				for (var i = 0; i < Items.Count; i++)
 				{
-
 					var item = Items[i];
 					if (item.IsFound || !item.IsActive)
 						continue;
@@ -185,7 +180,7 @@ namespace GGJ2013.States
 						}
 						else
 						{
-							
+							// Huh, what should go here? - Jason
 						}
 					break;
 				}
@@ -205,7 +200,6 @@ namespace GGJ2013.States
 
 				var t = Camera.ScreenToWorld (target);
 				Trace.WriteLine (String.Format ("new Vector2({0}, {1}),", t.X, t.Y));
-
 
 				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Player.Location, node.Poly)).FirstOrDefault ();
