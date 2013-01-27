@@ -59,11 +59,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="TentArea\dufflebag.png">
-      <Name>dufflebag</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="TentArea\flashlight.png">
       <Name>flashlight</Name>
       <Importer>TextureImporter</Importer>
@@ -134,6 +129,25 @@
     <Folder Include="CampArea\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TentArea\tossedblanket.png">
+      <Name>tossedblanket</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TentArea\lanternglow.png">
+      <Name>lanternglow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+      
+    <Compile Include="character.png">
+      <Name>character</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+
     <Compile Include="character.png">
       <Name>character</Name>
       <Importer>TextureImporter</Importer>

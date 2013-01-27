@@ -176,6 +176,7 @@ namespace GGJ2013.States
 						{
 							G.InventoryManager.CurrentItems.Add (item.Name);
 							Items.RemoveAt (i);
+							Player.AnimationManager.SetAnimation("Pick Up");
 						}
 					}
 					break;
@@ -196,6 +197,7 @@ namespace GGJ2013.States
 													Color.White);
 					}
 				}
+
 				var t = Camera.ScreenToWorld (target);
 				Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
 
@@ -206,7 +208,7 @@ namespace GGJ2013.States
 				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault ();
 
-				if (targetPoly != null)
+				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
 				{
 					if (targetPoly == myPoly) {
 						Player.ClearMove ();
@@ -261,7 +263,7 @@ namespace GGJ2013.States
 			CanLeaveLevel = (ItemsToLeave.Count == 0);
 			IsLevelComplete = (ItemsToRemember.Count == 0);
 
-			item.Clicked(this);
+			item.Clicked (this);
 
 			if (IsLevelComplete) {
 				IsLevelComplete = true;
