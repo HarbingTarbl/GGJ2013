@@ -19,21 +19,34 @@ namespace GGJ2013.Entities
 				       new Animation("Idle",
 							new []
 							{
-								new Rectangle(0, 0, 250, 500)
-							}),
+								new Rectangle(0, 0, 250, 500),
+								new Rectangle(250, 0, 250, 500),
+								new Rectangle(500, 0, 250, 500),
+								new Rectangle(750, 0, 250, 500)
+							}, Looping:false),
 					   
 					   new Animation("Walk",
 							new[]
 							{
-								new Rectangle(0, 0, 250, 500),
-								new Rectangle(250, 0, 250, 500),
-								new Rectangle(500, 0, 250, 500),
-								new Rectangle(750, 0, 250, 500),
-								new Rectangle(1000, 0, 250, 500),
-								new Rectangle(1250, 0, 250, 500),
-								new Rectangle(1500, 0, 250, 500),
-								new Rectangle(1750, 0, 250, 500),
-							})
+								new Rectangle(0, 250, 250, 500),
+								new Rectangle(250, 250, 250, 500),
+								new Rectangle(500, 250, 250, 500),
+								new Rectangle(750, 250, 250, 500),
+								new Rectangle(1000, 250, 250, 500),
+								new Rectangle(1250, 250, 250, 500),
+								new Rectangle(1500, 250, 250, 500),
+								new Rectangle(1750, 250, 250, 500),
+							}),
+						new Animation("Pick Up",
+							new []
+							{
+								new Rectangle(0, 500, 250, 500),
+								new Rectangle(250, 500, 250, 500),
+								new Rectangle(500, 500, 250, 500),
+								new Rectangle(500, 500, 250, 500),
+								new Rectangle(250, 500, 250, 500),
+								new Rectangle(0, 500, 250, 500),
+							}, Looping:false)
 			       })
 		{
 			Origin = new Vector2(250, 500);
@@ -85,6 +98,7 @@ namespace GGJ2013.Entities
 
 		private const float SPEED = 120; // pixel/sec
 		private bool hasTarget;
+		private bool frozen = false;
 		private float moveTime;
 		private float movePassed;
 		private Vector2 start;

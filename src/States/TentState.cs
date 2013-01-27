@@ -134,6 +134,7 @@ namespace GGJ2013
 				var that = this;
 				that.light1.IsVisible = false;
 				that.light2.IsVisible = true;
+				
 			}));
 
 			light1.IsVisible = true;
