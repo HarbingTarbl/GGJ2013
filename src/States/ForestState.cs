@@ -64,28 +64,31 @@ namespace GGJ2013.States
 
 			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
 			                           DepthFormat.None);
-			Flashlight = CreateSprite("TentArea/light1", 0, 0);
+			Flashlight = CreateSprite("flashlight_beam", 0, 0);
 			Lightmask = new Sprite()
 			{
 				IsVisible = true,
 				Texture = (Texture2D) light,
 			};
 
-			Lights.Add(Lightmask);
 
 		}
 
 		public override void Draw(SpriteBatch batch)
 		{
 			G.Graphics.GraphicsDevice.SetRenderTarget(light);
-			G.Graphics.GraphicsDevice.Clear(Color.Transparent);
-			batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
-			Flashlight.Draw(batch);
+			G.Graphics.GraphicsDevice.Clear(Color.Black);
+
+			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+			batch.Draw(Flashlight.Texture, Vector2.Zero, Color.White);
 			batch.End();
-
-
 			G.Graphics.GraphicsDevice.SetRenderTarget(null);
+
 			base.Draw(batch);
+
+			batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+			batch.Draw(light, Vector2.Zero, Color.White);
+			batch.End();
 
 		}
 
