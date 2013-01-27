@@ -76,6 +76,8 @@ namespace GGJ2013.States
 			pixel.SetData<Color>(new Color[] {Color.White});
 
 
+
+			//Shoe = CreateItem("Shoe");
 		}
 
 		public override void Draw(SpriteBatch batch)
@@ -125,6 +127,10 @@ namespace GGJ2013.States
 
 		public Sprite Flashlight;
 		public Sprite Lightmask;
+
+		public Sprite CoverBrush;
+		public Sprite Branch;
+		public Sprite ThornBush;
 
 		public GameItem Shoe;
 
