@@ -33,33 +33,43 @@ namespace GGJ2013.States
 				new Vector2 (307, 493),
 				new Vector2 (53, 553),
 				new Vector2 (214, 655),
-				new Vector2 (449, 660),
+				new Vector2 (467, 660),
+				new Vector2 (554, 574),
 				new Vector2 (640, 500),
 				new Vector2 (396, 489));
 
 			var p3 = new Polygon (
-				new Vector2 (653, 493),
+				new Vector2 (640, 500),
+				new Vector2 (554, 574),
 				new Vector2 (467, 660),
 				new Vector2 (1069, 659),
 				new Vector2 (1070, 657),
+				new Vector2 (963, 535),
 				new Vector2 (880, 452));
 
 			var p4 = new Polygon (
-				new Vector2 (885, 448),
+				new Vector2 (963, 535),
+				new Vector2 (880, 452),
+				new Vector2 (1122, 470),
+				new Vector2 (1192, 480),
 				new Vector2 (1271, 494),
-				new Vector2 (1075, 645));
+				new Vector2 (1070, 657));
 
 			var p5 = new Polygon (
 				new Vector2 (1122, 470),
 				new Vector2 (1148, 418),
-				new Vector2 (1277, 427),
-				new Vector2 (1268, 491));
+				new Vector2 (1209, 421),
+				new Vector2 (1274, 423),
+				new Vector2 (1271, 494),
+				new Vector2 (1192, 480));
 
 			var p6 = new Polygon(
+				new Vector2 (1148, 418),
 				new Vector2 (1066, 385),
 				new Vector2 (1188, 250),
 				new Vector2 (1275, 254),
-				new Vector2 (1270, 420));
+				new Vector2 (1274, 423),
+				new Vector2 (1209, 421));
 			
 			var p1n = new PolyNode (p1);
 			var p2n = new PolyNode (p2);
@@ -69,10 +79,10 @@ namespace GGJ2013.States
 			var p6n = new PolyNode (p6);
 
 			PolyLink.AttachLinks (3, 5, ref p1n, ref p2n);
-			PolyLink.AttachLinks (0, 0, ref p2n, ref p3n);
-			PolyLink.AttachLinks (0, 0, ref p3n, ref p4n);
-			PolyLink.AttachLinks (0, 0, ref p4n, ref p5n);
-			PolyLink.AttachLinks (0, 0, ref p6n, ref p6n);
+			PolyLink.AttachLinks (4, 1, ref p2n, ref p3n);
+			PolyLink.AttachLinks (5, 0, ref p3n, ref p4n);
+			PolyLink.AttachLinks (3, 4, ref p4n, ref p5n);
+			PolyLink.AttachLinks (2, 5, ref p6n, ref p6n);
 
 			Nav = new List<PolyNode> {
 				p1n,
