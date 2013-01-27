@@ -51,7 +51,7 @@ namespace GGJ2013
 			};
 			#endregion
 
-			Blanket = CreateItem ("Blanket", "A warm blanket", "TentArea/blanket", 300, 503, 				
+			Blanket = CreateItem ("Blanket", "A warm blanket", "TentArea/blanket", 200, 500,
 				new Vector2 (0, 41),
 				new Vector2 (256, -6),
 				new Vector2 (419, 91),
@@ -63,13 +63,19 @@ namespace GGJ2013
 				new Vector2 (630 - 587, 433 - 436),
 				new Vector2 (634 - 587, 484 - 436));
 
-			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", 500, 550,
+			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", 390, 550,
 				new Vector2 (426 - 500, 563 - 550),
 				new Vector2 (513 - 500, 551 - 550),
 				new Vector2 (653 - 500, 559 - 550),
 				new Vector2 (639 - 500, 594 - 550),
 				new Vector2 (566 - 500, 615 - 550),
 				new Vector2 (496 - 500, 603 - 550));
+
+			Matches = CreateItem ("Matches", "A set of matches", "TentArea/matches", 850, 500,
+				new Vector2 (830 - 850, 505 - 500),
+				new Vector2 (892 - 850, 491 - 500),
+				new Vector2 (905 - 850, 516 - 500),
+				new Vector2 (844 - 850, 532 - 500));
 
 			Blanket.OnClick += t =>
 			{
@@ -78,6 +84,8 @@ namespace GGJ2013
 				Sweater.IsActive = true;
 			};
 
+			Matches.IsActive = false;
+			Matches.IsVisible = false;
 			Blanket.IsActive = true;
 			Blanket.CanPickup = false;
 
@@ -95,9 +103,10 @@ namespace GGJ2013
 					new Vector2 (776, 507),
 					new Vector2 (745, 483)
 					), t =>
-					{
-						// something should happen here?
-					});
+					   {
+						   Matches.IsVisible = true;
+						   Matches.IsActive = true;
+					   });
 
 			Exit = new Hotspot(
 				"Tent Exit",
@@ -138,12 +147,13 @@ namespace GGJ2013
 				//glow.IsVisible = true;
 			});
 
-			light1.IsVisible = true;
+			light1.IsVisible = false;
 			light2.IsVisible = false;
 			glow.IsVisible = false;
 
 			Items.Add (Flash);
 			Items.Add (Sweater);
+			Items.Add (Matches);
 			Items.Add (Blanket);
 
 			Lights.Add (lantern);
@@ -185,6 +195,7 @@ namespace GGJ2013
 		public GameItem Sweater;
 		public GameItem Blanket;
 		public GameItem Flash;
+		public GameItem Matches;
 
 		public Hotspot LanternSpot;
 		public Hotspot Exit;
@@ -206,7 +217,7 @@ namespace GGJ2013
 
 		private void RunIntroCinematics()
 		{
-			G.Player.Location = new Vector2 (430, 495);
+			G.Player.Location = new Vector2 (530, 495);
 			//TODO: Put player in laying down animation
 			//TODO: fade in?
 			//TODO: Wait for player to play stand up animation
