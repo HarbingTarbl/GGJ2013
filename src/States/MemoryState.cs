@@ -216,7 +216,7 @@ namespace GGJ2013.States
 						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
 					} else {
 						// Clicked in a non direct polygon
-						throw new Exception ();
+						//throw new Exception ();
 					}
 				} else {
 					//Trace.WriteLine ("Did not click in a valid polygon");
