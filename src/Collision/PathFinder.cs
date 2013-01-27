@@ -31,7 +31,7 @@ namespace GGJ2013.Collision
 
 				steps++;
 				if (steps >= MAX_STEPS)
-					throw new Exception();
+					break;
 			}
 
 			route.Add (end);
@@ -41,6 +41,9 @@ namespace GGJ2013.Collision
 		private static PolyNode StepPath (List<Vector2> route, PolyNode current,
 			PolyNode end, ref Vector2 endv)
 		{
+			if (current == null)
+				return null;
+
 			if (current == end) { 
 				return null;
 			}

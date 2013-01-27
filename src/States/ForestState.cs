@@ -45,31 +45,38 @@ namespace GGJ2013.States
 				new Vector2 (715, 558),
 				new Vector2(492, 555));
 
-
 			var p5 = new Polygon (
-				new Vector2 (768, 488),
+				new Vector2 (714, 560),
+				new Vector2 (828, 380),
+				new Vector2 (928, 380),
+				new Vector2 (866, 653));
+
+			var p6 = new Polygon (
+				new Vector2 (928, 541),
 				new Vector2 (2032, 502),
 				new Vector2 (2026, 702),
-				new Vector2 (866, 653),
-				new Vector2 (715, 557));
+				new Vector2 (866, 653));
 
 			var p1n = new PolyNode(p1);
 			var p2n = new PolyNode(p2);
 			var p3n = new PolyNode(p3);
 			var p4n = new PolyNode(p4);
-			var p5n = new PolyNode (p5);
+			var p5n = new PolyNode(p5);
+			var p6n = new PolyNode(p6);
 			
 			PolyLink.AttachLinks(277, 350, ref p1n, ref p2n);
 			PolyLink.AttachLinks(268, 414, ref p2n, ref p3n);
 			PolyLink.AttachLinks(505, 521, ref p3n, ref p4n);
 			PolyLink.AttachLinks (740, 526, ref p4n, ref p5n);
+			PolyLink.AttachLinks (891, 581, ref p5n, ref p6n);
 
 			Nav = new List<PolyNode> {
 				p1n,
 				p2n,
 				p3n,
 				p4n,
-				p5n
+				p5n,
+				p6n
 			};
 			#endregion
 
@@ -89,10 +96,10 @@ namespace GGJ2013.States
 			//Shoe = CreateItem("Shoe");
 			Foreground = CreateSprite ("ForestArea/foreground");
 
-			Shoe = CreateItem ("Sarah's Shoe", "", "ForestArea/shoe", "UI/Icons/papers", 326, 467,
+			Shoe = CreateItem ("Sarah's Shoe", "", "ForestArea/shoe", "UI/Icons/shoe", 326, 467,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
 
-			Branch = CreateItem ("Bloody Broken Branch", "", "ForestArea/branch", "UI/Icons/papers", 784, 410,
+			Branch = CreateItem ("Bloody Broken Branch", "", "ForestArea/branch", "UI/Icons/branch", 784, 410,
 			    new Vector2 (815 - 784, 383 - 410),
 			    new Vector2 (761 - 784, 501 - 410),
 			    new Vector2 (814 - 784, 511 - 410),

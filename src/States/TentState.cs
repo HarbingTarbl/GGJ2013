@@ -55,7 +55,7 @@ namespace GGJ2013
 				new Vector2 (630 - 587, 433 - 436),
 				new Vector2 (634 - 587, 484 - 436));
 
-			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", 390, 550,
+			Sweater = CreateItem("Sweater", "A Sweater", "TentArea/sweater", "UI/Icons/sweater", 390, 550,
 				new Vector2 (426 - 500, 563 - 550),
 				new Vector2 (513 - 500, 551 - 550),
 				new Vector2 (653 - 500, 559 - 550),

@@ -159,7 +159,7 @@ namespace GGJ2013.States
 			}
 
 			var hotspot =
-				Hotspots.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i));
+				Hotspots.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i) && i.Enabled);
 
 			if (hotspot != null)
 			{
@@ -219,7 +219,7 @@ namespace GGJ2013.States
 					Player.Location, node.Poly)).FirstOrDefault();
 
 				var targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
-					Camera.ScreenToWorld(target), node.Poly)).FirstOrDefault();
+					target, node.Poly)).FirstOrDefault();
 
 				for (var i = 0; i < Items.Count; i++)
 				{
@@ -297,8 +297,6 @@ namespace GGJ2013.States
 				}
 
 
-
-
 				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
 				{
 					if (targetPoly == myPoly)
@@ -310,7 +308,7 @@ namespace GGJ2013.States
 							Player.MoveQueue.Enqueue(((Hotspot)Player.Target).WalkLocation);
 						}
 						else
-							Player.MoveQueue.Enqueue(Camera.ScreenToWorld(target));
+							Player.MoveQueue.Enqueue(target);
 					}
 					else
 					{

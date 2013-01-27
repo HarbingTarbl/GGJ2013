@@ -222,6 +222,7 @@ namespace GGJ2013.States
 				{
 					if (i != null && i.Name == "Bloody Broken Branch")
 					{
+						BoulderSpot.Enabled = false;
 						Boulder.IsVisible = false;
 						Machete.IsActive = true;
 						Machete.MouseHover = true;
@@ -276,7 +277,7 @@ namespace GGJ2013.States
 				BoulderSpot
 			});
 
-			return;
+			//return;
 			//REMOVE
 			TentLight.IsVisible = false;
 			FirepitAnimation.IsVisible = true;
