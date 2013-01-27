@@ -96,8 +96,7 @@ namespace GGJ2013.States
 			batch.End();
 
 			BeginDraw(batch, BlendState.AlphaBlend);
-			foreach (var light in Lights)
-			{
+			foreach (var light in Lights) {
 				light.Draw(batch);
 			}
 			batch.End();

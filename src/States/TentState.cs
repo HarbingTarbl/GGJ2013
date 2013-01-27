@@ -88,9 +88,7 @@ namespace GGJ2013
 			Matches.IsVisible = false;
 			Blanket.IsActive = true;
 			Blanket.CanPickup = false;
-
 			Sweater.CanPickup = true;
-
 			Flash.IsActive = true;
 			Flash.CanPickup = true;
 
@@ -138,6 +136,7 @@ namespace GGJ2013
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
 			glow = CreateSprite ("TentArea/lanternGlow", 370, 140);
+			border = CreateSprite ("TentArea/border");
 
 			LanternSpot = new Hotspot("Unlit Lantern",
 				new Circlegon(545, 315, 64), t =>
@@ -148,7 +147,7 @@ namespace GGJ2013
 				//glow.IsVisible = true;
 			});
 
-			light1.IsVisible = false;
+			light1.IsVisible = true;
 			light2.IsVisible = false;
 			glow.IsVisible = false;
 
@@ -161,18 +160,16 @@ namespace GGJ2013
 			Lights.Add (light1);
 			Lights.Add (light2);
 			Lights.Add (glow);
+			Lights.Add (border);
 
 			Hotspots.Add (Exit);
 			Hotspots.Add (LanternSpot);
 			Hotspots.Add (Bag);
 		}
 
-
-
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-
 		}
 
 		public override bool HandleInput(GameTime gameTime)
@@ -189,6 +186,7 @@ namespace GGJ2013
 		private Sprite light1;
 		private Sprite light2;
 		private Sprite glow;
+		private Sprite border;
 
 		public GameItem Sweater;
 		public GameItem Blanket;
