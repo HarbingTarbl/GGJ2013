@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace GGJ2013
 {
@@ -183,6 +184,7 @@ namespace GGJ2013
 
 		protected override void OnLevelStart (string LastScreen)
 		{
+			MediaPlayer.Stop();
 			if (String.IsNullOrEmpty (LastScreen))
 				RunIntroCinematics();
 		}

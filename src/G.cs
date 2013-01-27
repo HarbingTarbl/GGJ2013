@@ -38,6 +38,7 @@ namespace GGJ2013
 		public static InventoryManager InventoryManager;
 		public static DialogManager DialogManager;
 		public static GameTime GameTime;
+		public static Song Chirping;
 		public static bool DebugCollision = false;
 		public static string LastScreen;	
 		public static Player Player;
@@ -71,6 +72,7 @@ namespace GGJ2013
 			};
 
 			Player = new Player();
+			Chirping = Content.Load<Song> ("sfx/Chirping");
 
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());

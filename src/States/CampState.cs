@@ -8,6 +8,7 @@ using Jammy.Collision;
 using Jammy.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace GGJ2013.States
 {
@@ -204,6 +205,8 @@ namespace GGJ2013.States
 				case null:
 				case "Tent":
 					Player.Location = new Vector2 (188, 283);
+					MediaPlayer.Play (G.Chirping);
+					MediaPlayer.Volume = 0.5f;
 					break;
 				case "Forest":
 					Player.Location = new Vector2 (1177, 359);
