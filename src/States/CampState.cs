@@ -21,76 +21,45 @@ namespace GGJ2013.States
 			#region NavMesh
 
 			var p1 = new Polygon (
-				new Vector2 (166, 274),
-				new Vector2 (392, 288),
-				new Vector2 (521, 490),
-				new Vector2 (396, 489),
-				new Vector2 (230, 477),
-				new Vector2 (155, 390),
-				new Vector2 (152, 278));
+				new Vector2(151, 274),
+				new Vector2(331, 257),
+				new Vector2(435, 384),
+				new Vector2(215, 392));
 
 			var p2 = new Polygon (
-				new Vector2 (307, 493),
-				new Vector2 (53, 553),
-				new Vector2 (214, 655),
-				new Vector2 (467, 660),
-				new Vector2 (554, 574),
-				new Vector2 (640, 500),
-				new Vector2 (396, 489));
+				new Vector2(4, 416),
+				new Vector2(215, 395),
+				new Vector2(434, 388),
+				new Vector2(871, 405),
+				new Vector2(904, 714),
+				new Vector2(2, 717));
 
 			var p3 = new Polygon (
-				new Vector2 (640, 500),
-				new Vector2 (554, 574),
-				new Vector2 (467, 660),
-				new Vector2 (1069, 659),
-				new Vector2 (1070, 657),
-				new Vector2 (963, 535),
-				new Vector2 (880, 452));
+				new Vector2 (871, 404),
+				new Vector2 (1500, 409),
+				new Vector2 (1500, 712),
+				new Vector2 (906, 713));
 
 			var p4 = new Polygon (
-				new Vector2 (963, 535),
-				new Vector2 (880, 452),
-				new Vector2 (1122, 470),
-				new Vector2 (1192, 480),
-				new Vector2 (1271, 494),
-				new Vector2 (1070, 657));
-
-			var p5 = new Polygon (
-				new Vector2 (1122, 470),
-				new Vector2 (1148, 418),
-				new Vector2 (1209, 421),
-				new Vector2 (1274, 423),
-				new Vector2 (1271, 494),
-				new Vector2 (1192, 480));
-
-			var p6 = new Polygon(
-				new Vector2 (1148, 418),
-				new Vector2 (1066, 385),
-				new Vector2 (1188, 250),
-				new Vector2 (1275, 254),
-				new Vector2 (1274, 423),
-				new Vector2 (1209, 421));
+				new Vector2(936, 398),
+				new Vector2(1113, 287),
+				new Vector2(1219, 295),
+				new Vector2(1267, 402));
 			
 			var p1n = new PolyNode (p1);
 			var p2n = new PolyNode (p2);
 			var p3n = new PolyNode (p3);
 			var p4n = new PolyNode (p4);
-			var p5n = new PolyNode (p5);
-			var p6n = new PolyNode (p6);
 
-			PolyLink.AttachLinks (400, 487, ref p1n, ref p2n);
-			PolyLink.AttachLinks (546, 580, ref p2n, ref p3n);
-			PolyLink.AttachLinks (972, 544, ref p3n, ref p4n);
-			PolyLink.AttachLinks (1191, 478, ref p4n, ref p5n);
-			PolyLink.AttachLinks (1209, 420, ref p5n, ref p6n);
+			PolyLink.AttachLinks (318, 391, ref p1n, ref p2n);
+			PolyLink.AttachLinks (887, 555, ref p2n, ref p3n);
+			PolyLink.AttachLinks (1119, 403, ref p3n, ref p4n);
 
 			Nav = new List<PolyNode> {
 				p1n,
 				p2n,
 				p3n,
 				p4n,
-				p5n,
-				p6n
 			};
 			#endregion
 
@@ -129,9 +98,10 @@ namespace GGJ2013.States
 
 			TentEntrance = new Hotspot(
 				"Tent Entrance",
-				new Polygon(new Vector2(143, 266),
-				            new Vector2(40, 90),
-				            new Vector2(247, 252)),
+				new Polygon(new Vector2(3, 277),
+				new Vector2(333, 247),
+				new Vector2(83, 107),
+				new Vector2(2, 107)),
 				t =>
 				{
 					G.StateManager.Pop();
