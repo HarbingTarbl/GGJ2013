@@ -81,7 +81,7 @@ namespace GGJ2013.States
 			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 1134, 456, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
 			Boulder = CreateItem ("Boulder", "A heavy rock", "CampArea/boulder", "UI/Icons/papers", 480, 313);
-			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", "UI/Icons/papers", 560, 420,
+			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", 560, 420,
 				new Vector2 (485 - 560, 388-420),
 				new Vector2 (555 - 560, 314 - 420),
 				new Vector2 (626 - 560, 315 - 420),
@@ -92,6 +92,7 @@ namespace GGJ2013.States
 
 			Boulder.IsActive = true;
 			Boulder.CanPickup = false;
+
 
 			Machete.IsActive = false;
 			Machete.CanPickup = true;
@@ -111,8 +112,9 @@ namespace GGJ2013.States
 			Papers.IsActive = false;
 			Papers.CanPickup = true;
 
-			//FirepitLight = CreateSprite("CampArea/FirepitLightMap", 0, 0);
-			//TentLight = CreateSprite("CampArea/TentFlapLightMap", 0, 0);
+			FirepitLight = CreateSprite("CampArea/light map 1", 0, 0);
+			FirepitLight.IsVisible = false;
+			TentLight = CreateSprite("CampArea/light map 1", 0, 0);
 
 			TentEntrance = new Hotspot (
 				"Tent Entrance",
@@ -207,9 +209,9 @@ namespace GGJ2013.States
 
 			Lights.AddRange(new[]
 			{
-				CreateSprite ("CampArea/foreground")
-				//FirepitLight,
-				//TentLight
+				CreateSprite ("CampArea/foreground"),
+				FirepitLight,
+				TentLight
 			});
 
 			Hotspots.AddRange(new[]
@@ -245,6 +247,10 @@ namespace GGJ2013.States
 		//Lights
 		public Sprite FirepitLight;
 		public Sprite TentLight;
+
+		public Sprite Foreground;
+
+		public AnimatedSprite FirepitAnimation;
 
 		protected override void OnLevelStart (string LastScreen)
 		{

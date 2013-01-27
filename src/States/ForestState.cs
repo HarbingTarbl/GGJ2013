@@ -77,8 +77,6 @@ namespace GGJ2013.States
 
 
 
-			/Shoe = CreateItem("Shoe");
-
 
 		}
 
