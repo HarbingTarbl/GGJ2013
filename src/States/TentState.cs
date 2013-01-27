@@ -71,7 +71,7 @@ namespace GGJ2013
 				new Vector2 (566 - 500, 615 - 550),
 				new Vector2 (496 - 500, 603 - 550));
 
-			Blanket.OnClick += (t) =>
+			Blanket.OnClick += t =>
 			{
 				var that = this;
 				that.BlanketClicked = true;
@@ -87,6 +87,7 @@ namespace GGJ2013
 			Flash.CanPickup = true;
 
 			Bag = new Hotspot (
+				"Duffle Bag",
 				new Polygon (
 					new Vector2 (757, 443),
 					new Vector2 (883, 417),
@@ -99,6 +100,7 @@ namespace GGJ2013
 					});
 
 			Exit = new Hotspot(
+				"Tent Exit",
 				new Polygon(
 					new Vector2 (620 + 90, 250),
 					new Vector2 (607 + 90, 373),
@@ -126,7 +128,8 @@ namespace GGJ2013
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
 
-			Hotspots.Add(new Hotspot(new Circlegon(545, 315, 64), t =>
+			Hotspots.Add(new Hotspot("Unlit Lantern",
+				new Circlegon(545, 315, 64), t =>
 			{
 				var that = this;
 				that.light1.IsVisible = false;

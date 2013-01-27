@@ -10,8 +10,11 @@ namespace GGJ2013.Collision
 	public class Hotspot
 		: Polygon
 	{
-		public Hotspot(Polygon verts, Action<MemoryState> action)
+		public string Name;
+
+		public Hotspot(string name, Polygon verts, Action<MemoryState> action)
 		{
+			Name = name;
 			Vertices.AddRange(verts.Vertices);
 			Location = verts.Location;
 			Activated += action;

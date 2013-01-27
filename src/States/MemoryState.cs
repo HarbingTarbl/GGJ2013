@@ -37,7 +37,8 @@ namespace GGJ2013.States
 			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 
-			InventoryOpen = new Hotspot( //Replace with Sprite
+			InventoryOpen = new Hotspot ( //Replace with Sprite
+				"Open Inventory",
 				new Rectagon(10, 5, 30, 20),
 				t =>
 				{
@@ -115,23 +116,26 @@ namespace GGJ2013.States
 		private void ShowItemHint()
 		{
 			var mouse = Mouse.GetState();
-			for (var i = 0; i < Items.Count; i++)
-			{
-				var item = Items[i];
-				if (!item.IsActive)
-				{
-					continue;
-				}
 
-				if ( //TODO this is buggy. Needs actual player collision
-					CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), item.CollisionData))
-				{
-					G.DialogManager.PostMessage (item.Name,
-					                             Vector2.Transform (
-						                             item.CollisionData.Location + new Vector2 (item.CollisionData.Width/2f, -10),
-						                             Camera.Transformation), TimeSpan.Zero,
-					                             TimeSpan.Zero, Color.Gray);
-				}
+			var item =
+				Items.FirstOrDefault (i => CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), i.CollisionData) && i.IsActive);
+
+			if (item != null)
+			{
+				G.DialogManager.PostMessage (item.Name, Vector2.Transform (
+					item.CollisionData.Location + new Vector2 (item.CollisionData.Width / 2f, -10),
+					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
+				return;
+			}
+
+			var hotspot =
+				Hotspots.FirstOrDefault (i => CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), i));
+
+			if (hotspot != null)
+			{
+				G.DialogManager.PostMessage (hotspot.Name, Vector2.Transform (
+					hotspot.Location + new Vector2 (hotspot.Width / 2f, -10),
+					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 			}
 		}
 
