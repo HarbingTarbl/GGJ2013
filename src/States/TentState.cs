@@ -115,7 +115,6 @@ namespace GGJ2013
 					new Vector2(675 + 90, 374),
 					new Vector2(657 + 90, 299)), (t,i) =>
 					{
-						CanLeaveLevel = true;
 						if (CanLeaveLevel)
 						{
 							G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
@@ -197,22 +196,13 @@ namespace GGJ2013
 					break;
 				case "Camp":
 					G.Player.Location = new Vector2(696, 511);
-					MediaPlayer.Play (G.C.Load<Song> ("sfx/Zipper"));
+					G.C.Load<SoundEffect> ("sfx/Zipper").Play();
 					MediaPlayer.Volume = 0.25f;
 					MediaPlayer.IsRepeating = true;
 					break;
 
 
 			}		
-		}
-
-		private void RunIntroCinematics()
-		{
-			
-			//TODO: Put player in laying down animation
-			//TODO: fade in?
-			//TODO: Wait for player to play stand up animation
-			//TODO: play any dialog we have
 		}
 	}
 }

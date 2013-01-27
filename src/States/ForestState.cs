@@ -98,7 +98,7 @@ namespace GGJ2013.States
 			    new Vector2 (814 - 784, 511 - 410),
 			    new Vector2 (916 - 784, 435 - 410));
 
-			ThornBush = CreateItem ("Bush of Thorns", "", "ForestArea/thornbush", "UI/Icons/papers", 830, 283,
+			ThornBush = CreateItem ("Bush of Thorns", "", "ForestArea/bush", "UI/Icons/papers", 830, 283,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
 
 			CoverBrush1 = CreateItem ("CB1", "", "ForestArea/coverbush", "UI/Icons/papers", 1230, 489,

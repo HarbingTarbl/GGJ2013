@@ -67,7 +67,7 @@ namespace GGJ2013
 			BloomRenderer.LoadContent();
 			InventoryManager = new InventoryManager();
 
-			DialogManager = new DialogManager()
+			DialogManager = new DialogManager
 			{
 				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, G.SCREEN_WIDTH, 300),
 				Font = G.C.Load<SpriteFont>("fonts/debug"),
@@ -78,7 +78,7 @@ namespace GGJ2013
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());
 			StateManager.Add (new ForestState());
-			StateManager.Set ("Forest");
+			StateManager.Set ("Tent");
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;

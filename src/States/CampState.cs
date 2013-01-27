@@ -78,23 +78,34 @@ namespace GGJ2013.States
 			BrokenWineBottle = CreateItem("Broken Wine Bottle", "The neck of the bottle has been broken, likely due to a fall",
 										  "CampArea/win2", 422, 615, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
-			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 1134, 456, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
-
+			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 822, 457, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
+			
 			Boulder = CreateItem ("Boulder", "A heavy rock", "CampArea/boulder", "UI/Icons/papers", 480, 313);
-			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", "UI/Icons/papers", 560, 420,
-				new Vector2 (485 - 560, 388-420),
-				new Vector2 (555 - 560, 314 - 420),
-				new Vector2 (626 - 560, 315 - 420),
-				new Vector2 (676 - 560, 384 - 420),
-				new Vector2 (673 - 560, 431 - 420),
-				new Vector2 (589 - 560, 474 - 420),
-				new Vector2 (484 - 560, 441 - 420));
 
-			Boulder.IsActive = true;
+			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", 560, 420, new Rectagon (0, 0, 53, 35).Vertices.ToArray());
+				
+
+			var fireIdle = new Animation ("Idle",
+			   new[]
+				{
+					new Rectangle(0, 0, 450, 300),
+					new Rectangle(450, 0, 450, 300),
+					new Rectangle(900, 0, 450, 300),
+					new Rectangle(1350, 0, 450, 300)
+				}, Looping: true);
+			FirepitAnimation = new AnimatedSprite (G.C.Load<Texture2D> ("CampArea/fire_animation"), new Animation[] { fireIdle });
+			FirepitAnimation._IHateRectangles = new Rectangle (0, 0, 450, 300);
+			FirepitAnimation.IsVisible = false;
+			FirepitAnimation.Location = new Vector2 (0, 350);
+			FirepitAnimation.AnimationManager.SetAnimation ("Idle");
+
+			Boulder.IsActive = false;
 			Boulder.CanPickup = false;
+			Boulder.MouseHover = false;
 
 			Machete.IsActive = false;
-			Machete.CanPickup = true;
+			Machete.CanPickup = false;
+			Machete.MouseHover = false;
 
 			Backpack.IsActive = false;
 			Backpack.CanPickup = false;
@@ -107,13 +118,15 @@ namespace GGJ2013.States
 
 			BrokenWineBottle.IsActive = false;
 			BrokenWineBottle.CanPickup = true;
+			BrokenWineBottle.IsVisible= false;
 
 			Papers.IsActive = false;
 			Papers.CanPickup = true;
 
-			//FirepitLight = CreateSprite("CampArea/FirepitLightMap", 0, 0);
-			//TentLight = CreateSprite("CampArea/TentFlapLightMap", 0, 0);
-
+			FirepitLight = CreateSprite("CampArea/light map 1", 0, 0);
+			FirepitLight.IsVisible = false;
+			TentLight = CreateSprite("CampArea/light map 1", 0, 0);
+#region stuff
 			TentEntrance = new Hotspot (
 				"Tent Entrance",
 				new Polygon (new Vector2 (3, 277),
@@ -141,6 +154,15 @@ namespace GGJ2013.States
 				new Vector2(1268, 301)),
 			    (t,i) =>
 			    {
+				    if (!leaveOverride)
+				    {
+					    if (i != null && i.Description == "A flashlight, it's batteries are fully charged") {
+						    CanLeaveLevel = true;
+						    leaveOverride = true;
+					    }
+					    else
+						    CanLeaveLevel = false; // HACK
+				    }
 
 				    if (CanLeaveLevel)
 				    {
@@ -154,7 +176,7 @@ namespace GGJ2013.States
 				    }
 				    else
 				    {
-					    G.DialogManager.PostQueuedMessage("TODO: [Can't leave message]");
+					    G.DialogManager.PostQueuedMessage("It's too dark, maybe if I had a flashlight or something.");
 				    }
 				}) { WalkLocation = new Vector2 (1170, 298) };
 
@@ -171,11 +193,12 @@ namespace GGJ2013.States
 				{
 					if (i != null && i.Name == "Matches")
 					{
+						TentLight.IsVisible = false;
+						FirepitAnimation.IsVisible = true;
+						fireLit = true;
 						G.DialogManager.PostMessage("You have used the matches", TimeSpan.Zero, new TimeSpan(0, 0, 3));
 						G.InventoryManager.CurrentItems.Remove("Matches");
-						var that = this;
-						foreach (var item in that.Items)
-						{
+						foreach (var item in Items) {
 							item.IsActive = true;
 						}
 					}
@@ -184,6 +207,39 @@ namespace GGJ2013.States
 						G.DialogManager.PostMessage("I need matches to light this...", TimeSpan.Zero, new TimeSpan(0, 0, 3));
 					}
 				});
+
+			BoulderSpot = new Hotspot (
+				"Pry Boulder up",
+				new Polygon (new Vector2 (57, 497),
+					new Vector2 (485, 388),
+					new Vector2 (555, 314),
+					new Vector2 (626, 315),
+					new Vector2 (676, 384),
+					new Vector2 (673, 431),
+					new Vector2 (589, 474),
+					new Vector2 (484, 441)),
+				(t, i) =>
+				{
+					if (i != null && i.Name == "Bloody Broken Branch")
+					{
+						Boulder.IsVisible = false;
+						Machete.IsActive = true;
+						Machete.MouseHover = true;
+						Machete.CanPickup = true;
+
+						G.DialogManager.PostMessage ("You pried up the boulder with the branch", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+						G.InventoryManager.CurrentItems.Remove ("Bloody Broken Branch");
+						foreach (var item in Items)
+						{
+							item.IsActive = true;
+						}
+					}
+					else
+					{
+						G.DialogManager.PostMessage ("I need something long to pry this yI need matches to light this...", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+					}
+				});
+#endregion
 
 			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
 			{
@@ -207,26 +263,32 @@ namespace GGJ2013.States
 
 			Lights.AddRange(new[]
 			{
-				CreateSprite ("CampArea/foreground")
-				//FirepitLight,
-				//TentLight
+				CreateSprite ("CampArea/foreground"),
+				FirepitLight,
+				TentLight
 			});
 
 			Hotspots.AddRange(new[]
 			{
 				Firepit,
 				TentEntrance,
-				CampExit
+				CampExit,
+				BoulderSpot
 			});
+
+			return;
+			//REMOVE
+			TentLight.IsVisible = false;
+			FirepitAnimation.IsVisible = true;
+			fireLit = true;
+			G.DialogManager.PostMessage ("You have used the matches", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+			G.InventoryManager.CurrentItems.Remove ("Matches");
+			foreach (var item in Items)
+			{
+				item.IsActive = true;
+			}
 		}
 
-
-
-		private bool fireLit = false;
-
-
-
-		//Items
 		public GameItem Backpack;
 		public GameItem Batteries;
 		public GameItem EmptyWineBottle;
@@ -234,23 +296,39 @@ namespace GGJ2013.States
 		public GameItem Papers;
 		public GameItem Boulder;
 		public GameItem Machete;
-
-		//State Changers
 		public Hotspot TentEntrance;
 		public Hotspot CampExit;
-
-		//Events
 		public Hotspot Firepit;
-
-		//Lights
+		public Hotspot BoulderSpot;
 		public Sprite FirepitLight;
 		public Sprite TentLight;
+		public Sprite Foreground;
+		private bool leaveOverride;
+
+		public AnimatedSprite FirepitAnimation;
+		private bool fireLit = false;
+
+		public override void Draw(SpriteBatch batch)
+		{
+			base.Draw (batch);
+
+			BeginDraw (batch, BlendState.NonPremultiplied);
+			FirepitAnimation.Draw (batch);
+			batch.End();
+		}
+
+		public override void Update(GameTime gameTime)
+		{
+			base.Update (gameTime);
+			FirepitAnimation.Update (gameTime);
+		}
 
 		protected override void OnLevelStart (string LastScreen)
 		{
 			switch (LastScreen)
 			{
 				case null:
+				case "None":
 				case "Tent":
 					Player.Location = new Vector2 (188, 283);
 					MediaPlayer.Play (G.C.Load<Song> ("sfx/Chirping"));

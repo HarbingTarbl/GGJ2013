@@ -328,6 +328,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForestArea\branch.png">
+      <Name>branch</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="ForestArea\flashlight light map.png">
+      <Name>flashlight light map</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="ForestArea\forest_background placement reference.png">
+      <Name>forest_background placement reference</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="ForestArea\shoe.png">
       <Name>shoe</Name>
       <Importer>TextureImporter</Importer>
@@ -335,8 +350,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ForestArea\thornbush.png">
-      <Name>thornbush</Name>
+    <Compile Include="CampArea\light map 1.png">
+      <Name>light map 1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ForestArea\bush.png">
+      <Name>bush</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CampArea\fire_animation.png">
+      <Name>fire_animation</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
