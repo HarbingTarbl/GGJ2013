@@ -73,6 +73,7 @@ namespace GGJ2013
 			Player = new Player();
 
 			StateManager.Add (new TentState());
+			StateManager.Add(new CampState());
 			StateManager.Set ("Tent");
 
 			Activated += (s, a) => Active = true;

@@ -11,7 +11,7 @@ namespace GGJ2013
         static void Main(string[] args)
         {
             using (var game = new G())
-            {
+            { 
                 game.Run();
             }
         }

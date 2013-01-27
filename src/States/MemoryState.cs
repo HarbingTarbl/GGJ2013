@@ -81,6 +81,7 @@ namespace GGJ2013.States
 		public override void OnFocus()
 		{
 			OnLevelStart (G.LastScreen);
+			Camera.Location = new Vector2(0, 0);
 			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
 			Camera.UseBounds = true;
 		}
@@ -115,9 +116,10 @@ namespace GGJ2013.States
 		private void ShowItemHint()
 		{
 			var mouse = Mouse.GetState();
+			var target = Camera.ScreenToWorld(new Vector2 (mouse.X, mouse.Y));
 
 			var item =
-				Items.FirstOrDefault (i => CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), i.CollisionData) && i.IsActive);
+				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && i.IsActive);
 
 			if (item != null)
 			{
@@ -128,7 +130,7 @@ namespace GGJ2013.States
 			}
 
 			var hotspot =
-				Hotspots.FirstOrDefault (i => CollisionChecker.PointToPoly (new Vector2 (mouse.X, mouse.Y), i));
+				Hotspots.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i));
 
 			if (hotspot != null)
 			{
@@ -143,7 +145,7 @@ namespace GGJ2013.States
 			Items.ForEach (i => i.Update (gameTime));
 
 			Player.Update(gameTime);
-			Camera.CenterOnPoint(Player.Location.X + Player.Texture.Width/2f, Background.Width/2f);
+			Camera.CenterOnPoint(Player.Location.X, Background.Height /2f);
 
 			G.DialogManager.Update(gameTime);
 		}
@@ -155,7 +157,7 @@ namespace GGJ2013.States
 				return false;
 
 			var mouse = Mouse.GetState ();
-			var target = new Vector2 (mouse.X, mouse.Y);
+			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
 
 
 			for (var i = 0; i < Items.Count; i++)
@@ -198,7 +200,7 @@ namespace GGJ2013.States
 				}
 
 				var t = Camera.ScreenToWorld (target);
-				Trace.WriteLine (String.Format ("({0}, {1})", t.X, t.Y));
+				Trace.WriteLine (String.Format ("new Vector2({0}, {1}),", t.X, t.Y));
 
 
 				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
@@ -217,7 +219,7 @@ namespace GGJ2013.States
 						throw new Exception ();
 					}
 				} else {
-					Trace.WriteLine ("Did not click in a valid polygon");
+					//Trace.WriteLine ("Did not click in a valid polygon");
 				}
 
 				foreach (var spot in Hotspots)
@@ -231,8 +233,8 @@ namespace GGJ2013.States
 			}
 
 			var keystate = Keyboard.GetState ();
-			Player.Location += new Vector2 ((keystate.IsKeyDown (Keys.D) ? 1 : 0) - (keystate.IsKeyDown (Keys.A) ? 1 : 0),
-										   (keystate.IsKeyDown (Keys.S) ? 1 : 0 - (keystate.IsKeyDown (Keys.W) ? 1 : 0)));
+			Player.Location += new Vector2 ((keystate.IsKeyDown (Keys.D) ? 10 : 0) - (keystate.IsKeyDown (Keys.A) ? 10 : 0),
+										   (keystate.IsKeyDown (Keys.S) ? 10 : 0 - (keystate.IsKeyDown (Keys.W) ? 10 : 0)));
 
 			if (keystate.IsKeyDown (Keys.F1)
 				&& _oldKey.IsKeyUp (Keys.F1))

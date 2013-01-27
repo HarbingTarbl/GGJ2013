@@ -20,7 +20,7 @@ namespace GGJ2013
 		: MemoryState
 	{
 		public TentState()
-			: base ("Tent", "Tent", "None")
+			: base ("Tent", "Camp", "None")
 		{
 			Background = G.C.Load<Texture2D> ("TentArea/background");
 			#region NavMesh
@@ -165,21 +165,6 @@ namespace GGJ2013
 			Hotspots.Add (Exit);
 			Hotspots.Add (LanternSpot);
 			Hotspots.Add (Bag);
-		}
-
-		public override void Update(GameTime gameTime)
-		{
-			base.Update(gameTime);
-		}
-
-		public override bool HandleInput(GameTime gameTime)
-		{
-			if (Keyboard.GetState().IsKeyDown(Keys.Space))
-			{
-				G.DialogManager.PostQueuedMessage("Spaaaaaace", new TimeSpan(0, 0, 5));
-			}
-
-			return base.HandleInput(gameTime);
 		}
 
 		private Sprite lantern;
