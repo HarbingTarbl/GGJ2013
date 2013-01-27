@@ -106,6 +106,7 @@ namespace GGJ2013
 					   {
 						   Matches.IsVisible = true;
 						   Matches.IsActive = true;
+						   Matches.CanPickup = true;
 					   });
 
 			Exit = new Hotspot(
