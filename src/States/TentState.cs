@@ -11,6 +11,7 @@ using Jammy.Helpers;
 using Jammy.Sprites;
 using Jammy.StateManager;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -26,6 +27,10 @@ namespace GGJ2013
 			#region NavMesh
 			var p1 = new Polygon (
 				new Vector2 (106, 469),
+				new Vector2 (152, 442),
+				new Vector2 (420, 433),
+				new Vector2 (777, 429),
+				new Vector2 (1000, 443),
 				new Vector2 (997, 480),
 				new Vector2 (896, 594),
 				new Vector2 (627, 646),
@@ -68,6 +73,12 @@ namespace GGJ2013
 				Blanket.IsActive = false;
 				Blanket.Texture = G.C.Load<Texture2D> ("TentArea/tossedblanket");
 				Sweater.IsActive = true;
+				G.C.Load<SoundEffect> ("sfx/Blanket").Play();
+			};
+
+			Sweater.OnClick += t =>
+			{
+				G.C.Load<SoundEffect> ("sfx/Sweater").Play();
 			};
 
 			Matches.IsActive = false;
@@ -105,6 +116,8 @@ namespace GGJ2013
 					{
 						if (CanLeaveLevel)
 						{
+							G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
+							G.LastScreen = "Tent";
 							G.StateManager.Pop();
 							G.StateManager.Push(NextLevel);
 						}

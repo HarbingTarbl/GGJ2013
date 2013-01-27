@@ -235,6 +235,26 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="sfx\Blanket.wav">
+      <Name>Blanket</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="sfx\Paper.wav">
+      <Name>Paper</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="sfx\Sweater.wav">
+      <Name>Sweater</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="sfx\Zipper.wav">
+      <Name>Zipper</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="CampArea\background.png">
       <Name>background</Name>
       <Importer>TextureImporter</Importer>

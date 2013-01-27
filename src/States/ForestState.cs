@@ -17,8 +17,8 @@ namespace GGJ2013.States
 			: base("Forest", "WinRwar", "Camp")
 		{
 			Background = G.C.Load<Texture2D>("ForestArea/background");
-			#region Nav Mesh
 
+			#region Nav Mesh
 			var p1 = new Polygon(
 				new Vector2(111, 233),
 				new Vector2(339, 304),
@@ -48,22 +48,18 @@ namespace GGJ2013.States
 			var p2n = new PolyNode(p2);
 			var p3n = new PolyNode(p3);
 			var p4n = new PolyNode(p4);
+			
+			PolyLink.AttachLinks(276, 347, ref p1n, ref p2n);
+			//PolyLink.AttachLinks(268, 416, ref p2n, ref p3n);
+			//PolyLink.AttachLinks(503, 523, ref p3n, ref p4n);
 
-			PolyLink.AttachLinks(71, 259, ref p1n, ref p2n);
-			PolyLink.AttachLinks(219, 390, ref p2n, ref p3n);
-			PolyLink.AttachLinks(515, 490, ref p3n, ref p4n);
-
-			Nav = new List<PolyNode> { p1n, p2n, p3n, p4n };
-
-
-
+			Nav = new List<PolyNode> {
+				p1n,
+				p2n,
+				//p3n,
+				//p4n
+			};
 			#endregion
-
-
-
-
-
-
 		}
 
 		public GameItem Shoe;
@@ -73,6 +69,10 @@ namespace GGJ2013.States
 
 		public Hotspot Bush;
 		public Hotspot TreeBranch;
-		
+
+		protected override void OnLevelStart(string LastScreen)
+		{
+			Player.Location = new Vector2 (74, 232);
+		}
 	}
 }
