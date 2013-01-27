@@ -137,7 +137,7 @@ namespace GGJ2013.States
 			var target = Camera.ScreenToWorld(new Vector2 (mouse.X, mouse.Y));
 
 			var item =
-				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && (i.IsActive || Keyboard.GetState().IsKeyDown(Keys.Space)));
+				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && i.MouseHover && (i.IsActive || Keyboard.GetState().IsKeyDown(Keys.Space)));
 
 			if (item != null)
 			{

@@ -43,7 +43,7 @@ namespace GGJ2013.Items
 
 		public Texture2D InventoryIcon;
 
-		public bool MouseHover;
+		public bool MouseHover = true;
 
 		public bool IsFound;
 

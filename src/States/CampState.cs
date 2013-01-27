@@ -82,7 +82,7 @@ namespace GGJ2013.States
 			
 			Boulder = CreateItem ("Boulder", "A heavy rock", "CampArea/boulder", "UI/Icons/papers", 480, 313);
 
-			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", 560, 420, new Rectagon (0, 0, 53, 35).Vertices.ToArray());
+			Machete = CreateItem ("Machete", "A knife used for cutting things down", "CampArea/machete", 560, 420, new Rectagon (0, 0, 150, 60).Vertices.ToArray());
 				
 
 			var fireIdle = new Animation ("Idle",
@@ -107,11 +107,13 @@ namespace GGJ2013.States
 			Machete.CanPickup = false;
 			Machete.MouseHover = false;
 
-			Backpack.IsActive = false;
+			Backpack.IsActive = true;
 			Backpack.CanPickup = false;
 
 			Batteries.IsActive = false;
-			Batteries.CanPickup = true;
+			Batteries.CanPickup = false;
+			Batteries.IsVisible = false;
+			Batteries.MouseHover = false;
 
 			EmptyWineBottle.IsActive = false;
 			EmptyWineBottle.CanPickup = true;
@@ -121,7 +123,9 @@ namespace GGJ2013.States
 			BrokenWineBottle.IsVisible= false;
 
 			Papers.IsActive = false;
-			Papers.CanPickup = true;
+			Papers.CanPickup = false;
+			Papers.IsVisible = false;
+			Papers.MouseHover = false;
 
 			FirepitLight = CreateSprite("CampArea/light map 1", 0, 0);
 			FirepitLight.IsVisible = false;
@@ -164,7 +168,7 @@ namespace GGJ2013.States
 						    CanLeaveLevel = false; // HACK
 				    }
 
-				    if (CanLeaveLevel)
+				    if (leaveOverride || CanLeaveLevel)
 				    {
 						G.FadeOut.Finished += () =>
 						{
@@ -210,7 +214,7 @@ namespace GGJ2013.States
 
 			BoulderSpot = new Hotspot (
 				"Pry Boulder up",
-				new Polygon (new Vector2 (57, 497),
+				new Polygon (
 					new Vector2 (485, 388),
 					new Vector2 (555, 314),
 					new Vector2 (626, 315),
@@ -237,10 +241,22 @@ namespace GGJ2013.States
 					}
 					else
 					{
-						G.DialogManager.PostMessage ("I need something long to pry this yI need matches to light this...", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+						G.DialogManager.PostMessage ("I need something strong to pry this up", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 					}
 				});
 #endregion
+
+			Backpack.OnClick += state =>
+			{
+				Batteries.IsActive = true;
+				Batteries.CanPickup = true;
+				Batteries.IsVisible = true;
+				Batteries.MouseHover = true;
+				Papers.IsActive = true;
+				Papers.CanPickup = true;
+				Papers.IsVisible = true;
+				Papers.MouseHover = true;
+			};
 
 			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
 			{
@@ -277,7 +293,7 @@ namespace GGJ2013.States
 				BoulderSpot
 			});
 
-			//return;
+			return;
 			//REMOVE
 			TentLight.IsVisible = false;
 			FirepitAnimation.IsVisible = true;

@@ -49,6 +49,7 @@ namespace GGJ2013.States
 				new Vector2 (714, 560),
 				new Vector2 (828, 380),
 				new Vector2 (928, 380),
+				new Vector2 (929, 542),
 				new Vector2 (866, 653));
 
 			var p6 = new Polygon (
@@ -67,7 +68,7 @@ namespace GGJ2013.States
 			PolyLink.AttachLinks(277, 350, ref p1n, ref p2n);
 			PolyLink.AttachLinks(268, 414, ref p2n, ref p3n);
 			PolyLink.AttachLinks(505, 521, ref p3n, ref p4n);
-			PolyLink.AttachLinks (740, 526, ref p4n, ref p5n);
+			PolyLink.AttachLinks (744, 514, ref p4n, ref p5n);
 			PolyLink.AttachLinks (891, 581, ref p5n, ref p6n);
 
 			Nav = new List<PolyNode> {
@@ -121,8 +122,9 @@ namespace GGJ2013.States
 			Branch.IsActive = true;
 			Branch.CanPickup = true;
 
-			ThornBush.IsActive = true;
+			ThornBush.IsActive = false;
 			ThornBush.CanPickup = false;
+			ThornBush.MouseHover = false;
 
 			CoverBrush1.IsActive = false;
 			CoverBrush2.IsActive = false;
@@ -147,6 +149,52 @@ namespace GGJ2013.States
 					G.FadeOut.TriggerStart();
 				}) { WalkLocation = new Vector2 (170, 279) };
 
+			SarahSpot = new Hotspot (
+				"Sarah's Body",
+				new Polygon (
+				new Vector2(1545, 551),
+				new Vector2(1839, 548),
+				new Vector2(1871, 659),
+				new Vector2(1552, 638)),
+				(t, i) =>
+				{
+				}) { WalkLocation = new Vector2 (170, 279) };
+
+			ShrubSpot = new Hotspot (
+				"Chop down thorny bushes",
+				new Polygon (
+					new Vector2(938, 596),
+					new Vector2(1021, 343),
+					new Vector2(2046, 483),
+					new Vector2(2036, 709)),
+				(t, i) =>
+				{
+					if (i != null && i.Name == "Machete")
+					{
+						CoverBrush1.IsVisible = false;
+						CoverBrush2.IsVisible = false;
+						CoverBrush3.IsVisible = false;
+						ThornBush.IsVisible = false;
+						ThornBush.IsActive = false;
+						ThornBush.MouseHover = false;
+						SarahSpot.Enabled = true;
+						ShrubSpot.Enabled = false;
+
+						G.DialogManager.PostMessage ("You chopped down the thorny bushes", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+						foreach (var item in Items)
+						{
+							item.IsActive = true;
+						}
+					}
+					else
+					{
+						G.DialogManager.PostMessage ("I need something to chop these bushes down", TimeSpan.Zero, new TimeSpan (0, 0, 3));
+					}
+				});
+
+			SarahSpot.Enabled = false;
+			ShrubSpot.Enabled = true;
+
 			Items.Add (Shoe);
 			Items.Add (Branch);
 			Items.Add (ThornBush);
@@ -155,6 +203,8 @@ namespace GGJ2013.States
 			Items.Add (CoverBrush3);
 
 			Hotspots.Add (ForestExit);
+			Hotspots.Add (ShrubSpot);
+			Hotspots.Add (SarahSpot);
 
 			Lights.Add (Foreground);
 		}
@@ -216,10 +266,10 @@ namespace GGJ2013.States
 		public GameItem ThornBush;
 		public GameItem Branch;
 		public GameItem Shoe;
-		public Hotspot ForestExit;
 
-		public Hotspot CampEntrance;
-		public Hotspot DeadyBody;
+		public Hotspot ForestExit;
+		public Hotspot SarahSpot;
+		public Hotspot ShrubSpot;
 
 		public Hotspot Bush;
 		public Hotspot TreeBranch;
