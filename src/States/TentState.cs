@@ -169,8 +169,6 @@ namespace GGJ2013
 
 		public override bool HandleInput(GameTime gameTime)
 		{
-			
-
 			if (Keyboard.GetState().IsKeyDown(Keys.Space))
 			{
 				G.DialogManager.PostQueuedMessage("Spaaaaaace", new TimeSpan(0, 0, 5));
