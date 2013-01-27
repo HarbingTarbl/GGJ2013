@@ -129,7 +129,9 @@ namespace GGJ2013.States
 
 			TentEntrance = new Hotspot(
 				"Tent Entrance",
-				new Polygon(),
+				new Polygon(new Vector2(143, 266),
+new Vector2(40, 90),
+new Vector2(247, 252)),
 				t =>
 				{
 					G.StateManager.Pop();
@@ -152,15 +154,26 @@ namespace GGJ2013.States
 			                       });
 
 			Firepit = new Hotspot(
-				"Fire Pit",
-				new	Polygon(),
+				"Light Fire Pit",
+				new	Polygon(new Vector2(57, 497),
+					new Vector2(176, 463),
+					new Vector2(286, 480),
+					new Vector2(190, 510)),
 				t =>
 				{
-					var that = this;
-					foreach (var item in that.Items)
+					if (G.InventoryManager.CurrentItems.Contains("Matches"))
 					{
-						item.IsActive = true;
-						//FirepitLight.IsVisible = true;
+						G.DialogManager.PostMessage("You have used the matches", TimeSpan.Zero, new TimeSpan(0, 0, 3));
+						G.InventoryManager.CurrentItems.Remove("Matches");
+						var that = this;
+						foreach (var item in that.Items)
+						{
+							item.IsActive = true;
+						}
+					}
+					else
+					{
+						G.DialogManager.PostMessage("I need matches to light this...", TimeSpan.Zero, new TimeSpan(0, 0, 3));
 					}
 				});
 
@@ -187,6 +200,12 @@ namespace GGJ2013.States
 				CampExit
 			});
 		}
+
+
+
+		private bool fireLit = false;
+
+
 
 		//Items
 		public GameItem Backpack;

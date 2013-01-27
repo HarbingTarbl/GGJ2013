@@ -96,7 +96,6 @@ namespace GGJ2013.Entities
 						if (TargerIsItem)
 						{
 							state.OnItemFound((GameItem) Target);
-							((GameItem) Target).Location = Location - Origin;
 							Trace.WriteLine(((GameItem) Target).Location);
 						}
 						else
