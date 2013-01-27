@@ -204,12 +204,8 @@ namespace GGJ2013.States
 						var item = G.InventoryManager.SelectItemAt(screen);
 						if (item != null)
 							HeldItem = GameItem.ItemDictionary[item];
-
 					}
-
 			}
-				
-
 
 			if (mouse.LeftButton.WasButtonRelease(_oldMouse.LeftButton))
 			{

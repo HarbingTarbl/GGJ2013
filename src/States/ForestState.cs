@@ -42,24 +42,34 @@ namespace GGJ2013.States
 			var p4 = new Polygon(
 				new Vector2(515, 490),
 				new Vector2(770, 488),
-				new Vector2(964, 562),
-				new Vector2(804, 550),
+				new Vector2 (715, 558),
 				new Vector2(492, 555));
+
+
+			var p5 = new Polygon (
+				new Vector2 (768, 488),
+				new Vector2 (2032, 502),
+				new Vector2 (2026, 702),
+				new Vector2 (866, 653),
+				new Vector2 (715, 557));
 
 			var p1n = new PolyNode(p1);
 			var p2n = new PolyNode(p2);
 			var p3n = new PolyNode(p3);
 			var p4n = new PolyNode(p4);
+			var p5n = new PolyNode (p5);
 			
-			PolyLink.AttachLinks(276, 347, ref p1n, ref p2n);
-			//PolyLink.AttachLinks(268, 416, ref p2n, ref p3n);
-			//PolyLink.AttachLinks(503, 523, ref p3n, ref p4n);
+			PolyLink.AttachLinks(277, 350, ref p1n, ref p2n);
+			PolyLink.AttachLinks(268, 414, ref p2n, ref p3n);
+			PolyLink.AttachLinks(505, 521, ref p3n, ref p4n);
+			PolyLink.AttachLinks (740, 526, ref p4n, ref p5n);
 
 			Nav = new List<PolyNode> {
 				p1n,
 				p2n,
-				//p3n,
-				//p4n
+				p3n,
+				p4n,
+				p5n
 			};
 			#endregion
 
@@ -84,6 +94,7 @@ namespace GGJ2013.States
 		{
 			base.Draw(batch);
 
+			return;
 			var lightRect = new Rectangle (0, 0, Flashlight.Texture.Width, Flashlight.Texture.Height);
 			GeomHelpers.CenterRectangle (ref lightRect, Flashlight.Location);
 
@@ -142,7 +153,7 @@ namespace GGJ2013.States
 
 		protected override void OnLevelStart(string LastScreen)
 		{
-			Player.Location = new Vector2 (74, 232);
+			Player.Location = new Vector2 (101, 249);
 		}
 
 		private RenderTarget2D light;
