@@ -193,5 +193,10 @@ namespace GGJ2013.States
 		public Sprite FirepitLight;
 		public Sprite TentLight;
 
+		protected override void OnLevelStart (string LastScreen)
+		{
+			if (LastScreen == "Tent")
+				Player.Location = new Vector2 (188, 283);
+		}
 	}
 }
