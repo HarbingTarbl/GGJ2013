@@ -130,8 +130,8 @@ namespace GGJ2013.States
 			TentEntrance = new Hotspot(
 				"Tent Entrance",
 				new Polygon(new Vector2(143, 266),
-new Vector2(40, 90),
-new Vector2(247, 252)),
+				            new Vector2(40, 90),
+				            new Vector2(247, 252)),
 				t =>
 				{
 					G.StateManager.Pop();
@@ -177,6 +177,8 @@ new Vector2(247, 252)),
 					}
 				});
 
+			ItemsToLeave.Add("Papers");
+			ItemsToLeave.Add("Backpack");
 
 			Items.AddRange(new[]
 			{
