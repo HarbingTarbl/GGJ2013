@@ -119,6 +119,7 @@ namespace GGJ2013.States
 			foreach (var light in Lights) {
 				light.Draw(batch);
 			}
+			PreDrawFUUUCK (batch);
 			batch.End();
 
 			//G.BloomRenderer.Draw (G.GameTime);
@@ -129,6 +130,10 @@ namespace GGJ2013.States
 			ShowItemHint();
 			G.InventoryManager.Draw(batch);
 			G.DialogManager.Draw(batch);
+		}
+
+		protected virtual void PreDrawFUUUCK (SpriteBatch batch)
+		{
 		}
 
 		private void ShowItemHint()
