@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collision\Hotspot.cs" />
+    <Compile Include="Collision\PathFinder.cs" />
     <Compile Include="Interface\DialogManager.cs" />
     <Compile Include="Interface\ItemViewer.cs" />
     <Compile Include="AStar.cs" />

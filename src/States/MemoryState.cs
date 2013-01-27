@@ -212,9 +212,13 @@ namespace GGJ2013.States
 					if (targetPoly == myPoly) {
 						Player.ClearMove ();
 						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
-					} else {
-						// Clicked in a non direct polygon
-						//throw new Exception ();
+					} else
+					{
+						List<Vector2> points = PathFinder.CalculatePath (
+							Player.Location, Camera.ScreenToWorld (target), Nav);
+
+						Player.ClearMove ();
+						points.ForEach (v => Player.MoveQueue.Enqueue (v));
 					}
 				} else {
 					//Trace.WriteLine ("Did not click in a valid polygon");

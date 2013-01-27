@@ -78,11 +78,11 @@ namespace GGJ2013.States
 			var p5n = new PolyNode (p5);
 			var p6n = new PolyNode (p6);
 
-			PolyLink.AttachLinks (3, 5, ref p1n, ref p2n);
-			PolyLink.AttachLinks (4, 1, ref p2n, ref p3n);
-			PolyLink.AttachLinks (5, 0, ref p3n, ref p4n);
-			PolyLink.AttachLinks (3, 4, ref p4n, ref p5n);
-			PolyLink.AttachLinks (2, 5, ref p6n, ref p6n);
+			PolyLink.AttachLinks (400, 487, ref p1n, ref p2n);
+			PolyLink.AttachLinks (546, 580, ref p2n, ref p3n);
+			PolyLink.AttachLinks (972, 544, ref p3n, ref p4n);
+			PolyLink.AttachLinks (1191, 478, ref p4n, ref p5n);
+			PolyLink.AttachLinks (1209, 420, ref p5n, ref p6n);
 
 			Nav = new List<PolyNode> {
 				p1n,

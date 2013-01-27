@@ -32,23 +32,9 @@ namespace GGJ2013
 				new Vector2 (345, 644),
 				new Vector2 (159, 605));
 
-			var p2 = new Polygon (
-				new Vector2 (106, 769),
-				new Vector2 (997, 780),
-				new Vector2 (896, 894),
-				new Vector2 (627, 946),
-				new Vector2 (345, 944),
-				new Vector2 (159, 905));
-
 			var p1n = new PolyNode (p1);
-			var p2n = new PolyNode (p2);
 
-			PolyLink.AttachLinks (3, 0, ref p1n, ref p2n);
-
-			Nav = new List<PolyNode> {
-				p1n,
-				p2n
-			};
+			Nav = new List<PolyNode> { p1n };
 			#endregion
 
 			Blanket = CreateItem ("Blanket", "A warm blanket", "TentArea/blanket", 200, 500,
