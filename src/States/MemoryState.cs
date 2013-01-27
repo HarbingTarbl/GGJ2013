@@ -106,8 +106,13 @@ namespace GGJ2013.States
 			batch.Draw (Background, Vector2.Zero, Color.White);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
-			if (HeldItem != null && !WasReleased)
-				batch.Draw(HeldItem.InventoryIcon, new Rectangle(m.X - 50, m.Y - 50, 100, 100), Color.White);
+			if (HeldItem != null
+			    && !WasReleased)
+			{
+				var vec = Vector2.Transform(new Vector2(m.X, m.Y) - new Vector2(50,50), Camera.Transformation);
+				batch.Draw(HeldItem.InventoryIcon, new Rectangle((int)vec.X, (int)vec.Y, 100, 100), Color.White);
+
+			}
 			batch.End();
 
 			BeginDraw(batch, BlendState.AlphaBlend);

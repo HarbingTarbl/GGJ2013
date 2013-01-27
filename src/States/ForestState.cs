@@ -80,7 +80,7 @@ namespace GGJ2013.States
 			G.Graphics.GraphicsDevice.Clear(Color.Black);
 
 			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
-			batch.Draw(Flashlight.Texture, Vector2.Zero, Color.White);
+			batch.Draw(Flashlight.Texture, Flashlight.Location - new Vector2(Flashlight.Texture.Width/2f, Flashlight.Texture.Height/2f), Color.White);
 			batch.End();
 			G.Graphics.GraphicsDevice.SetRenderTarget(null);
 
