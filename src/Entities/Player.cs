@@ -141,7 +141,7 @@ namespace GGJ2013.Entities
 		public object Target;
 		public bool TargerIsItem;
 
-		private const float SPEED = 120; // pixel/sec
+		private const float SPEED = 1500;//120; // pixel/sec
 		private bool hasTarget;
 		private bool frozen = false;
 		private float moveTime;

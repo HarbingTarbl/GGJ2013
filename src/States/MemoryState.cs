@@ -115,7 +115,6 @@ namespace GGJ2013.States
 			ShowItemHint();
 			G.InventoryManager.Draw(batch);
 			G.DialogManager.Draw(batch);
-
 		}
 
 		private void ShowItemHint()
