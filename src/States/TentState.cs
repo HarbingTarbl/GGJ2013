@@ -115,11 +115,17 @@ namespace GGJ2013
 					new Vector2(675 + 90, 374),
 					new Vector2(657 + 90, 299)), t =>
 					{
+						CanLeaveLevel = true;
 						if (CanLeaveLevel)
 						{
 							G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
-							G.LastScreen = "Tent";
-							G.StateManager.Set (NextLevel);
+							G.FadeOut.Finished = () => {
+								G.FadeOut.Reset();
+								G.LastScreen = "Tent";
+								G.StateManager.Set (NextLevel);
+								G.FadeIn.TriggerStart();
+							};
+							G.FadeOut.TriggerStart();
 						}
 						else
 						{
@@ -184,8 +190,10 @@ namespace GGJ2013
 		protected override void OnLevelStart (string LastScreen)
 		{
 			MediaPlayer.Stop();
-			if (LastScreen == "None")
+			if (G.LastScreen == "None")
 				RunIntroCinematics();
+			else if (G.LastScreen == "Camp")
+				Player.Location = new Vector2(696, 473);
 		}
 
 		private void RunIntroCinematics()

@@ -80,7 +80,6 @@ namespace GGJ2013.States
 
 			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 1134, 456, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
-
 			Backpack.IsActive = false;
 			Backpack.CanPickup = false;
 
@@ -99,16 +98,23 @@ namespace GGJ2013.States
 			//FirepitLight = CreateSprite("CampArea/FirepitLightMap", 0, 0);
 			//TentLight = CreateSprite("CampArea/TentFlapLightMap", 0, 0);
 
-			TentEntrance = new Hotspot(
+			TentEntrance = new Hotspot (
 				"Tent Entrance",
-				new Polygon(new Vector2(3, 277),
-				new Vector2(333, 247),
-				new Vector2(83, 107),
-				new Vector2(2, 107)),
+				new Polygon (new Vector2 (3, 277),
+				new Vector2 (333, 247),
+				new Vector2 (83, 107),
+				new Vector2 (2, 107)),
 				t =>
 				{
-					G.StateManager.Set ("Tent", G.FadeOut, G.FadeIn);
-				});
+					G.LastScreen = "Camp";
+					G.FadeOut.Finished = () =>
+					{
+						G.FadeOut.Reset ();
+						G.StateManager.Set ("Tent");
+						G.FadeIn.TriggerStart ();
+					};
+					G.FadeOut.TriggerStart ();
+				}) { WalkLocation = new Vector2 (170, 279) };
 
 			CampExit = new Hotspot(
 				"Camp Exit",
@@ -119,16 +125,22 @@ namespace GGJ2013.States
 				new Vector2(1268, 301)),
 			    t =>
 			    {
+
 				    if (CanLeaveLevel)
 				    {
-					    G.StateManager.Pop();
-					    G.StateManager.Push(NextLevel); 
+						G.FadeOut.Finished += () =>
+						{
+							G.FadeOut.Reset ();
+							G.StateManager.Set (NextLevel);
+							G.FadeIn.TriggerStart ();
+						};
+						G.FadeOut.TriggerStart ();
 				    }
 				    else
 				    {
 					    G.DialogManager.PostQueuedMessage("TODO: [Can't leave message]");
 				    }
-			    });
+				}) { WalkLocation = new Vector2 (1170, 298) };
 
 			Firepit = new Hotspot(
 				"Light Fire Pit",
@@ -230,8 +242,6 @@ namespace GGJ2013.States
 				default:
 					throw new Exception ("The person has come from an invalid state");
 			}
-			base.OnLevelStart(LastScreen);
-
 		}
 	}
 }

@@ -80,7 +80,7 @@ namespace GGJ2013.States
 		public string CurrentItem;
 		public string LastItem;
 
-		protected virtual void OnLevelStart(string LastScreen)
+		protected virtual void OnLevelStart (string LastScreen)
 		{
 			if (LastScreen != null)
 			{
@@ -337,7 +337,7 @@ namespace GGJ2013.States
 		}
 
 
-		private MouseState _oldMouse;
+		protected MouseState _oldMouse;
 		private KeyboardState _oldKey;
 		private Polygon _insideMesh;
 

@@ -5,6 +5,7 @@ using System.Text;
 using GGJ2013.Collision;
 using GGJ2013.Items;
 using Jammy.Collision;
+using Jammy.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -60,7 +61,43 @@ namespace GGJ2013.States
 				//p4n
 			};
 			#endregion
+
+			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
+			                           DepthFormat.None);
+			Flashlight = CreateSprite("TentArea/light1", 0, 0);
+			Lightmask = new Sprite()
+			{
+				IsVisible = true,
+				Texture = (Texture2D) light,
+			};
+
+			Lights.Add(Lightmask);
+
 		}
+
+		public override void Draw(SpriteBatch batch)
+		{
+			G.Graphics.GraphicsDevice.SetRenderTarget(light);
+			G.Graphics.GraphicsDevice.Clear(Color.Transparent);
+			batch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+			Flashlight.Draw(batch);
+			batch.End();
+
+
+			G.Graphics.GraphicsDevice.SetRenderTarget(null);
+			base.Draw(batch);
+
+		}
+
+		public override bool HandleInput(GameTime gameTime)
+		{
+			Flashlight.Location = new Vector2(_oldMouse.X, _oldMouse.Y);
+			return base.HandleInput(gameTime);
+
+		}
+
+		public Sprite Flashlight;
+		public Sprite Lightmask;
 
 		public GameItem Shoe;
 
@@ -74,5 +111,7 @@ namespace GGJ2013.States
 		{
 			Player.Location = new Vector2 (74, 232);
 		}
+
+		private RenderTarget2D light;
 	}
 }
