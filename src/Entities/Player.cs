@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.Collision;
@@ -59,7 +60,7 @@ namespace GGJ2013.Entities
 
 			Origin = new Vector2(125, 500);
 			AnimationManager.SetAnimation("Idle");
-			CollisionData = new Rectagon(0, 0, 250, 500);
+			CollisionData = new Rectagon(0, 0, 100, 250);
 
 		}
 
@@ -82,7 +83,7 @@ namespace GGJ2013.Entities
 			AnimationManager.Update(gameTime);
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
-			CollisionData.Location = Location - Origin;
+			CollisionData.Location = Location - Origin - new Vector2(-75, -250);
 
 			if (MoveQueue.Count == 0)
 			{
@@ -93,7 +94,11 @@ namespace GGJ2013.Entities
 					{
 						var state = (MemoryState) G.StateManager.CurrentState;
 						if (TargerIsItem)
+						{
 							state.OnItemFound((GameItem) Target);
+							((GameItem) Target).Location = Location - Origin;
+							Trace.WriteLine(((GameItem) Target).Location);
+						}
 						else
 							((Hotspot) Target).OnActivate(state);
 					}

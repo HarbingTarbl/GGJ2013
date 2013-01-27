@@ -124,13 +124,24 @@ namespace GGJ2013.States
 			var target = Camera.ScreenToWorld(new Vector2 (mouse.X, mouse.Y));
 
 			var item =
-				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && i.IsActive);
+				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData)); //&& i.IsActive);
 
 			if (item != null)
 			{
 				G.DialogManager.PostMessage (item.Name, Vector2.Transform (
 					item.CollisionData.Location + new Vector2(item.CollisionData.Left, item.CollisionData.Top) + new Vector2 (item.CollisionData.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
+
+				if (Keyboard.GetState().IsKeyDown(Keys.Space))
+				{
+					item.Location = target - new Vector2(item.CollisionData.Width/2f, item.CollisionData.Height/2f);
+				}
+
+				if (Keyboard.GetState().IsKeyDown(Keys.P))
+					Trace.WriteLine(string.Format("new Vector2({0},{1})", item.Location.X, item.Location.Y));
+
+				
+
 				return;
 			}
 
@@ -151,6 +162,10 @@ namespace GGJ2013.States
 
 			Player.Update(gameTime);
 			Camera.CenterOnPoint(Player.Location.X, Background.Height /2f);
+			InventoryOpen.Location = Camera.Location + new Vector2(10, 5) + ((G.InventoryManager.IsShown)
+				                                                                 ? new Vector2(0,
+				                                                                               G.InventoryManager.Bounds.Bottom + 25)
+				                                                                 : Vector2.Zero);
 
 			G.DialogManager.Update(gameTime);
 		}
