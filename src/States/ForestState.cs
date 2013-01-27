@@ -21,22 +21,21 @@ namespace GGJ2013.States
 
 			var p1 = new Polygon(
 				new Vector2(111, 233),
-new Vector2(339, 304),
-new Vector2(316, 367),
-new Vector2(71, 259));
+				new Vector2(339, 304),
+				new Vector2(316, 367),
+				new Vector2(71, 259));
 
 			var p2 = new Polygon(
 				new Vector2(316, 367),
-
-new Vector2(240, 449),
-new Vector2(160, 414),
-new Vector2(242, 336));
+				new Vector2(240, 449),
+				new Vector2(160, 414),
+				new Vector2(242, 336));
 
 			var p3 = new Polygon(
 				new Vector2(293, 390),
-new Vector2(241, 446),
-new Vector2(492, 555),
-new Vector2(515, 490));
+				new Vector2(241, 446),
+				new Vector2(492, 555),
+				new Vector2(515, 490));
 
 			var p4 = new Polygon(
 				new Vector2(515, 490),
