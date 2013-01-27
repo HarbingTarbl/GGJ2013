@@ -20,59 +20,77 @@ namespace GGJ2013.States
 			Background = G.C.Load<Texture2D>("CampArea/background");
 			#region NavMesh
 
-			var p1 = new Polygon(
-				new Vector2(397, 280),
-				new Vector2(159, 275),
-				new Vector2(154, 292),
-				new Vector2(186, 298),
-				new Vector2(204, 334),
-				new Vector2(129, 352),
-				new Vector2(127, 384),
-				new Vector2(212, 429),
-				new Vector2(196, 454),
-				new Vector2(245, 473),
-				new Vector2(296, 502),
-				new Vector2(121, 539),
-				new Vector2(118, 646),
-				new Vector2(163, 672),
-				new Vector2(213, 636),
-				new Vector2(269, 639),
-				new Vector2(441, 648),
-				new Vector2(528, 675),
-				new Vector2(610, 680),
-				new Vector2(726, 674),
-				new Vector2(819, 655),
-				new Vector2(929, 664),
-				new Vector2(1081, 634),
-				new Vector2(1144, 600),
-				new Vector2(1159, 543),
-				new Vector2(1372, 477),
-				new Vector2(1374, 345),
-				new Vector2(1291, 352),
-				new Vector2(1164, 441),
-				new Vector2(1079, 478),
-				new Vector2(897, 445),
-				new Vector2(838, 501),
-				new Vector2(639, 500),
-				new Vector2(482, 382),
-				new Vector2(399, 283));
+			var p1 = new Polygon (
+				new Vector2 (166, 274),
+				new Vector2 (392, 288),
+				new Vector2 (521, 490),
+				new Vector2 (396, 489),
+				new Vector2 (230, 477),
+				new Vector2 (155, 390),
+				new Vector2 (152, 278));
 
+			var p2 = new Polygon (
+				new Vector2 (307, 493),
+				new Vector2 (53, 553),
+				new Vector2 (214, 655),
+				new Vector2 (467, 660),
+				new Vector2 (554, 574),
+				new Vector2 (640, 500),
+				new Vector2 (396, 489));
 
+			var p3 = new Polygon (
+				new Vector2 (640, 500),
+				new Vector2 (554, 574),
+				new Vector2 (467, 660),
+				new Vector2 (1069, 659),
+				new Vector2 (1070, 657),
+				new Vector2 (963, 535),
+				new Vector2 (880, 452));
 
-			var p2 = new Polygon();
-			foreach (var vector in p1.Vertices)
-			{
-				p2.Vertices.Add(new Vector2(0, 400)+vector);
-			}
+			var p4 = new Polygon (
+				new Vector2 (963, 535),
+				new Vector2 (880, 452),
+				new Vector2 (1122, 470),
+				new Vector2 (1192, 480),
+				new Vector2 (1271, 494),
+				new Vector2 (1070, 657));
 
-			var p1n = new PolyNode(p1);
-			var p2n = new PolyNode(p2);
+			var p5 = new Polygon (
+				new Vector2 (1122, 470),
+				new Vector2 (1148, 418),
+				new Vector2 (1209, 421),
+				new Vector2 (1274, 423),
+				new Vector2 (1271, 494),
+				new Vector2 (1192, 480));
 
-			PolyLink.AttachLinks(3, 0, ref p1n, ref p2n);
+			var p6 = new Polygon(
+				new Vector2 (1148, 418),
+				new Vector2 (1066, 385),
+				new Vector2 (1188, 250),
+				new Vector2 (1275, 254),
+				new Vector2 (1274, 423),
+				new Vector2 (1209, 421));
+			
+			var p1n = new PolyNode (p1);
+			var p2n = new PolyNode (p2);
+			var p3n = new PolyNode (p3);
+			var p4n = new PolyNode (p4);
+			var p5n = new PolyNode (p5);
+			var p6n = new PolyNode (p6);
+
+			PolyLink.AttachLinks (3, 5, ref p1n, ref p2n);
+			PolyLink.AttachLinks (4, 1, ref p2n, ref p3n);
+			PolyLink.AttachLinks (5, 0, ref p3n, ref p4n);
+			PolyLink.AttachLinks (3, 4, ref p4n, ref p5n);
+			PolyLink.AttachLinks (2, 5, ref p6n, ref p6n);
 
 			Nav = new List<PolyNode> {
 				p1n,
-				p2n
+				p2n,
+				p3n,
+				p4n,
+				p5n,
+				p6n
 			};
 			#endregion
 
@@ -185,5 +203,10 @@ namespace GGJ2013.States
 		public Sprite FirepitLight;
 		public Sprite TentLight;
 
+		protected override void OnLevelStart (string LastScreen)
+		{
+			if (LastScreen == "Tent")
+				Player.Location = new Vector2 (188, 283);
+		}
 	}
 }

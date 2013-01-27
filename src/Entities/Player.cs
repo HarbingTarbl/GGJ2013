@@ -59,7 +59,7 @@ namespace GGJ2013.Entities
 
 			Origin = new Vector2(125, 500);
 			AnimationManager.SetAnimation("Idle");
-			CollisionData = new Rectagon(125, 250, 95, 250);
+			CollisionData = new Rectagon(0, 0, 250, 500);
 
 		}
 
@@ -75,7 +75,6 @@ namespace GGJ2013.Entities
 		{
 			batch.Draw(Texture, _IHateRectangles, AnimationManager.Bounding, Color.White, Rotation, Origin,
 				MoveQueue.Count > 0 ?  MoveQueue.Peek().X - _IHateRectangles.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
-
 		}
 
 		public override void Update (GameTime gameTime)
@@ -83,8 +82,7 @@ namespace GGJ2013.Entities
 			AnimationManager.Update(gameTime);
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
-			CollisionData.Location = Location - Origin + new Vector2(75, 250);
-
+			CollisionData.Location = Location - Origin;
 
 			if (MoveQueue.Count == 0)
 			{

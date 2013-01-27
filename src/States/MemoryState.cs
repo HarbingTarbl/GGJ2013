@@ -39,13 +39,18 @@ namespace GGJ2013.States
 
 			InventoryOpen = new Hotspot( //Replace with Sprite
 				"Open Inventory",
-				new Rectagon(10, 5, 30, 20),
+				new Rectagon(10, 5, 18, 55),
 				t =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
+					InventoryOpen.Rotation = G.InventoryManager.IsShown ? -MathHelper.PiOver2 : MathHelper.PiOver2;
+
 					InventoryOpen.Location.Y += G.InventoryManager.IsShown
-						                            ? G.InventoryManager.Bounds.Bottom
-						                            : -G.InventoryManager.Bounds.Bottom;
+						                            ? G.InventoryManager.Bounds.Bottom + 25
+						                            : -G.InventoryManager.Bounds.Bottom - 25;
+
+					InventoryOpen.Name = G.InventoryManager.IsShown ? "Close Inventory" : "Open Inventory";
+
 				}) {EnforceDistance = false};
 
 			Hotspots.Add(InventoryOpen);
@@ -159,16 +164,14 @@ namespace GGJ2013.States
 			var mouse = Mouse.GetState ();
 			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
 
-
-			
-
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
+
 				Player.Target = null;
+
 
 				for (var i = 0; i < Items.Count; i++)
 				{
-
 					var item = Items[i];
 					if (item.IsFound || !item.IsActive)
 						continue;
@@ -182,6 +185,7 @@ namespace GGJ2013.States
 						else
 						{
 							OnItemFound(item);
+
 						}
 					break;
 				}
@@ -202,7 +206,6 @@ namespace GGJ2013.States
 				var t = Camera.ScreenToWorld (target);
 				Trace.WriteLine (String.Format ("new Vector2({0}, {1}),", t.X, t.Y));
 
-
 				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
 					Player.Location, node.Poly)).FirstOrDefault ();
 
@@ -216,7 +219,7 @@ namespace GGJ2013.States
 						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
 					} else {
 						// Clicked in a non direct polygon
-						throw new Exception ();
+						//throw new Exception ();
 					}
 				} else {
 					//Trace.WriteLine ("Did not click in a valid polygon");
