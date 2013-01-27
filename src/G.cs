@@ -74,7 +74,8 @@ namespace GGJ2013
 
 			StateManager.Add (new TentState());
 			StateManager.Add (new CampState());
-			StateManager.Set ("Tent");
+			StateManager.Add (new ForestState());
+			StateManager.Set ("Camp");
 
 			Activated += (s, a) => Active = true;
 			Deactivated += (s, a) => Active = false;
@@ -88,21 +89,19 @@ namespace GGJ2013
 		protected override void Update(GameTime gameTime)
 		{
 			GameTime = gameTime;
-
-			BloomRenderer.Settings =
-				BloomSettings.PresetSettings[
-				                             Keyboard.GetState().IsKeyDown(Keys.NumPad0)
-					                             ? 0
+			BloomRenderer.Settings = Keyboard.GetState().IsKeyDown(Keys.NumPad0)
+					                             ? BloomSettings.PresetSettings[0]
 					                             : Keyboard.GetState().IsKeyDown(Keys.NumPad1)
-						                               ? 1
+						                               ? BloomSettings.PresetSettings[1]
 						                               : Keyboard.GetState().IsKeyDown(Keys.NumPad2)
-							                                 ? 2
+							                                 ? BloomSettings.PresetSettings[2]
 							                                 : Keyboard.GetState().IsKeyDown(Keys.NumPad3)
-								                                   ? 3
+								                                   ? BloomSettings.PresetSettings[3]
 								                                   : Keyboard.GetState().IsKeyDown(Keys.NumPad4)
-									                                     ? 4
-									                                     : Keyboard.GetState().IsKeyDown(Keys.NumPad5) ? 5 : 0
-					];
+									                                     ? BloomSettings.PresetSettings[4]
+									                                     : Keyboard.GetState().IsKeyDown(Keys.NumPad5) ? 
+																			BloomSettings.PresetSettings[5] 
+																			: BloomRenderer.Settings;
 
 			if (Keyboard.GetState().IsKeyDown(Keys.F2))
 			{

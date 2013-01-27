@@ -66,8 +66,8 @@ namespace GGJ2013.Interface
 				for(var i = 0; i < 10; i++)
 				{
 					G.Debug.DrawPolygon(_itemFrame, Color.Gray);
-
 					_itemFrame.Location.X += SlotPadding.X + _itemFrame.Width;
+
 				}
 
 				G.Debug.Stop();

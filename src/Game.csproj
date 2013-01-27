@@ -123,6 +123,7 @@
     <Compile Include="Items\MemoryItem.cs" />
     <Compile Include="Items\GameItem.cs" />
     <Compile Include="States\CampState.cs" />
+    <Compile Include="States\ForestState.cs" />
     <Compile Include="States\TentState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

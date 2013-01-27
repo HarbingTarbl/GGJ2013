@@ -94,17 +94,19 @@ namespace GGJ2013.States
 			};
 			#endregion
 
-			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 0, 0, new Vector2(0, 0));
+			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 900, 500,
+			                      new Rectagon(0, 0, 111, 59).Vertices.ToArray());
 
-			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 0, 0,
-			                       new Vector2(0, 0));
+			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 761, 549,
+								new Rectagon(0, 0, 78, 32).Vertices.ToArray());
 
-			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", 0, 0, new Vector2(0, 0));
+			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", 137, 574,
+				new Rectagon(0, 0, 24, 81).Vertices.ToArray());
 
 			BrokenWineBottle = CreateItem("Broken Wine Bottle", "The neck of the bottle has been broken, likely due to a fall",
-			                              "CampArea/win2", 0, 0, new Vector2(0, 0));
+										  "CampArea/win2", 422, 615, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
-			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 0, 0, new Vector2(0, 0));
+			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 1134, 456, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
 
 			Backpack.IsActive = false;
@@ -168,7 +170,8 @@ namespace GGJ2013.States
 				Batteries,
 				EmptyWineBottle,
 				BrokenWineBottle,
-				Papers
+				Papers, 
+				Backpack
 			});
 
 			/*Lights.AddRange(new[]
