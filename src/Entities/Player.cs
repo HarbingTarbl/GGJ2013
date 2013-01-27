@@ -10,12 +10,34 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GGJ2013.Entities
 {
 	public class Player
-		: Sprite
+		: AnimatedSprite
 	{
 		public Player()
+			: base(G.C.Load<Texture2D>("character"),
+			       new[]
+			       {
+				       new Animation("Idle",
+							new []
+							{
+								new Rectangle(0, 0, 250, 500)
+							}),
+					   
+					   new Animation("Walk",
+							new[]
+							{
+								new Rectangle(0, 0, 250, 500),
+								new Rectangle(250, 0, 250, 500),
+								new Rectangle(500, 0, 250, 500),
+								new Rectangle(750, 0, 250, 500),
+								new Rectangle(1000, 0, 250, 500),
+								new Rectangle(1250, 0, 250, 500),
+								new Rectangle(1500, 0, 250, 500),
+								new Rectangle(1750, 0, 250, 500),
+							})
+			       })
 		{
-			Texture = G.C.Load<Texture2D> ("Player");
-			Origin = new Vector2 (38, 220);
+			Origin = new Vector2(250, 500);
+
 		}
 
 		public Queue<Vector2> MoveQueue = new Queue<Vector2>();
@@ -29,7 +51,15 @@ namespace GGJ2013.Entities
 		public void Update (GameTime gameTime)
 		{
 			if (MoveQueue.Count == 0)
-				return;
+			{
+				AnimationManager.SetAnimation("Idle");
+				return;				
+			}
+			
+			if (AnimationManager.CurrentAnimation.Name != "Walk")
+			{
+				AnimationManager.SetAnimation("Walk");
+			}
 
 			// Grab the next target in our queue
 			if (MoveQueue.Count > 0 && !hasTarget)

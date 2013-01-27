@@ -37,7 +37,7 @@ namespace GGJ2013.Interface
 			if (!IsShown || CurrentItems.Count == 0)
 				return;
 
-			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
 			var offset = Bounds.Location;
 
 			_itemSlot.X = (int)offset.X;
