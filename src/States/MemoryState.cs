@@ -261,7 +261,7 @@ namespace GGJ2013.States
 			CanLeaveLevel = (ItemsToLeave.Count == 0);
 			IsLevelComplete = (ItemsToRemember.Count == 0);
 
-			item.Clicked(this);
+			item.Clicked (this);
 
 			if (IsLevelComplete) {
 				IsLevelComplete = true;

@@ -73,9 +73,9 @@ namespace GGJ2013
 
 			Blanket.OnClick += t =>
 			{
-				var that = this;
-				that.BlanketClicked = true;
-				that.Blanket.IsActive = false;
+				Blanket.IsActive = false;
+				Blanket.Texture = G.C.Load<Texture2D> ("TentArea/tossedblanket");
+				Sweater.IsActive = true;
 			};
 
 			Blanket.IsActive = true;
@@ -124,52 +124,46 @@ namespace GGJ2013
 			ItemsToLeave.Add("Sweater");
 			ItemsToLeave.Add("Flashlight");
 
-			lantern = CreateSprite ("TentArea/lantern", 520, 0);
+			lantern = CreateSprite ("TentArea/lantern", 510, 89);
 			light1 = CreateSprite ("TentArea/light1");
 			light2 = CreateSprite ("TentArea/light2");
+			glow = CreateSprite ("TentArea/lanternGlow", 370, 140);
 
-			Hotspots.Add(new Hotspot("Unlit Lantern",
+			LanternSpot = new Hotspot("Unlit Lantern",
 				new Circlegon(545, 315, 64), t =>
 			{
-				var that = this;
-				that.light1.IsVisible = false;
-				that.light2.IsVisible = true;
-			}));
+				LanternSpot.Name = "Lit Lantern";
+				light1.IsVisible = false;
+				light2.IsVisible = true;
+				//glow.IsVisible = true;
+			});
 
 			light1.IsVisible = true;
 			light2.IsVisible = false;
+			glow.IsVisible = false;
 
 			Items.Add (Flash);
 			Items.Add (Sweater);
 			Items.Add (Blanket);
 
-			Lights.Add(lantern);
-			Lights.Add(light1);
-			Lights.Add(light2);
+			Lights.Add (lantern);
+			Lights.Add (light1);
+			Lights.Add (light2);
+			Lights.Add (glow);
 
-			Hotspots.Add(Exit);
-			Hotspots.Add(Bag);
+			Hotspots.Add (Exit);
+			Hotspots.Add (LanternSpot);
+			Hotspots.Add (Bag);
 		}
 
 		protected override void OnLevelComplete()
 		{
-			G.DialogManager.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
+			//G.DialogManager.PostMessage("YAY YOU WIN", TimeSpan.Zero, TimeSpan.FromSeconds(5), Color.Red);
 		}
 
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
-
-			if (BlanketClicked)
-			{
-				CurrentBlanketMoveTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
-				Blanket.Location = Vector2.SmoothStep(Blanket.Location, BlanketDestination, CurrentBlanketMoveTime / BlanketMoveTime);
-				if (CurrentBlanketMoveTime >= BlanketMoveTime - 3)
-				{
-					BlanketClicked = false;
-					Sweater.IsActive = true;
-				}
-			}
 
 		}
 
@@ -188,11 +182,13 @@ namespace GGJ2013
 		private Sprite lantern;
 		private Sprite light1;
 		private Sprite light2;
+		private Sprite glow;
 
 		public GameItem Sweater;
 		public GameItem Blanket;
 		public GameItem Flash;
 
+		public Hotspot LanternSpot;
 		public Hotspot Exit;
 		public Hotspot Bag;
 

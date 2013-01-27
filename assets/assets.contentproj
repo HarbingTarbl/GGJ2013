@@ -59,11 +59,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="TentArea\dufflebag.png">
-      <Name>dufflebag</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="TentArea\flashlight.png">
       <Name>flashlight</Name>
       <Importer>TextureImporter</Importer>
@@ -132,6 +127,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CampArea\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TentArea\tossedblanket.png">
+      <Name>tossedblanket</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TentArea\lanternglow.png">
+      <Name>lanternglow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
