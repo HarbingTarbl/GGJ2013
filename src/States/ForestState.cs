@@ -76,6 +76,10 @@ namespace GGJ2013.States
 			pixel.SetData<Color>(new Color[] {Color.White});
 
 
+
+			/Shoe = CreateItem("Shoe");
+
+
 		}
 
 		public override void Draw(SpriteBatch batch)
@@ -92,16 +96,16 @@ namespace GGJ2013.States
 				//						  Flashlight.Texture.Height));
 
 			blocks[0] = new Rectangle(0, (int) Flashlight.Location.Y, (int) Flashlight.Location.X, Flashlight.Texture.Height);
-			blocks[1] = new Rectangle((int)Flashlight.Location.X + Flashlight.Texture.Width, (int) Flashlight.Location.Y,
+			blocks[1] = new Rectangle((int)Flashlight.Location.X + Flashlight.Texture.Width/2, (int) Flashlight.Location.Y,
 			                          G.SCREEN_WIDTH - (int) Flashlight.Location.X + Flashlight.Texture.Width,
 			                          Flashlight.Texture.Height);
 
-			blocks[2] = new Rectangle(0, 0, G.SCREEN_WIDTH, (int) Flashlight.Location.Y);
-			blocks[3] = new Rectangle(0, (int) Flashlight.Location.Y, G.SCREEN_WIDTH,
+			blocks[2] = new Rectangle(0, 0, G.SCREEN_WIDTH, (int) Flashlight.Location.Y - Flashlight.Texture.Height/2);
+			blocks[3] = new Rectangle(0, (int) Flashlight.Location.Y + Flashlight.Texture.Height /2, G.SCREEN_WIDTH,
 			                          G.SCREEN_HEIGHT - (int) Flashlight.Location.Y + Flashlight.Texture.Height);
 
 			batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
-			for (var i = 3; i < blocks.Length; i++)
+			for (var i = 1; i < blocks.Length; i++)
 			{
 				batch.Draw(pixel, blocks[i], Color.Black);
 			}
@@ -121,6 +125,10 @@ namespace GGJ2013.States
 
 		public Sprite Flashlight;
 		public Sprite Lightmask;
+
+		public Sprite CoverBrush;
+		public Sprite Branch;
+		public Sprite ThornBush;
 
 		public GameItem Shoe;
 
