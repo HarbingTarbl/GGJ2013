@@ -124,7 +124,7 @@ namespace GGJ2013.States
 			var target = Camera.ScreenToWorld(new Vector2 (mouse.X, mouse.Y));
 
 			var item =
-				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData)); //&& i.IsActive);
+				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && (i.IsActive || Keyboard.GetState().IsKeyDown(Keys.Space)));
 
 			if (item != null)
 			{
@@ -153,6 +153,7 @@ namespace GGJ2013.States
 				G.DialogManager.PostMessage (hotspot.Name, Vector2.Transform (
 					hotspot.Location + new Vector2(hotspot.Left, hotspot.Top) + new Vector2 (hotspot.Width / 2f, -10),
 					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
+
 			}
 		}
 
