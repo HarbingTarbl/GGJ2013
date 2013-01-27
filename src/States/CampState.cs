@@ -117,6 +117,7 @@ namespace GGJ2013.States
 				                       {
 					                       G.StateManager.Pop();
 					                       G.StateManager.Push(NextLevel);
+										   
 				                       }
 				                       else
 				                       {
@@ -148,8 +149,13 @@ namespace GGJ2013.States
 					}
 				});
 
-			ItemsToLeave.Add("Papers");
-			ItemsToLeave.Add("Backpack");
+			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
+			{
+				GameItem.ItemDictionary["Flashlight"].Description = "A flashlight, it's batteries are fully charged";
+				G.InventoryManager.CurrentItems.Remove("Batteries");
+			});
+
+			ItemsToLeave.Add("Flashlight_lit");
 
 			Items.AddRange(new[]
 			{
@@ -206,7 +212,8 @@ namespace GGJ2013.States
 				case "Tent":
 					Player.Location = new Vector2 (188, 283);
 					MediaPlayer.Play (G.Chirping);
-					MediaPlayer.Volume = 0.5f;
+					MediaPlayer.Volume = 0.25f;
+					MediaPlayer.IsRepeating = true;
 					break;
 				case "Forest":
 					Player.Location = new Vector2 (1177, 359);
@@ -214,6 +221,8 @@ namespace GGJ2013.States
 				default:
 					throw new Exception ("The person has come from an invalid state");
 			}
+			base.OnLevelStart(LastScreen);
+
 		}
 	}
 }

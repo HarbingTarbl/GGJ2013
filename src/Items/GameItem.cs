@@ -18,12 +18,12 @@ namespace GGJ2013.Items
 			ItemDictionary.Add(name, this);
 		}
 
-		public static List<Tuple<string, string, GameItem>>  CraftingList = new List<Tuple<string, string, GameItem>> ();
+		public static List<Tuple<string, string, Action >>  CraftingList = new List<Tuple<string, string, Action>> ();
 		public static Dictionary<string, GameItem> ItemDictionary = new Dictionary<string, GameItem>(); 
 
-		public static void AddCraftingRecipie(string item1, string item2, GameItem result)
+		public static void AddCraftingRecipie(string item1, string item2, Action result)
 		{
-			CraftingList.Add(new Tuple<string, string, GameItem>(item1, item2, result));
+			CraftingList.Add(new Tuple<string, string, Action>(item1, item2, result));
 		}
 
 		public GameItem AttemptCraft(GameItem other)
@@ -33,7 +33,8 @@ namespace GGJ2013.Items
 				if ((tup.Item1 == Name && tup.Item2 == other.Name)
 				    || (tup.Item1 == other.Name && tup.Item2 == Name))
 				{
-					return tup.Item3;
+					tup.Item3();
+					break;
 				}
 			}
 

@@ -26,6 +26,9 @@ namespace GGJ2013.Interface
 		public bool IsShown;
 		public Vector2 SlotPadding = new Vector2(20, 0);
 
+		public string SelectedItem1;
+		public string SelectedItem2;
+
 		public string SelectItemAt(Vector2 point)
 		{
 			point -= Bounds.Location;
@@ -60,17 +63,20 @@ namespace GGJ2013.Interface
 
 				offset = Bounds.Location;
 
-				G.Debug.Begin(Matrix.Identity);
-				_itemFrame.Location = offset;
-
-				for(var i = 0; i < 10; i++)
+				if (CurrentItems.Count > 0)
 				{
-					G.Debug.DrawPolygon(_itemFrame, Color.Gray);
-					_itemFrame.Location.X += SlotPadding.X + _itemFrame.Width;
+					G.Debug.Begin(Matrix.Identity);
+					_itemFrame.Location = offset;
 
+					foreach (var str in CurrentItems)
+					{
+						G.Debug.DrawPolygon(_itemFrame, str == SelectedItem1 || str == SelectedItem2 ? Color.Red : Color.Gray);
+						_itemFrame.Location.X += SlotPadding.X + _itemFrame.Width;
+
+					}
+
+					G.Debug.Stop();
 				}
-
-				G.Debug.Stop();
 			}
 			batch.End();
 

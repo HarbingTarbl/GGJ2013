@@ -80,12 +80,19 @@ namespace GGJ2013.States
 		public string CurrentItem;
 		public string LastItem;
 
-		protected virtual void OnLevelStart(string LastScreen) { }
+		protected virtual void OnLevelStart(string LastScreen)
+		{
+			if (LastScreen != null)
+			{
+				G.InventoryManager.IsShown = false;
+			}
+		}
 		protected virtual void OnLevelComplete() { }
 
 		public override void OnFocus()
 		{
-			OnLevelStart (G.LastScreen);
+
+			OnLevelStart (LastLevel);
 			Camera.Location = new Vector2(0, 0);
 			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
 			Camera.UseBounds = true;
@@ -178,12 +185,20 @@ namespace GGJ2013.States
 
 			var mouse = Mouse.GetState ();
 			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
+			var screen = new Vector2(mouse.X, mouse.Y);
 
 			if (mouse.LeftButton.WasButtonPressed (_oldMouse.LeftButton))
 			{
 
 				Player.Target = null;
+				var t = Camera.ScreenToWorld(target);
+				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", t.X, t.Y));
 
+				var myPoly = Nav.Where(node => CollisionChecker.PointToPoly(
+					Player.Location, node.Poly)).FirstOrDefault();
+
+				var targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
+					Camera.ScreenToWorld(target), node.Poly)).FirstOrDefault();
 
 				for (var i = 0; i < Items.Count; i++)
 				{
@@ -208,43 +223,38 @@ namespace GGJ2013.States
 				}
 
 
-				if (G.InventoryManager.IsShown && CollisionChecker.PointToPoly (target, G.InventoryManager.Bounds))
+				if (G.InventoryManager.IsShown
+				    && CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
 				{
+					CurrentItem = G.InventoryManager.SelectItemAt(screen);
 
-					LastItem = CurrentItem;
-					CurrentItem = G.InventoryManager.SelectItemAt (target);
-					if (!string.IsNullOrEmpty (CurrentItem))
-					{
-						G.DialogManager.PostMessage (GameItem.ItemDictionary[CurrentItem].Description, TimeSpan.Zero, new TimeSpan (0, 0, 5),
-													Color.White);
+					if (!string.IsNullOrEmpty(CurrentItem))
+						{
+
+						if (G.InventoryManager.SelectedItem1 == null)
+						{
+							G.InventoryManager.SelectedItem1 = CurrentItem;
+						}
+						else if (G.InventoryManager.SelectedItem2 == null)
+						{
+							G.InventoryManager.SelectedItem2 = CurrentItem;
+						}
+						
+
+
+						G.DialogManager.PostMessage(GameItem.ItemDictionary[CurrentItem].Description, TimeSpan.Zero, new TimeSpan(0, 0, 5),
+						                            Color.White);
 					}
 				}
-
-				var t = Camera.ScreenToWorld (target);
-				Trace.WriteLine (String.Format ("new Vector2({0}, {1}),", t.X, t.Y));
-
-				var myPoly = Nav.Where (node => CollisionChecker.PointToPoly (
-					Player.Location, node.Poly)).FirstOrDefault ();
-
-				var targetPoly = Nav.Where (node => CollisionChecker.PointToPoly (
-					Camera.ScreenToWorld (target), node.Poly)).FirstOrDefault ();
-
-				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
+				else
 				{
-					if (targetPoly == myPoly) {
-						Player.ClearMove ();
-						Player.MoveQueue.Enqueue (Camera.ScreenToWorld (target));
-					} else
-					{
-						List<Vector2> points = PathFinder.CalculatePath (
-							Player.Location, Camera.ScreenToWorld (target), Nav);
-
-						Player.ClearMove ();
-						points.ForEach (v => Player.MoveQueue.Enqueue (v));
-					}
-				} else {
-					//Trace.WriteLine ("Did not click in a valid polygon");
+					LastItem = null;
+					CurrentItem = null;
+					G.InventoryManager.SelectedItem1 = null;
+					G.InventoryManager.SelectedItem2 = null;
 				}
+
+
 
 				foreach (var spot in Hotspots)
 				{
@@ -261,6 +271,9 @@ namespace GGJ2013.States
 						{
 							Player.Target = spot;
 							Player.TargerIsItem = false;
+							if(spot.WalkLocation != Vector2.Zero)
+							targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
+								spot.WalkLocation, node.Poly)).FirstOrDefault();
 						}
 						else
 						{
@@ -269,6 +282,41 @@ namespace GGJ2013.States
 						}
 					}
 
+				}
+
+
+				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
+				{
+					if (targetPoly == myPoly)
+					{
+						Player.ClearMove();
+
+						if (Player.Target != null && Player.TargerIsItem == false && ((Hotspot)Player.Target).WalkLocation != Vector2.Zero)
+						{
+							Player.MoveQueue.Enqueue(((Hotspot)Player.Target).WalkLocation);
+						}
+						else
+							Player.MoveQueue.Enqueue(Camera.ScreenToWorld(target));
+					}
+					else
+					{
+						List<Vector2> points;
+						if (Player.Target != null && Player.TargerIsItem == false && ((Hotspot)Player.Target).WalkLocation != Vector2.Zero)
+						{
+							points = PathFinder.CalculatePath(
+							Player.Location, ((Hotspot)Player.Target).WalkLocation, Nav);
+						}
+						else
+						 points = PathFinder.CalculatePath(
+							Player.Location, Camera.ScreenToWorld(target), Nav);
+
+						Player.ClearMove();
+						points.ForEach(v => Player.MoveQueue.Enqueue(v));
+					}
+				}
+				else
+				{
+					//Trace.WriteLine ("Did not click in a valid polygon");
 				}
 			}
 

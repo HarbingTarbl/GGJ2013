@@ -41,7 +41,7 @@ namespace GGJ2013.Collision
 		private static PolyNode StepPath (List<Vector2> route, PolyNode current,
 			PolyNode end, ref Vector2 endv)
 		{
-			if (current == end) {// || true) { 
+			if (current == end) { 
 				return null;
 			}
 
