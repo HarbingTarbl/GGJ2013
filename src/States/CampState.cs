@@ -227,8 +227,18 @@ new Vector2(247, 252)),
 
 		protected override void OnLevelStart (string LastScreen)
 		{
-			if (LastScreen == "Tent")
-				Player.Location = new Vector2 (188, 283);
+			switch (LastScreen)
+			{
+				case null:
+				case "Tent":
+					Player.Location = new Vector2 (188, 283);
+					break;
+				case "Forest":
+					Player.Location = new Vector2 (1177, 359);
+					break;
+				default:
+					throw new Exception ("The person has come from an invalid state");
+			}
 		}
 	}
 }
