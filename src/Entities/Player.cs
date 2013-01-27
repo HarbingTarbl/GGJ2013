@@ -53,6 +53,8 @@ namespace GGJ2013.Entities
 			_IHateRectangles.Height = 250;
 			Origin = new Vector2(125, 500);
 			AnimationManager.SetAnimation("Idle");
+			CollisionData = new Rectagon(0, 0, 250, 500);
+
 		}
 
 		public Queue<Vector2> MoveQueue = new Queue<Vector2>();
@@ -63,18 +65,19 @@ namespace GGJ2013.Entities
 			hasTarget = false;
 		}
 
-		public void Draw(SpriteBatch batch)
+		public override void Draw(SpriteBatch batch)
 		{
 			batch.Draw(Texture, _IHateRectangles, AnimationManager.Bounding, Color.White, Rotation, Origin,
 				MoveQueue.Count > 0 ?  MoveQueue.Peek().X - _IHateRectangles.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
 
 		}
 
-		public void Update (GameTime gameTime)
+		public override void Update (GameTime gameTime)
 		{
 			AnimationManager.Update(gameTime);
 			_IHateRectangles.X = (int)Location.X;
 			_IHateRectangles.Y = (int)Location.Y;
+			CollisionData.Location = Location - Origin;
 			if (MoveQueue.Count == 0)
 			{
 				if(AnimationManager.CurrentAnimation.Name == "Walk")

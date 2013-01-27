@@ -37,7 +37,7 @@ namespace GGJ2013.Interface
 			if (!IsShown || CurrentItems.Count == 0)
 				return;
 
-			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullNone);
+			batch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone);
 			var offset = Bounds.Location;
 
 			_itemSlot.X = (int)offset.X;
@@ -46,7 +46,7 @@ namespace GGJ2013.Interface
 			{
 				var item = GameItem.ItemDictionary[str];
 
-				batch.Draw(item.Texture, _itemSlot, Color.White);
+				batch.Draw(item.InventoryIcon, _itemSlot, Color.White);
 				_itemSlot.X += (int)SlotPadding.X + _itemSlot.Width;
 			}
 			batch.End();

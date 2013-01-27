@@ -22,6 +22,9 @@ namespace GGJ2013.Collision
 
 		public event Action<MemoryState> Activated;
 
+		public bool Enabled = true;
+		public bool EnforceDistance = true;
+
 		public void OnActivate(MemoryState state)
 		{
 			var handler = Activated;
