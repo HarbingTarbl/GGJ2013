@@ -94,36 +94,10 @@ namespace GGJ2013
 
 		protected override void Update(GameTime gameTime)
 		{
-			GameTime = gameTime;
-			BloomRenderer.Settings = Keyboard.GetState().IsKeyDown(Keys.NumPad0)
-					                             ? BloomSettings.PresetSettings[0]
-					                             : Keyboard.GetState().IsKeyDown(Keys.NumPad1)
-						                               ? BloomSettings.PresetSettings[1]
-						                               : Keyboard.GetState().IsKeyDown(Keys.NumPad2)
-							                                 ? BloomSettings.PresetSettings[2]
-							                                 : Keyboard.GetState().IsKeyDown(Keys.NumPad3)
-								                                   ? BloomSettings.PresetSettings[3]
-								                                   : Keyboard.GetState().IsKeyDown(Keys.NumPad4)
-									                                     ? BloomSettings.PresetSettings[4]
-									                                     : Keyboard.GetState().IsKeyDown(Keys.NumPad5) ? 
-																			BloomSettings.PresetSettings[5] 
-																			: BloomRenderer.Settings;
-
-			if (Keyboard.GetState().IsKeyDown(Keys.F2))
-			{
-				BloomRenderer.ShowBuffer = BloomComponent.IntermediateBuffer.PreBloom;
-			}
-
-			if (Keyboard.GetState().IsKeyDown(Keys.F3))
-			{
-				BloomRenderer.ShowBuffer = BloomComponent.IntermediateBuffer.FinalResult;
-			}
-
-
-
 			StateManager.Update(gameTime);
 			FadeOut.Update (gameTime);
 			FadeIn.Update (gameTime);
+
 			base.Update(gameTime);
 		}
 
