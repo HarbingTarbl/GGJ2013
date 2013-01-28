@@ -37,7 +37,6 @@ namespace GGJ2013
 		public static BloomComponent BloomRenderer;
 		public static InventoryManager InventoryManager;
 		public static DialogManager DialogManager;
-		public static GameTime GameTime;
 		public static bool DebugCollision = false;
 		public static string LastScreen = "None";
 		public static Player Player;

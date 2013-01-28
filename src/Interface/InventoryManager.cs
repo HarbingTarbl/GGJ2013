@@ -38,8 +38,6 @@ namespace GGJ2013.Interface
 
 			return null;
 		}
-
-
 		
 		public void Draw(SpriteBatch batch)
 		{

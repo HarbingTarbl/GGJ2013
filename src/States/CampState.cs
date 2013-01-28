@@ -192,7 +192,6 @@ namespace GGJ2013.States
 					{
 						TentLight.IsVisible = false;
 						FirepitAnimation.IsVisible = true;
-						fireLit = true;
 						G.DialogManager.PostMessage("You have used the matches", TimeSpan.Zero, new TimeSpan(0, 0, 3));
 						G.InventoryManager.CurrentItems.Remove("Matches");
 						foreach (var item in Items) {
@@ -294,7 +293,6 @@ namespace GGJ2013.States
 			//REMOVE
 			TentLight.IsVisible = false;
 			FirepitAnimation.IsVisible = true;
-			fireLit = true;
 			G.DialogManager.PostMessage ("You have used the matches", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 			G.InventoryManager.CurrentItems.Remove ("Matches");
 			foreach (var item in Items)
@@ -316,10 +314,8 @@ namespace GGJ2013.States
 		public Hotspot BoulderSpot;
 		public Sprite FirepitLight;
 		public Sprite TentLight;
-		private bool leaveOverride;
 
 		public AnimatedSprite FirepitAnimation;
-		private bool fireLit = false;
 
 		protected override void DrawBottomLayer (SpriteBatch batch)
 		{
