@@ -236,13 +236,13 @@ namespace GGJ2013.States
 				G.SCREEN_WIDTH,
 				G.SCREEN_HEIGHT + lightRect.Bottom);
 
-			//batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+			BeginDraw (batch, BlendState.NonPremultiplied, false);
 			batch.Draw (pixel, r1, Color.Black);
 			batch.Draw (pixel, r2, Color.Black);
 			batch.Draw (pixel, r3, Color.Black);
 			batch.Draw (pixel, r4, Color.Black);
 			batch.Draw (Flashlight.Texture, lightRect, Color.White);
-			//batch.End();
+			batch.End();
 		}
 
 		public override bool HandleInput(GameTime gameTime)

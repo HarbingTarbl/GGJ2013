@@ -115,9 +115,7 @@ namespace GGJ2013.States
 			Lights.ForEach (l => l.Draw (batch));
 			batch.End();
 
-			BeginDraw (batch, BlendState.NonPremultiplied, false);
 			DrawTopLayer (batch);
-			batch.End();
 
 			G.InventoryManager.Draw(batch);
 			ShowItemHint();
