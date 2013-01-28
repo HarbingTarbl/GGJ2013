@@ -233,58 +233,50 @@ namespace GGJ2013.States
 				var targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
 					target, node.Poly)).FirstOrDefault();
 
-				for (var i = 0; i < Items.Count; i++)
+				foreach (GameItem item in Items)
 				{
-					var item = Items[i];
 					if (item.IsFound || !item.IsActive)
 						continue;
 
+					// Handle moving to and picking up items
 					if (CollisionChecker.PointToPoly(target, item.CollisionData))
 					{
-						if (!CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData))
-						{
+						// If the player is not near the item, set the item as the target
+						if (!CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData)) {
 							Player.Target = item;
 							Player.TargerIsItem = true;
-						}
-						else
-						{
+						} else {
 							OnItemFound(item);
-
 						}
 						break;
 					}
 				}
 
-
+				// Handle inventory
 				if (G.InventoryManager.IsShown
-				    && CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
+					&& CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
 				{
-
 					var item  = G.InventoryManager.SelectItemAt(screen);
 					if (item != null)
 					{
-						if (HeldItem == null
-						    || HeldItem.Name == item)
+						if (HeldItem == null || HeldItem.Name == item)
 						{
-							G.DialogManager.PostMessage(GameItem.ItemDictionary[item].Description, TimeSpan.Zero,
-							                            new TimeSpan(0, 0, 5),
-							                            Color.White);
+							G.DialogManager.PostMessage(GameItem.ItemDictionary[item].Description,
+								TimeSpan.Zero, new TimeSpan(0, 0, 5), Color.White);
 						}
 						else
 						{
 							HeldItem.AttemptCraft(GameItem.ItemDictionary[item]);
 						}
 					}
-
 				}
-
-
 
 				foreach (var spot in Hotspots)
 				{
-					bool hotSpotClicked = spot.Enabled &&
-					                      CollisionChecker.PointToPoly(target, spot);
+					if (!spot.Enabled)
+						continue;
 
+					bool hotSpotClicked = CollisionChecker.PointToPoly(target, spot);
 					if (hotSpotClicked)
 					{
 						if (!spot.EnforceDistance)
@@ -302,25 +294,27 @@ namespace GGJ2013.States
 						else
 						{
 							spot.OnActivate(this, HeldItem);
-
 						}
 					}
-
 				}
 
-
+				// Handle clicking on the ground and moving
 				if (targetPoly != null && Player.AnimationManager.CurrentAnimation.Name != "Pick Up")
 				{
+					// Stop the current movement route, we're going somewhere else
+					Player.ClearMove();
+
 					if (targetPoly == myPoly)
 					{
-						Player.ClearMove();
-
-						if (Player.Target != null && Player.TargerIsItem == false && ((Hotspot)Player.Target).WalkLocation != Vector2.Zero)
+						if (Player.Target != null && Player.TargerIsItem == false
+							&& ((Hotspot)Player.Target).WalkLocation != Vector2.Zero)
 						{
 							Player.MoveQueue.Enqueue(((Hotspot)Player.Target).WalkLocation);
 						}
 						else
+						{
 							Player.MoveQueue.Enqueue(target);
+						}
 					}
 					else
 					{
@@ -331,16 +325,11 @@ namespace GGJ2013.States
 							Player.Location, ((Hotspot)Player.Target).WalkLocation, Nav);
 						}
 						else
-						 points = PathFinder.CalculatePath(
-							Player.Location, target, Nav);
-
-						Player.ClearMove();
+						{
+							points = PathFinder.CalculatePath (Player.Location, target, Nav);
+						}
 						points.ForEach(v => Player.MoveQueue.Enqueue(v));
 					}
-				}
-				else
-				{
-					//Trace.WriteLine ("Did not click in a valid polygon");
 				}
 			}
 
