@@ -74,11 +74,11 @@ namespace GGJ2013.States
 			Batteries = CreateItem("Batteries", "Your tongue hurts - they are supprisingly strong", "CampArea/batteries", "UI/Icons/batteries", 761, 480,
 								new Rectagon(0, 0, 78, 32).Vertices.ToArray());
 
-			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", 137, 574,
+			EmptyWineBottle = CreateItem("Empty Wine Bottle", "It's empty", "CampArea/wine1", "UI/Icons/bottle", 137, 574,
 				new Rectagon(0, 0, 24, 81).Vertices.ToArray());
 
 			BrokenWineBottle = CreateItem("Broken Wine Bottle", "The neck of the bottle has been broken, likely due to a fall",
-										  "CampArea/win2", 422, 615, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
+				"CampArea/wine2", "UI/Icons/bottle", 422, 615, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 
 			Papers = CreateItem("Shrededd paper", "[TODO]", "CampArea/papers", "UI/Icons/papers", 822, 457, new Rectagon(0, 0, 53, 35).Vertices.ToArray());
 			

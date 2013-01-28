@@ -42,19 +42,13 @@ namespace GGJ2013.Items
 		}
 
 		public Texture2D InventoryIcon;
-
-		public bool MouseHover = true;
-
-		public bool IsFound;
-
-		public bool CanPickup;
-
-		public bool IsActive;
-
 		public Action<MemoryState> OnClick;
 
+		public bool MouseHover = true;
+		public bool IsFound;
+		public bool CanPickup;
+		public bool IsActive;
 		public string Name;
-
 		public string Description;
 
 		public void Clicked(MemoryState ugh)

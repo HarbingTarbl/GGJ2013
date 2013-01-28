@@ -189,8 +189,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="CampArea\win2.png">
-      <Name>win2</Name>
+    <Compile Include="CampArea\wine2.png">
+      <Name>wine2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
