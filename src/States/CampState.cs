@@ -101,6 +101,24 @@ namespace GGJ2013.States
 			FirepitAnimation.Location = new Vector2 (0, 350);
 			FirepitAnimation.AnimationManager.SetAnimation ("Idle");
 
+			var fireflies_idle = new Animation ("Idle",
+			   new[]
+				{
+					new Rectangle(0, 0, 200, 200),
+					new Rectangle(200, 0, 200, 200),
+					new Rectangle(400, 0, 200, 200),
+					new Rectangle(600, 0, 200, 200),
+					new Rectangle(800, 0, 200, 200),
+					new Rectangle(1000, 0, 200, 200),
+					new Rectangle(1200, 0, 200, 200),
+					new Rectangle(1400, 0, 200, 200)
+				}, Looping: true);
+			FliesAnimation = new AnimatedSprite (G.C.Load<Texture2D> ("CampArea/fireflies_animation"), new [] { fireflies_idle});
+			FliesAnimation._IHateRectangles = new Rectangle (0, 0, 200, 200);
+			FliesAnimation.IsVisible = true;
+			FliesAnimation.Location = new Vector2 (900, 325);
+			FliesAnimation.AnimationManager.SetAnimation ("Idle");
+
 			Boulder.IsActive = false;
 			Boulder.CanPickup = false;
 			Boulder.MouseHover = false;
@@ -316,9 +334,11 @@ namespace GGJ2013.States
 		public Sprite TentLight;
 
 		public AnimatedSprite FirepitAnimation;
+		public AnimatedSprite FliesAnimation;
 
 		protected override void DrawBottomLayer (SpriteBatch batch)
 		{
+			FliesAnimation.Draw (batch);
 			FirepitAnimation.Draw (batch);
 		}
 
@@ -326,6 +346,7 @@ namespace GGJ2013.States
 		{
 			base.Update (gameTime);
 			FirepitAnimation.Update (gameTime);
+			FliesAnimation.Update (gameTime);
 		}
 
 		protected override void OnLevelStart (string LastScreen)
