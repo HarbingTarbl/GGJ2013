@@ -161,10 +161,10 @@ namespace GGJ2013
 			Items.Add (Blanket);
 
 			Lights.Add (lantern);
-			Lights.Add (light1);
-			Lights.Add (light2);
 			Lights.Add (glow);
 			Lights.Add (border);
+			Lights.Add (light1);
+			Lights.Add (light2);
 
 			Hotspots.Add (Exit);
 			Hotspots.Add (LanternSpot);
