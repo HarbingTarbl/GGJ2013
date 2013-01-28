@@ -236,7 +236,7 @@ namespace GGJ2013.States
 					{
 						G.DialogManager.PostMessage ("I need something strong to pry this up", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 					}
-				});
+				}) { WalkLocation = new Vector2(606, 470) };
 			#endregion
 
 			Backpack.OnClick += state =>
