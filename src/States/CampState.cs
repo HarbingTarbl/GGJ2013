@@ -161,17 +161,7 @@ namespace GGJ2013.States
 				new Vector2(1268, 301)),
 			    (t,i) =>
 			    {
-				    if (!leaveOverride)
-				    {
-					    if (i != null && i.Description == "A flashlight, it's batteries are fully charged") {
-						    CanLeaveLevel = true;
-						    leaveOverride = true;
-					    }
-					    else
-						    CanLeaveLevel = false; // HACK
-				    }
-
-				    if (leaveOverride || CanLeaveLevel)
+				    if (CanLeaveLevel)
 				    {
 						G.FadeOut.Finished += () =>
 						{
@@ -265,7 +255,12 @@ namespace GGJ2013.States
 			{
 				GameItem.ItemDictionary["Flashlight"].Description = "A flashlight, it's batteries are fully charged";
 				GameItem.ItemDictionary["Flashlight"].InventoryIcon = G.C.Load<Texture2D>("UI/Icons/flashlight_on");
+
 				G.InventoryManager.CurrentItems.Remove("Batteries");
+
+				// Since we're doing this manually, we have to update it manually
+				ItemsToLeave.Remove ("Flashlight_lit");
+				CanLeaveLevel = (ItemsToLeave.Count == 0);
 			});
 
 			ItemsToLeave.Add("Flashlight_lit");
