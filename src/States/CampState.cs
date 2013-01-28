@@ -173,7 +173,7 @@ namespace GGJ2013.States
 				    }
 				    else
 				    {
-					    G.DialogManager.PostQueuedMessage("It's too dark, maybe if I had a flashlight or something.");
+					    G.DialogManager.PostQueuedMessage("It's too dark, maybe if I had a flashlight or something.", new TimeSpan (0, 0, 3));
 				    }
 				}) { WalkLocation = new Vector2 (1170, 298) };
 
