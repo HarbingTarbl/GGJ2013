@@ -19,7 +19,6 @@ namespace GGJ2013.States
 		public CampState()
 			: base("Camp", "Forest", "Tent")
 		{
-			Background = G.C.Load<Texture2D>("CampArea/background");
 			#region NavMesh
 
 			var p1 = new Polygon (
@@ -65,6 +64,9 @@ namespace GGJ2013.States
 				p4n,
 			};
 			#endregion
+
+			Background = G.C.Load<Texture2D>("CampArea/background");
+			Foreground = G.C.Load<Texture2D>("CampArea/foreground");
 
 			Backpack = CreateItem("Backpack", "A torn backpack", "CampArea/backpack", 734, 410,
 			                      new Rectagon(0, 0, 111, 59).Vertices.ToArray());
@@ -130,7 +132,8 @@ namespace GGJ2013.States
 			FirepitLight = CreateSprite("CampArea/light map 1", 0, 0);
 			FirepitLight.IsVisible = false;
 			TentLight = CreateSprite("CampArea/light map 1", 0, 0);
-#region stuff
+
+			#region HotSpots
 			TentEntrance = new Hotspot (
 				"Tent Entrance",
 				new Polygon (new Vector2 (3, 277),
@@ -244,7 +247,7 @@ namespace GGJ2013.States
 						G.DialogManager.PostMessage ("I need something strong to pry this up", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 					}
 				});
-#endregion
+			#endregion
 
 			Backpack.OnClick += state =>
 			{
@@ -280,7 +283,6 @@ namespace GGJ2013.States
 
 			Lights.AddRange(new[]
 			{
-				CreateSprite ("CampArea/foreground"),
 				FirepitLight,
 				TentLight
 			});
@@ -319,19 +321,14 @@ namespace GGJ2013.States
 		public Hotspot BoulderSpot;
 		public Sprite FirepitLight;
 		public Sprite TentLight;
-		public Sprite Foreground;
 		private bool leaveOverride;
 
 		public AnimatedSprite FirepitAnimation;
 		private bool fireLit = false;
 
-		public override void Draw(SpriteBatch batch)
+		protected override void DrawBottomLayer (SpriteBatch batch)
 		{
-			base.Draw (batch);
-
-			BeginDraw (batch, BlendState.NonPremultiplied);
 			FirepitAnimation.Draw (batch);
-			batch.End();
 		}
 
 		public override void Update(GameTime gameTime)

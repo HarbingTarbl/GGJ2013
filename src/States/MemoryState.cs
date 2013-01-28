@@ -60,6 +60,7 @@ namespace GGJ2013.States
 		public CameraSingle Camera; 
 
 		public Texture2D Background;
+		public Texture2D Foreground; 
 		public List<GameItem> Items;
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
@@ -91,7 +92,6 @@ namespace GGJ2013.States
 
 		public override void OnFocus()
 		{
-
 			OnLevelStart (G.LastScreen);
 			Camera.Location = new Vector2(0, 0);
 			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
@@ -100,39 +100,48 @@ namespace GGJ2013.States
 
 		public override void Draw (SpriteBatch batch)
 		{
-			//G.BloomRenderer.BeginDraw();
-			var m = Mouse.GetState();
 			BeginDraw (batch, BlendState.NonPremultiplied);
-			batch.Draw (Background, Vector2.Zero, Color.White);
+			batch.Draw (Background, Vector2.Zero, Color.White);	
+			
+			DrawBottomLayer (batch);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
-			if (HeldItem != null
-			    && !WasReleased)
-			{
-				var vec = Camera.ScreenToWorld(new Vector2(m.X, m.Y) - new Vector2(50, 50));
-				batch.Draw(HeldItem.InventoryIcon, new Rectangle((int)vec.X, (int)vec.Y, 100, 100), Color.White);
 
-			}
+			DrawTopLayer (batch);
+			if (Foreground != null)
+				batch.Draw (Foreground, Vector2.Zero, Color.White);
+
 			batch.End();
 
 			BeginDraw(batch, BlendState.AlphaBlend);
-			foreach (var light in Lights) {
-				light.Draw(batch);
-			}
-			PreDrawFUUUCK (batch);
+			Lights.ForEach (l => l.Draw (batch));
 			batch.End();
 
-			//G.BloomRenderer.Draw (G.GameTime);
+			G.InventoryManager.Draw(batch);
+			ShowItemHint();
+			G.DialogManager.Draw(batch);
+
+			if (HeldItem != null && !WasReleased)
+			{
+				var m = Mouse.GetState();
+				var drawDest = new Vector2 (
+					m.X - (HeldItem.InventoryIcon.Width/2),
+					m.Y - (HeldItem.InventoryIcon.Height/2));
+				
+				BeginDraw (batch, BlendState.NonPremultiplied, false);
+				batch.Draw (HeldItem.InventoryIcon, drawDest, Color.White);
+				batch.End();
+			}
 
 			if (G.DebugCollision)
 				DrawDebug();
-
-			ShowItemHint();
-			G.InventoryManager.Draw(batch);
-			G.DialogManager.Draw(batch);
 		}
 
-		protected virtual void PreDrawFUUUCK (SpriteBatch batch)
+		protected virtual void DrawBottomLayer (SpriteBatch batch)
+		{
+		}
+
+		protected virtual void DrawTopLayer (SpriteBatch batch)
 		{
 		}
 
@@ -157,8 +166,6 @@ namespace GGJ2013.States
 
 				if (Keyboard.GetState().IsKeyDown(Keys.P))
 					Trace.WriteLine(string.Format("new Vector2({0},{1})", item.Location.X, item.Location.Y));
-
-				
 
 				return;
 			}
@@ -325,7 +332,7 @@ namespace GGJ2013.States
 						}
 						else
 						 points = PathFinder.CalculatePath(
-							Player.Location, Camera.ScreenToWorld(target), Nav);
+							Player.Location, target, Nav);
 
 						Player.ClearMove();
 						points.ForEach(v => Player.MoveQueue.Enqueue(v));
@@ -435,7 +442,7 @@ namespace GGJ2013.States
 			return CreateItem(name, desc, texturePath, texturePath, x, y, verts);
 		}
 
-		protected void BeginDraw (SpriteBatch batch, BlendState state)
+		protected void BeginDraw (SpriteBatch batch, BlendState state, bool useCamera=true)
 		{
 			batch.Begin (
 				SpriteSortMode.Deferred,
@@ -444,7 +451,7 @@ namespace GGJ2013.States
 				DepthStencilState.Default,
 				RasterizerState.CullCounterClockwise,
 				null,
-				Camera.Transformation);
+				useCamera ? Camera.Transformation : Matrix.Identity);
 		}
 	}
 }

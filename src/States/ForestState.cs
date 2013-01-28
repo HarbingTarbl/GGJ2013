@@ -84,7 +84,7 @@ namespace GGJ2013.States
 			
 			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
 			                           DepthFormat.None);
-			Flashlight = CreateSprite("flashlight_beam", 0, 0);
+			Flashlight = CreateSprite("ForestArea/flashlight_beam");
 			Lightmask = new Sprite
 			{
 				IsVisible = true,
@@ -209,7 +209,7 @@ namespace GGJ2013.States
 			Lights.Add (Foreground);
 		}
 
-		protected override void PreDrawFUUUCK(SpriteBatch batch)
+		protected override void DrawTopLayer (SpriteBatch batch)
 		{
 			var lightRect = new Rectangle (0, 0, Flashlight.Texture.Width, Flashlight.Texture.Height);
 			GeomHelpers.CenterRectangle (ref lightRect, Flashlight.Location);
