@@ -149,7 +149,7 @@ namespace GGJ2013
 				light1.IsVisible = false;
 				light2.IsVisible = true;
 				//glow.IsVisible = true;
-			});
+			}) { WalkLocation = new Vector2 (596, 546) };
 
 			light1.IsVisible = true;
 			light2.IsVisible = false;
