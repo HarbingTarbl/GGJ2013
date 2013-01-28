@@ -101,13 +101,11 @@ namespace GGJ2013.States
 		public override void Draw (SpriteBatch batch)
 		{
 			BeginDraw (batch, BlendState.NonPremultiplied);
-			batch.Draw (Background, Vector2.Zero, Color.White);	
-			
+			batch.Draw (Background, Vector2.Zero, Color.White);
 			DrawBottomLayer (batch);
 			Items.ForEach (i => i.Draw (batch));
 			Player.Draw (batch);
 
-			DrawTopLayer (batch);
 			if (Foreground != null)
 				batch.Draw (Foreground, Vector2.Zero, Color.White);
 
@@ -115,6 +113,10 @@ namespace GGJ2013.States
 
 			BeginDraw(batch, BlendState.AlphaBlend);
 			Lights.ForEach (l => l.Draw (batch));
+			batch.End();
+
+			BeginDraw (batch, BlendState.NonPremultiplied, false);
+			DrawTopLayer (batch);
 			batch.End();
 
 			G.InventoryManager.Draw(batch);
