@@ -170,13 +170,13 @@ namespace Memory.States
 			{
 				if (!i.IsMouseHover || !CollisionChecker.PointToPoly (worldMouse, i.Region))
 					continue;
-
+					
 				var msgLoc = i.Region.Location
 					+ new Vector2 (i.Region.Left, i.Region.Top)
 					+ new Vector2 (i.Region.Width / 2f, -10);
 
 				hoverString = i.Name;
-				hoverLocation = Camera.ScreenToWorld (msgLoc);
+				hoverLocation = Vector2.Transform (msgLoc, Camera.Transformation);
 				return;
 			}
 

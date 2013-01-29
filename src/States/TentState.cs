@@ -98,12 +98,17 @@ namespace Memory
 					new Vector2 (902, 489),
 					new Vector2 (776, 507),
 					new Vector2 (745, 483)
-					), (t,i) =>
+					), (t, i) =>
 					   {
+						   if (BagOpened)
+							   return;
+
+						   Player.AnimationManager.SetAnimation ("Kick");
 						   Matches.IsVisible = true;
 						   Matches.IsActive = true;
 						   Matches.CanPickup = true;
-					   });
+						   BagOpened = true;
+					   }) { WalkLocation = new Vector2 (740, 482) };
 
 			Exit = new Hotspot(
 				"Tent Exit",
@@ -129,7 +134,6 @@ namespace Memory
 						else
 						{
 							G.DialogManager.PostMessage ("I should put on some clothes... and grab my flashlight.", TimeSpan.Zero, new TimeSpan (0, 0, 5));
-							G.C.Load<SoundEffect> ("sfx/Zipper").Play();
 						}
 					}) { WalkLocation = new Vector2(706, 486)};
 
@@ -145,6 +149,10 @@ namespace Memory
 			LanternSpot = new Hotspot("Unlit Lantern",
 				new Circlegon(545, 315, 64), (t,i) =>
 			{
+				if (light2.IsVisible)
+					return;
+
+				Player.AnimationManager.SetAnimation ("Wake Up");
 				G.C.Load<SoundEffect> ("sfx/Lantern").Play ();
 				LanternSpot.Name = "Lit Lantern";
 				light1.IsVisible = false;
@@ -186,6 +194,7 @@ namespace Memory
 		public Hotspot LanternSpot;
 		public Hotspot Exit;
 		public Hotspot Bag;
+		private bool BagOpened;
 
 		protected override void OnLevelStart (string lastScreen)
 		{
@@ -193,7 +202,7 @@ namespace Memory
 			switch (lastScreen)
 			{
 				case "None":
-					G.Player.Location = new Vector2 (440, 495);
+					Player.Location = new Vector2 (440, 495);
 					break;
 				case "Camp":
 					G.Player.Location = new Vector2(696, 511);

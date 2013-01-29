@@ -39,8 +39,29 @@ namespace Memory.Entities
 							new Rectangle(1000, 500, 250, 500),
 							new Rectangle(1250, 500, 250, 500),
 							new Rectangle(1500, 500, 250, 500),
-							new Rectangle(1750, 500, 250, 500),
+							new Rectangle(1750, 500, 250, 500)
 						}),
+					new Animation("Wake Up",
+						new[]
+						{
+							new Rectangle(0, 2000, 250, 500),
+							new Rectangle(250, 2000, 250, 500),
+							new Rectangle(500, 2000, 250, 500),
+							new Rectangle(750, 2000, 250, 500),
+							new Rectangle(1000, 2000, 250, 500),
+							new Rectangle(1250, 2000, 250, 500),
+							new Rectangle(1500, 2000, 250, 500),
+							new Rectangle(1750, 2000, 250, 500)
+						}, Looping:false) { NextAnim = "Idle" },
+					new Animation("Kick",
+						new[]
+						{
+							new Rectangle(0, 1500, 250, 500),
+							new Rectangle(250, 1500, 250, 500),
+							new Rectangle(500, 1500, 250, 500),
+							new Rectangle(750, 1500, 250, 500),
+							new Rectangle(1000, 1500, 250, 500)
+						}, Looping:false) { NextAnim = "Idle" },
 					new Animation("Pick Up",
 						new []
 						{
@@ -49,7 +70,7 @@ namespace Memory.Entities
 							new Rectangle(500, 1000, 250, 500),
 							new Rectangle(500, 1000, 250, 500),
 							new Rectangle(250, 1000, 250, 500),
-							new Rectangle(0, 1000, 250, 500),
+							new Rectangle(0, 1000, 250, 500)
 						}, Looping:false) { NextAnim = "Idle" }
 				})
 		{
@@ -57,7 +78,7 @@ namespace Memory.Entities
 			_IHateRectangles.Height = 250;
 
 			Origin = new Vector2(125, 500);
-			AnimationManager.SetAnimation("Idle");
+			AnimationManager.SetAnimation ("Idle");
 			CollisionData = new Rectagon(0, 0, 100, 250);
 		}
 

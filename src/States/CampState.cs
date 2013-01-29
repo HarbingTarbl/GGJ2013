@@ -167,6 +167,8 @@ namespace Memory.States
 						G.StateManager.Set ("Tent");
 						G.FadeIn.TriggerStart ();
 					};
+
+					G.C.Load<SoundEffect> ("sfx/Zipper").Play ();
 					G.FadeOut.TriggerStart ();
 				}) { WalkLocation = new Vector2 (170, 279) };
 
