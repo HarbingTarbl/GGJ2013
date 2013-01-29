@@ -206,6 +206,9 @@ namespace GGJ2013.States
 					new Vector2(97, 518)),
 				(t,i) =>
 				{
+					if (FirepitAnimation.IsVisible)
+						return;
+
 					if (i != null && i.Name == "Matches")
 					{
 						TentLight.IsVisible = false;
