@@ -60,7 +60,8 @@ namespace GGJ2013.States
 		}
 
 		public Player Player;
-		public CameraSingle Camera; 
+		public CameraSingle Camera;
+		public Hotspot InventoryOpen;
 
 		public Texture2D Background;
 		public Texture2D Foreground; 
@@ -68,8 +69,6 @@ namespace GGJ2013.States
 		public List<Hotspot> Hotspots;
 		public List<PolyNode> Nav;
 		public List<Sprite> Lights;
-
-		public Hotspot InventoryOpen;
 
 		// I want to get rid of this whole chunk so bad
 		public List<string> ItemsToLeave;
@@ -79,19 +78,22 @@ namespace GGJ2013.States
 
 		protected virtual void OnLevelStart (string LastScreen)
 		{
-			if (LastScreen != null)
-			{
+			// Show the inventory on the first screen?
+			if (LastScreen != null) {
 				G.InventoryManager.IsShown = false;
 			}
 		}
-		protected virtual void OnLevelComplete() { }
+		protected virtual void OnLevelComplete()
+		{
+		}
 
 		public override void OnFocus()
 		{
-			OnLevelStart (G.LastScreen);
-			Camera.Location = new Vector2(0, 0);
-			Camera.Bounds = new Rectangle(0, 0, Background.Width, Background.Height);
+			Camera.Location = Vector2.Zero;
+			Camera.Bounds = new Rectangle (0, 0, Background.Width, Background.Height);
 			Camera.UseBounds = true;
+
+			OnLevelStart (G.LastScreen);
 		}
 
 		public override void Draw (SpriteBatch batch)
