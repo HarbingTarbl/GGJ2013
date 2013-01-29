@@ -128,8 +128,8 @@ namespace GGJ2013
 						}
 						else
 						{
-							G.DialogManager.PostMessage("I should put on some clothes... ", TimeSpan.Zero, new TimeSpan(0, 0, 5));
-							G.DialogManager.PostMessage("and grab my flashlight.", new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 5));
+							G.DialogManager.PostMessage ("I should put on some clothes... and grab my flashlight.", TimeSpan.Zero, new TimeSpan (0, 0, 5));
+							G.C.Load<SoundEffect> ("sfx/Zipper").Play();
 						}
 					}) { WalkLocation = new Vector2(706, 486)};
 
@@ -145,6 +145,7 @@ namespace GGJ2013
 			LanternSpot = new Hotspot("Unlit Lantern",
 				new Circlegon(545, 315, 64), (t,i) =>
 			{
+				G.C.Load<SoundEffect> ("sfx/Lantern").Play ();
 				LanternSpot.Name = "Lit Lantern";
 				light1.IsVisible = false;
 				light2.IsVisible = true;

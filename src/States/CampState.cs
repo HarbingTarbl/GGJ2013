@@ -211,6 +211,7 @@ namespace GGJ2013.States
 
 					if (i != null && i.Name == "Matches")
 					{
+						G.C.Load<SoundEffect> ("sfx/Match").Play();
 						TentLight.IsVisible = false;
 						FirepitAnimation.IsVisible = true;
 						G.DialogManager.PostMessage("You have used the matches", TimeSpan.Zero, new TimeSpan(0, 0, 3));
