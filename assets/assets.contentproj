@@ -421,6 +421,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForestArea\exit_animation.png">
+      <Name>exit_animation</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="CampArea\fireflies_animation.png">
       <Name>fireflies_animation</Name>
       <Importer>TextureImporter</Importer>

@@ -192,6 +192,21 @@ namespace GGJ2013.States
 					}
 				});
 
+			var exitidle = new Animation ("Idle",
+			   new[]
+				{
+					new Rectangle(0, 0, 200, 200),
+					new Rectangle(200, 0, 200, 200),
+					new Rectangle(400, 0, 200, 200),
+					new Rectangle(600, 0, 200, 200),
+					new Rectangle(800, 0, 200, 200)
+				}, Looping: true);
+			ExitLight = new AnimatedSprite (G.C.Load<Texture2D> ("ForestArea/exit_animation"), new [] { exitidle});
+			ExitLight._IHateRectangles = new Rectangle (0, 0, 200, 200);
+			ExitLight.IsVisible = true;
+			ExitLight.Location = new Vector2 (0, 0);
+			ExitLight.AnimationManager.SetAnimation ("Idle");
+
 			SarahSpot.Enabled = false;
 			ShrubSpot.Enabled = true;
 
@@ -205,8 +220,17 @@ namespace GGJ2013.States
 			Hotspots.Add (ForestExit);
 			Hotspots.Add (ShrubSpot);
 			Hotspots.Add (SarahSpot);
+		}
 
-			Lights.Add (Foreground);
+		public override void Update(GameTime gameTime)
+		{
+			base.Update(gameTime);
+			ExitLight.Update (gameTime);
+		}
+
+		protected override void DrawBottomLayer(SpriteBatch batch)
+		{
+			ExitLight.Draw (batch);
 		}
 
 		protected override void DrawTopLayer (SpriteBatch batch)
@@ -252,8 +276,7 @@ namespace GGJ2013.States
 
 		}
 
-		public Sprite Foreground;
-
+		public AnimatedSprite ExitLight;
 		public Sprite Flashlight;
 		public Sprite Lightmask;
 
