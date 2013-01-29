@@ -121,7 +121,7 @@ namespace GGJ2013.States
 
 			ThornBush.IsActive = false;
 			ThornBush.CanPickup = false;
-			ThornBush.MouseHover = false;
+			ThornBush.IsMouseHover = false;
 
 			CoverBrush1.IsActive = false;
 			CoverBrush2.IsActive = false;
@@ -173,9 +173,9 @@ namespace GGJ2013.States
 						CoverBrush3.IsVisible = false;
 						ThornBush.IsVisible = false;
 						ThornBush.IsActive = false;
-						ThornBush.MouseHover = false;
-						SarahSpot.Enabled = true;
-						ShrubSpot.Enabled = false;
+						ThornBush.IsMouseHover = false;
+						SarahSpot.IsUsable = true;
+						ShrubSpot.IsUsable = false;
 
 						G.DialogManager.PostMessage ("You chopped down the thorny bushes", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 						foreach (var item in Items)
@@ -204,8 +204,8 @@ namespace GGJ2013.States
 			ExitLight.Location = new Vector2 (0, 0);
 			ExitLight.AnimationManager.SetAnimation ("Idle");
 
-			SarahSpot.Enabled = false;
-			ShrubSpot.Enabled = true;
+			SarahSpot.IsUsable = false;
+			ShrubSpot.IsUsable = true;
 
 			Items.Add (Shoe);
 			Items.Add (Branch);
@@ -268,7 +268,7 @@ namespace GGJ2013.States
 
 		public override bool HandleInput(GameTime gameTime)
 		{
-			Flashlight.Location = new Vector2(_oldMouse.X, _oldMouse.Y);
+			Flashlight.Location = new Vector2(oldMouse.X, oldMouse.Y);
 			return base.HandleInput(gameTime);
 
 		}

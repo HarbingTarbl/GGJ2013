@@ -4,19 +4,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.States;
+using Jammy.Collision;
 using Jammy.Sprites;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GGJ2013.Items
 {
 	public class GameItem
-		: Sprite
+		: Sprite, IInteractable
 	{
 		public GameItem (string name, Texture2D texture)
 		{
 			Name = name;
 			Texture = texture;
 			ItemDictionary.Add(name, this);
+
+			IsMouseHover = true;
 		}
 
 		public static List<Tuple<string, string, Action >>  CraftingList = new List<Tuple<string, string, Action>> ();
@@ -42,14 +45,19 @@ namespace GGJ2013.Items
 			return null;
 		}
 
+		// IInteractable
+		public string Name { get; set; }
+		public Polygon Region { get { return CollisionData; } }
+		public bool IsUsable { get { return CanPickup && IsActive; } }
+
+		public bool IsMouseHover { get; set; }
+
 		public Texture2D InventoryIcon;
 		public Action<MemoryState> OnClick;
 
-		public bool MouseHover = true;
 		public bool IsFound;
 		public bool CanPickup;
 		public bool IsActive;
-		public string Name;
 		public string Description;
 
 		public void Clicked(MemoryState ugh)

@@ -148,38 +148,30 @@ namespace GGJ2013.States
 		private void ShowItemHint()
 		{
 			var mouse = Mouse.GetState();
-			var target = Camera.ScreenToWorld(new Vector2 (mouse.X, mouse.Y));
+			var worldMouse = Camera.ScreenToWorld (new Vector2 (mouse.X, mouse.Y));
 
-			var item =
-				Items.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i.CollisionData) && i.MouseHover && (i.IsActive || Keyboard.GetState().IsKeyDown(Keys.Space)));
-
-			if (item != null)
+			foreach (var i in Hotspots.Concat<IInteractable> (Items))
 			{
-				G.DialogManager.PostMessage (item.Name, Vector2.Transform (
-					item.CollisionData.Location + new Vector2(item.CollisionData.Left, item.CollisionData.Top) + new Vector2 (item.CollisionData.Width / 2f, -10),
-					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
+				if (!i.IsMouseHover || !CollisionChecker.PointToPoly (worldMouse, i.Region))
+					continue;
 
-				if (Keyboard.GetState().IsKeyDown(Keys.Space))
-				{
-					item.Location = target - new Vector2(item.CollisionData.Width/2f, item.CollisionData.Height/2f);
-				}
+				var msgLoc = i.Region.Location
+					+ new Vector2 (i.Region.Left, i.Region.Top)
+					+ new Vector2 (i.Region.Width / 2f, -10);
 
-				if (Keyboard.GetState().IsKeyDown(Keys.P))
-					Trace.WriteLine(string.Format("new Vector2({0},{1})", item.Location.X, item.Location.Y));
+				var worldLoc = Vector2.Transform (msgLoc, Camera.Transformation);
 
+				G.DialogManager.PostMessage (i.Name, worldLoc, TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
 				return;
 			}
-
-			var hotspot =
-				Hotspots.FirstOrDefault(i => CollisionChecker.PointToPoly(target, i) && i.Enabled);
-
-			if (hotspot != null)
-			{
-				G.DialogManager.PostMessage (hotspot.Name, Vector2.Transform (
-					hotspot.Location + new Vector2(hotspot.Left, hotspot.Top) + new Vector2 (hotspot.Width / 2f, -10),
-					Camera.Transformation), TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
-
-			}
+			#region levelediting
+			/*//TODO: for level editor
+			if (Keyboard.GetState ().IsKeyDown (Keys.Space)) {
+				item.Location = target - new Vector2 (item.CollisionData.Width / 2f, item.CollisionData.Height / 2f);
+			} else if (Keyboard.GetState ().IsKeyDown (Keys.P)) {
+				Trace.WriteLine (string.Format ("new Vector2({0},{1})", item.Location.X, item.Location.Y));
+			}*/
+			#endregion
 		}
 
 		public override void Update(GameTime gameTime)
@@ -187,13 +179,14 @@ namespace GGJ2013.States
 			Items.ForEach (i => i.Update (gameTime));
 
 			Player.Update(gameTime);
-			Camera.CenterOnPoint(Player.Location.X, Background.Height /2f);
-			InventoryOpen.Location = Camera.Location + new Vector2(10, 5) + ((G.InventoryManager.IsShown)
-				                                                                 ? new Vector2(0,
-				                                                                               G.InventoryManager.Bounds.Bottom + 25)
-				                                                                 : Vector2.Zero);
+			G.DialogManager.Update (gameTime);
 
-			G.DialogManager.Update(gameTime);
+			Camera.CenterOnPoint (Player.Location.X, Background.Height/2f);
+
+			InventoryOpen.Location = Camera.Location + new Vector2(10, 5)
+				+ ((G.InventoryManager.IsShown)
+				? new Vector2 (0, G.InventoryManager.Bounds.Bottom + 25)
+				: Vector2.Zero);
 		}
 
 
@@ -203,23 +196,24 @@ namespace GGJ2013.States
 				return false;
 
 			var mouse = Mouse.GetState ();
-			var target = Camera.ScreenToWorld(new Vector2(mouse.X, mouse.Y));
-			var screen = new Vector2(mouse.X, mouse.Y);
+			var screenMouse = new Vector2 (mouse.X, mouse.Y);
+			var worldMouse = Camera.ScreenToWorld (new Vector2(mouse.X, mouse.Y));
 
+			// Grab inventory items
 			if (mouse.LeftButton == ButtonState.Pressed && WasReleased)
 			{
-				if(CollisionChecker.PointToPoly(screen, G.InventoryManager.Bounds)
-			    && G.InventoryManager.IsShown)
-					{
-						WasReleased = false;
+				if(CollisionChecker.PointToPoly(screenMouse, G.InventoryManager.Bounds)
+					&& G.InventoryManager.IsShown)
+				{
+					WasReleased = false;
 
-						var item = G.InventoryManager.SelectItemAt(screen);
-						if (item != null)
-							HeldItem = GameItem.ItemDictionary[item];
-					}
+					var item = G.InventoryManager.SelectItemAt(screenMouse);
+					if (item != null)
+						HeldItem = GameItem.ItemDictionary[item];
+				}
 			}
 
-			if (mouse.LeftButton.WasButtonRelease(_oldMouse.LeftButton))
+			if (mouse.LeftButton.WasButtonReleased (oldMouse.LeftButton))
 			{
 				WasReleased = true;
 				Player.Target = null;
@@ -231,7 +225,7 @@ namespace GGJ2013.States
 					Player.Location, node.Poly)).FirstOrDefault();
 
 				var targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
-					target, node.Poly)).FirstOrDefault();
+					worldMouse, node.Poly)).FirstOrDefault();
 
 				foreach (GameItem item in Items)
 				{
@@ -239,7 +233,7 @@ namespace GGJ2013.States
 						continue;
 
 					// Handle moving to and picking up items
-					if (CollisionChecker.PointToPoly(target, item.CollisionData))
+					if (CollisionChecker.PointToPoly(worldMouse, item.CollisionData))
 					{
 						// If the player is not near the item, set the item as the target
 						if (!CollisionChecker.PolyToPoly(Player.CollisionData, item.CollisionData)) {
@@ -254,9 +248,9 @@ namespace GGJ2013.States
 
 				// Handle inventory
 				if (G.InventoryManager.IsShown
-					&& CollisionChecker.PointToPoly(target, G.InventoryManager.Bounds))
+					&& CollisionChecker.PointToPoly(worldMouse, G.InventoryManager.Bounds))
 				{
-					var item  = G.InventoryManager.SelectItemAt(screen);
+					var item  = G.InventoryManager.SelectItemAt(screenMouse);
 					if (item != null)
 					{
 						if (HeldItem == null || HeldItem.Name == item)
@@ -273,10 +267,10 @@ namespace GGJ2013.States
 
 				foreach (var spot in Hotspots)
 				{
-					if (!spot.Enabled)
+					if (!spot.IsUsable)
 						continue;
 
-					bool hotSpotClicked = CollisionChecker.PointToPoly(target, spot);
+					bool hotSpotClicked = CollisionChecker.PointToPoly(worldMouse, spot);
 					if (hotSpotClicked)
 					{
 						if (!spot.EnforceDistance)
@@ -313,7 +307,7 @@ namespace GGJ2013.States
 						}
 						else
 						{
-							Player.MoveQueue.Enqueue(target);
+							Player.MoveQueue.Enqueue(worldMouse);
 						}
 					}
 					else
@@ -326,7 +320,7 @@ namespace GGJ2013.States
 						}
 						else
 						{
-							points = PathFinder.CalculatePath (Player.Location, target, Nav);
+							points = PathFinder.CalculatePath (Player.Location, worldMouse, Nav);
 						}
 						points.ForEach(v => Player.MoveQueue.Enqueue(v));
 					}
@@ -344,7 +338,7 @@ namespace GGJ2013.States
 			}
 
 			_oldKey = keystate;
-			_oldMouse = mouse;
+			oldMouse = mouse;
 			return base.HandleInput (gameTime);
 		}
 
@@ -352,7 +346,7 @@ namespace GGJ2013.States
 		public GameItem HeldItem;
 		public bool WasReleased = false;
 
-		protected MouseState _oldMouse;
+		protected MouseState oldMouse;
 		private KeyboardState _oldKey;
 		private Polygon _insideMesh;
 

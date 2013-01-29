@@ -121,11 +121,11 @@ namespace GGJ2013.States
 
 			Boulder.IsActive = false;
 			Boulder.CanPickup = false;
-			Boulder.MouseHover = false;
+			Boulder.IsMouseHover = false;
 
 			Machete.IsActive = false;
 			Machete.CanPickup = false;
-			Machete.MouseHover = false;
+			Machete.IsMouseHover = false;
 
 			Backpack.IsActive = true;
 			Backpack.CanPickup = false;
@@ -133,7 +133,7 @@ namespace GGJ2013.States
 			Batteries.IsActive = false;
 			Batteries.CanPickup = false;
 			Batteries.IsVisible = false;
-			Batteries.MouseHover = false;
+			Batteries.IsMouseHover = false;
 
 			EmptyWineBottle.IsActive = false;
 			EmptyWineBottle.CanPickup = true;
@@ -145,7 +145,7 @@ namespace GGJ2013.States
 			Papers.IsActive = false;
 			Papers.CanPickup = false;
 			Papers.IsVisible = false;
-			Papers.MouseHover = false;
+			Papers.IsMouseHover = false;
 
 			FirepitLight = CreateSprite("CampArea/light map 1", 0, 0);
 			FirepitLight.IsVisible = false;
@@ -239,10 +239,10 @@ namespace GGJ2013.States
 				{
 					if (i != null && i.Name == "Bloody Broken Branch")
 					{
-						BoulderSpot.Enabled = false;
+						BoulderSpot.IsUsable = false;
 						Boulder.IsVisible = false;
 						Machete.IsActive = true;
-						Machete.MouseHover = true;
+						Machete.IsMouseHover = true;
 						Machete.CanPickup = true;
 
 						G.DialogManager.PostMessage ("You pried up the boulder with the branch", TimeSpan.Zero, new TimeSpan (0, 0, 3));
@@ -264,11 +264,11 @@ namespace GGJ2013.States
 				Batteries.IsActive = true;
 				Batteries.CanPickup = true;
 				Batteries.IsVisible = true;
-				Batteries.MouseHover = true;
+				Batteries.IsMouseHover = true;
 				Papers.IsActive = true;
 				Papers.CanPickup = true;
 				Papers.IsVisible = true;
-				Papers.MouseHover = true;
+				Papers.IsMouseHover = true;
 			};
 
 			GameItem.AddCraftingRecipie("Flashlight", "Batteries", () =>
