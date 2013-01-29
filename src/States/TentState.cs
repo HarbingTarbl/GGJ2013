@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GGJ2013.Collision;
-using GGJ2013.Items;
-using GGJ2013.States;
 using Jammy;
 using Jammy.Collision;
 using Jammy.Helpers;
 using Jammy.Sprites;
 using Jammy.StateManager;
+using Memory.Collision;
+using Memory.Items;
+using Memory.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace GGJ2013
+namespace Memory
 {
 	public class TentState
 		: MemoryState

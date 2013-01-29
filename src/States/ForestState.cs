@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GGJ2013.Collision;
-using GGJ2013.Items;
 using Jammy.Collision;
 using Jammy.Sprites;
+using Memory.Collision;
+using Memory.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Jammy.Helpers;
 using Microsoft.Xna.Framework.Input;
 
-namespace GGJ2013.States
+namespace Memory.States
 {
 	public class ForestState
 		: MemoryState

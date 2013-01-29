@@ -7,7 +7,7 @@ using System.Threading;
 using Jammy.Collision;
 using Microsoft.Xna.Framework;
 
-namespace GGJ2013.Collision
+namespace Memory.Collision
 {
 	public static class PathFinder
 	{

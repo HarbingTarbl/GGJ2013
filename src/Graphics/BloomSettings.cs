@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 #endregion
 
-namespace GGJ2013.Graphics
+namespace Memory.Graphics
 {
     /// <summary>
     /// Class holds all the settings used to tweak the bloom effect.

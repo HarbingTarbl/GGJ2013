@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GGJ2013.Items;
-using GGJ2013.States;
 using Jammy.Collision;
+using Memory.Items;
+using Memory.States;
 using Microsoft.Xna.Framework;
 
-namespace GGJ2013.Collision
+namespace Memory.Collision
 {
 	public class Hotspot
 		: Polygon, IInteractable

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using GGJ2013.Collision;
-using GGJ2013.Interface;
-using GGJ2013.Entities;
-using GGJ2013.Items;
+using Memory.Interface;
 using Jammy;
 using Jammy.Collision;
 using Jammy.Parallax;
 using Jammy.Helpers;
 using Jammy.Sprites;
 using Jammy.StateManager;
+using Memory.Collision;
+using Memory.Entities;
+using Memory.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace GGJ2013.States
+namespace Memory.States
 {
 	public class MemoryState
 		: BaseGameState

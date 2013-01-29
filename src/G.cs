@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GGJ2013.Collision;
-using GGJ2013.Entities;
-using GGJ2013.Graphics;
-using GGJ2013.Interface;
-using GGJ2013.Items;
-using GGJ2013.States;
+using Memory.Collision;
+using Memory.Items;
 using Jammy;
 using Jammy.Collision;
 using Jammy.Parallax;
 using Jammy.StateManager;
+using Memory.Entities;
+using Memory.Graphics;
+using Memory.Interface;
+using Memory.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -19,7 +19,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace GGJ2013
+namespace Memory
 {
 	public class G 
 		: Game

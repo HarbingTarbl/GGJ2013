@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using GGJ2013.Items;
 using Jammy.Collision;
 using Jammy.Sprites;
+using Memory.Items;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GGJ2013.Interface
+namespace Memory.Interface
 {
 	public class InventoryManager
 	{

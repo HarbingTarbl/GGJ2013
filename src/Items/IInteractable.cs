@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Jammy.Collision;
 
-namespace GGJ2013.Items
+namespace Memory.Items
 {
 	public interface IInteractable
 	{

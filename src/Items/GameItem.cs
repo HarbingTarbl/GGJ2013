@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using GGJ2013.States;
 using Jammy.Collision;
 using Jammy.Sprites;
+using Memory.States;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GGJ2013.Items
+namespace Memory.Items
 {
 	public class GameItem
 		: Sprite, IInteractable

@@ -3,65 +3,62 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using GGJ2013.Collision;
-using GGJ2013.Items;
-using GGJ2013.States;
 using Jammy.Collision;
 using Jammy.Sprites;
+using Memory.Collision;
+using Memory.Items;
+using Memory.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GGJ2013.Entities
+namespace Memory.Entities
 {
 	public class Player
 		: AnimatedSprite
 	{
-		public Player()
-			: base(G.C.Load<Texture2D>("character"),
-			       new[]
-			       {
-				       new Animation("Idle",
-							new []
-							{
-								new Rectangle(0, 0, 250, 500),
-								new Rectangle(250, 0, 250, 500),
-								new Rectangle(500, 0, 250, 500),
-								new Rectangle(750, 0, 250, 500)
-							}, Looping:false),
+		public Player() : base (
+				G.C.Load<Texture2D>("character"),
+				new[]
+				{
+					new Animation("Idle",
+						new []
+						{
+							new Rectangle(0, 0, 250, 500),
+							new Rectangle(250, 0, 250, 500),
+							new Rectangle(500, 0, 250, 500),
+							new Rectangle(750, 0, 250, 500)
+						}, Looping:false),
 					   
-					   new Animation("Walk",
-							new[]
-							{
-								new Rectangle(0, 500, 250, 500),
-								new Rectangle(250, 500, 250, 500),
-								new Rectangle(500, 500, 250, 500),
-								new Rectangle(750, 500, 250, 500),
-								new Rectangle(1000, 500, 250, 500),
-								new Rectangle(1250, 500, 250, 500),
-								new Rectangle(1500, 500, 250, 500),
-								new Rectangle(1750, 500, 250, 500),
-							}),
-						new Animation("Pick Up",
-							new []
-							{
-								new Rectangle(0, 1000, 250, 500),
-								new Rectangle(250, 1000, 250, 500),
-								new Rectangle(500, 1000, 250, 500),
-								new Rectangle(500, 1000, 250, 500),
-								new Rectangle(250, 1000, 250, 500),
-								new Rectangle(0, 1000, 250, 500),
-							}, Looping:false) { NextAnim = "Idle" }
-			       })
+					new Animation("Walk",
+						new[]
+						{
+							new Rectangle(0, 500, 250, 500),
+							new Rectangle(250, 500, 250, 500),
+							new Rectangle(500, 500, 250, 500),
+							new Rectangle(750, 500, 250, 500),
+							new Rectangle(1000, 500, 250, 500),
+							new Rectangle(1250, 500, 250, 500),
+							new Rectangle(1500, 500, 250, 500),
+							new Rectangle(1750, 500, 250, 500),
+						}),
+					new Animation("Pick Up",
+						new []
+						{
+							new Rectangle(0, 1000, 250, 500),
+							new Rectangle(250, 1000, 250, 500),
+							new Rectangle(500, 1000, 250, 500),
+							new Rectangle(500, 1000, 250, 500),
+							new Rectangle(250, 1000, 250, 500),
+							new Rectangle(0, 1000, 250, 500),
+						}, Looping:false) { NextAnim = "Idle" }
+				})
 		{
 			_IHateRectangles.Width = 125;
 			_IHateRectangles.Height = 250;
 
-
-
 			Origin = new Vector2(125, 500);
 			AnimationManager.SetAnimation("Idle");
 			CollisionData = new Rectagon(0, 0, 100, 250);
-
 		}
 
 		public Queue<Vector2> MoveQueue = new Queue<Vector2>();

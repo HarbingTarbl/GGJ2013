@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 #endregion
 
-namespace GGJ2013.Graphics
+namespace Memory.Graphics
 {
     public class BloomComponent 
     {

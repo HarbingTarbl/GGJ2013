@@ -5,7 +5,7 @@ using System.Text;
 using Jammy.Collision;
 using Microsoft.Xna.Framework;
 
-namespace GGJ2013
+namespace Memory
 {
 	public class Pathfinder
 	{
