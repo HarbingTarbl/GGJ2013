@@ -155,7 +155,7 @@ namespace GGJ2013.States
 				new Vector2(1552, 638)),
 				(t, i) =>
 				{
-				}) { WalkLocation = new Vector2 (170, 279) };
+				});
 
 			ShrubSpot = new Hotspot (
 				"Chop down thorny bushes",
