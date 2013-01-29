@@ -18,8 +18,6 @@ namespace GGJ2013.States
 		public ForestState()
 			: base("Forest", "Camp", "Camp")
 		{
-			Background = G.C.Load<Texture2D>("ForestArea/background");
-
 			#region Nav Mesh
 			var p1 = new Polygon(
 				new Vector2(111, 233),
@@ -81,7 +79,9 @@ namespace GGJ2013.States
 			};
 			#endregion
 
-			
+			Background = G.C.Load<Texture2D> ("ForestArea/background");
+			Foreground = G.C.Load<Texture2D> ("ForestArea/foreground");
+
 			light = new RenderTarget2D(G.Graphics.GraphicsDevice, G.SCREEN_WIDTH, G.SCREEN_HEIGHT, false, SurfaceFormat.Color,
 			                           DepthFormat.None);
 			Flashlight = CreateSprite("ForestArea/flashlight_beam");
@@ -93,9 +93,6 @@ namespace GGJ2013.States
 
 			pixel = new Texture2D(G.Graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
 			pixel.SetData<Color>(new Color[] {Color.White});
-
-			//Shoe = CreateItem("Shoe");
-			Foreground = CreateSprite ("ForestArea/foreground");
 
 			Shoe = CreateItem ("Sarah's Shoe", "", "ForestArea/shoe", "UI/Icons/shoe", 326, 467,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
