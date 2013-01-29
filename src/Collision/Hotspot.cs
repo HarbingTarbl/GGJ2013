@@ -38,6 +38,5 @@ namespace GGJ2013.Collision
 			if (handler != null)
 				Activated(state, draggedItem);
 		}
-
 	}
 }

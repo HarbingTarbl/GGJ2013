@@ -69,6 +69,6 @@ namespace GGJ2013.Items
 			if (handler != null)
 				handler(ugh);
 
-		}
+		}	
 	}
 }

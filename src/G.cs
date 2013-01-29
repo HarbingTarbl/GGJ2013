@@ -91,6 +91,16 @@ namespace GGJ2013
 			BloomRenderer.UnloadContent();
 		}
 
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear (Color.Black);
+			StateManager.Draw (SpriteBatch);
+			FadeOut.Draw (SpriteBatch);
+			FadeIn.Draw (SpriteBatch);
+
+			base.Draw (gameTime);
+		}
+
 		protected override void Update(GameTime gameTime)
 		{
 			StateManager.Update(gameTime);
@@ -98,17 +108,6 @@ namespace GGJ2013
 			FadeIn.Update (gameTime);
 
 			base.Update(gameTime);
-		}
-
-		protected override void Draw(GameTime gameTime)
-		{
-			GraphicsDevice.Clear (Color.Black);
-			StateManager.Draw (SpriteBatch);
-
-			FadeOut.Draw (SpriteBatch);
-			FadeIn.Draw (SpriteBatch);
-
-			base.Draw(gameTime);
 		}
 	}
 }

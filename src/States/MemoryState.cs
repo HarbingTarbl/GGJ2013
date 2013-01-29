@@ -35,19 +35,24 @@ namespace GGJ2013.States
 
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 
-			InventoryOpen = new Hotspot( //Replace with Sprite
+			InventoryOpen = new Hotspot(
 				"Open Inventory",
 				new Rectagon(10, 5, 18, 55),
 				(t,i) =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
-					InventoryOpen.Rotation = G.InventoryManager.IsShown ? -MathHelper.PiOver2 : MathHelper.PiOver2;
+
+					InventoryOpen.Rotation = G.InventoryManager.IsShown ?
+						-MathHelper.PiOver2
+						: MathHelper.PiOver2;
 
 					InventoryOpen.Location.Y += G.InventoryManager.IsShown
-						                            ? G.InventoryManager.Bounds.Bottom + 25
-						                            : -G.InventoryManager.Bounds.Bottom - 25;
+						? G.InventoryManager.Bounds.Bottom + 25
+						: -G.InventoryManager.Bounds.Bottom - 25;
 
-					InventoryOpen.Name = G.InventoryManager.IsShown ? "Close Inventory" : "Open Inventory";
+					InventoryOpen.Name = G.InventoryManager.IsShown
+						? "Close Inventory"
+						: "Open Inventory";
 
 				}) {EnforceDistance = false};
 
@@ -168,7 +173,6 @@ namespace GGJ2013.States
 		public override void Update(GameTime gameTime)
 		{
 			Items.ForEach (i => i.Update (gameTime));
-
 			Player.Update(gameTime);
 			G.DialogManager.Update (gameTime);
 
@@ -183,6 +187,7 @@ namespace GGJ2013.States
 
 		public override bool HandleInput(GameTime gameTime)
 		{
+			// Window not focused, ignore
 			if (!G.Active)
 				return false;
 
@@ -210,7 +215,7 @@ namespace GGJ2013.States
 				Player.Target = null;
 
 				//TODO: take out later
-				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", target.X, target.Y));
+				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", worldMouse.X, worldMouse.Y));
 
 				var myPoly = Nav.Where(node => CollisionChecker.PointToPoly(
 					Player.Location, node.Poly)).FirstOrDefault();
