@@ -193,6 +193,7 @@ namespace Memory.States
 				    }
 				    else
 				    {
+					    SoundWrapper.PlayDialog ("Too Dark");
 					    G.DialogManager.PostQueuedMessage("It's too dark, maybe if I had a flashlight or something.", new TimeSpan (0, 0, 3));
 				    }
 				}) { WalkLocation = new Vector2 (1170, 298) };
@@ -242,8 +243,8 @@ namespace Memory.States
 				{
 					if (i != null && i.Name == "Bloody Broken Branch")
 					{
+						Boulder.Location.X -= 50;
 						BoulderSpot.IsUsable = false;
-						Boulder.IsVisible = false;
 						Machete.IsActive = true;
 						Machete.IsMouseHover = true;
 						Machete.CanPickup = true;
@@ -257,10 +258,14 @@ namespace Memory.States
 					}
 					else
 					{
+						SoundWrapper.PlayDialog ("Rock");
 						G.DialogManager.PostMessage ("I need something strong to pry this up", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 					}
 				}) { WalkLocation = new Vector2(606, 470) };
 			#endregion
+
+			Batteries.OnClick += s => SoundWrapper.PlayDialog ("Batteries");
+			Papers.OnClick += s => SoundWrapper.PlayDialog ("Letter");
 
 			Backpack.OnClick += state =>
 			{
@@ -342,6 +347,8 @@ namespace Memory.States
 		public AnimatedSprite FirepitAnimation;
 		public AnimatedSprite FliesAnimation;
 
+		private bool firstTime = true;
+
 		protected override void DrawBottomLayer (SpriteBatch batch)
 		{
 			FliesAnimation.Draw (batch);
@@ -366,6 +373,10 @@ namespace Memory.States
 					MediaPlayer.Play (G.C.Load<Song> ("sfx/Chirping"));
 					MediaPlayer.Volume = 0.25f;
 					MediaPlayer.IsRepeating = true;
+					if (firstTime) {
+						SoundWrapper.PlayDialog ("Remember");
+						firstTime = false;
+					}
 					break;
 				case "Forest":
 					Player.Location = new Vector2 (1177, 359);

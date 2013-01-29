@@ -77,10 +77,9 @@ namespace Memory
 				G.C.Load<SoundEffect> ("sfx/Blanket").Play();
 			};
 
-			Sweater.OnClick += t =>
-			{
-				G.C.Load<SoundEffect> ("sfx/Sweater").Play();
-			};
+			Sweater.OnClick += s => G.C.Load<SoundEffect> ("sfx/Sweater").Play();
+			Matches.OnClick += s => SoundWrapper.PlayDialog ("Matches");
+			Flash.OnClick += s => SoundWrapper.PlayDialog ("Flashlight");
 
 			Matches.IsActive = false;
 			Matches.IsVisible = false;
@@ -133,6 +132,7 @@ namespace Memory
 						}
 						else
 						{
+							SoundWrapper.PlayDialog ("Cold and Dark");
 							G.DialogManager.PostMessage ("I should put on some clothes... and grab my flashlight.", TimeSpan.Zero, new TimeSpan (0, 0, 5));
 						}
 					}) { WalkLocation = new Vector2(706, 486)};
@@ -152,8 +152,8 @@ namespace Memory
 				if (light2.IsVisible)
 					return;
 
+				G.C.Load<SoundEffect> ("sfx/Lantern").Play();
 				Player.AnimationManager.SetAnimation ("Wake Up");
-				G.C.Load<SoundEffect> ("sfx/Lantern").Play ();
 				LanternSpot.Name = "Lit Lantern";
 				light1.IsVisible = false;
 				light2.IsVisible = true;
@@ -202,6 +202,7 @@ namespace Memory
 			switch (lastScreen)
 			{
 				case "None":
+					SoundWrapper.PlayDialog ("Intro");
 					Player.Location = new Vector2 (440, 495);
 					break;
 				case "Camp":

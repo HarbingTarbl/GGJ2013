@@ -114,6 +114,8 @@ namespace Memory.States
 			CoverBrush3 = CreateItem ("CB13", "", "ForestArea/coverbush", "UI/Icons/papers", 1666, 493,
 				new Rectagon (0, 0, 53, 35).Vertices.ToArray ());
 
+			Branch.OnClick += s => SoundWrapper.PlayDialog ("Bloody Branch");
+
 			Shoe.IsActive = true;
 			Shoe.CanPickup = true;
 
@@ -127,6 +129,21 @@ namespace Memory.States
 			CoverBrush1.IsActive = false;
 			CoverBrush2.IsActive = false;
 			CoverBrush3.IsActive = false;
+
+			var exitidle = new Animation ("Idle",
+			   new[]
+				{
+					new Rectangle(0, 0, 200, 200),
+					new Rectangle(200, 0, 200, 200),
+					new Rectangle(400, 0, 200, 200),
+					new Rectangle(600, 0, 200, 200),
+					new Rectangle(800, 0, 200, 200)
+				}, Looping: true);
+			ExitLight = new AnimatedSprite (G.C.Load<Texture2D> ("ForestArea/exit_animation"), new[] { exitidle });
+			ExitLight._IHateRectangles = new Rectangle (0, 0, 200, 200);
+			ExitLight.IsVisible = true;
+			ExitLight.Location = new Vector2 (0, 0);
+			ExitLight.AnimationManager.SetAnimation ("Idle");
 
 			ForestExit = new Hotspot (
 				"Tent Entrance",
@@ -189,21 +206,6 @@ namespace Memory.States
 						G.DialogManager.PostMessage ("I need something to chop these bushes down", TimeSpan.Zero, new TimeSpan (0, 0, 3));
 					}
 				});
-
-			var exitidle = new Animation ("Idle",
-			   new[]
-				{
-					new Rectangle(0, 0, 200, 200),
-					new Rectangle(200, 0, 200, 200),
-					new Rectangle(400, 0, 200, 200),
-					new Rectangle(600, 0, 200, 200),
-					new Rectangle(800, 0, 200, 200)
-				}, Looping: true);
-			ExitLight = new AnimatedSprite (G.C.Load<Texture2D> ("ForestArea/exit_animation"), new [] { exitidle});
-			ExitLight._IHateRectangles = new Rectangle (0, 0, 200, 200);
-			ExitLight.IsVisible = true;
-			ExitLight.Location = new Vector2 (0, 0);
-			ExitLight.AnimationManager.SetAnimation ("Idle");
 
 			SarahSpot.IsUsable = false;
 			ShrubSpot.IsUsable = true;
@@ -296,9 +298,16 @@ namespace Memory.States
 		protected override void OnLevelStart(string lastScreen)
 		{
 			Player.Location = new Vector2 (101, 249);
+
+			if (firstTime)
+			{
+				SoundWrapper.PlayDialog ("Enter Woods");
+				firstTime = false;
+			}
 		}
 
 		private RenderTarget2D light;
 		private Texture2D pixel;
+		private bool firstTime = true;
 	}
 }
