@@ -42,11 +42,14 @@ namespace GGJ2013
 		public static Player Player;
 		public static bool Active;
 
+		public static SpriteFont DialogFont;
+		public static SpriteFont HoverFont;
+
 		public static ColorTransition FadeOut;
 		public static ColorTransition FadeIn;
 
-		public static readonly int SCREEN_WIDTH = 1280;
-		public static readonly int SCREEN_HEIGHT = 720;
+		public const int SCREEN_WIDTH = 1280;
+		public const int SCREEN_HEIGHT = 720;
 
 		protected override void LoadContent()
 		{
@@ -66,10 +69,14 @@ namespace GGJ2013
 			BloomRenderer.LoadContent();
 			InventoryManager = new InventoryManager();
 
+			DialogFont = C.Load<SpriteFont> ("fonts/debug");
+			HoverFont = C.Load<SpriteFont> ("fonts/debug");
+
+
 			DialogManager = new DialogManager
 			{
-				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, G.SCREEN_WIDTH, 300),
-				Font = G.C.Load<SpriteFont>("fonts/debug"),
+				MessageBounds = new Rectangle(15, 15 + (int)InventoryManager.Bounds.Bottom, SCREEN_WIDTH, 300),
+				Font = DialogFont,
 			};
 
 			Player = new Player();

@@ -12,7 +12,6 @@ namespace GGJ2013.Interface
 		public DialogManager()
 		{
 			MessageQueue = new List<Message>();
-			
 		}
 
 		public void Update(GameTime gameTime)
@@ -32,9 +31,7 @@ namespace GGJ2013.Interface
 						i--;
 					}
 				}
-			}
-
-			
+			}	
 		}
 
 		public void Draw(SpriteBatch batch)
@@ -97,10 +94,7 @@ namespace GGJ2013.Interface
 			msg.Lines = SplitString(message, msg.Width);
 			msg.Height = msg.Lines.Length*(LinePadding + strMeasure.Y);
 
-		
 			MessageQueue.Add(msg);
-
-
 			MessageQueue.Sort();
 		}
 

@@ -35,36 +35,39 @@ namespace GGJ2013.States
 
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 
-			InventoryOpen = new Hotspot(
+			InventoryButton = new Hotspot(
 				"Open Inventory",
 				new Rectagon(10, 5, 18, 55),
 				(t,i) =>
 				{
 					G.InventoryManager.IsShown = !G.InventoryManager.IsShown;
 
-					InventoryOpen.Rotation = G.InventoryManager.IsShown ?
+					InventoryButton.Rotation = G.InventoryManager.IsShown ?
 						-MathHelper.PiOver2
 						: MathHelper.PiOver2;
 
-					InventoryOpen.Location.Y += G.InventoryManager.IsShown
+					InventoryButton.Location.Y += G.InventoryManager.IsShown
 						? G.InventoryManager.Bounds.Bottom + 25
 						: -G.InventoryManager.Bounds.Bottom - 25;
 
-					InventoryOpen.Name = G.InventoryManager.IsShown
+					InventoryButton.Name = G.InventoryManager.IsShown
 						? "Close Inventory"
 						: "Open Inventory";
 
 				}) {EnforceDistance = false};
 
-			Hotspots.Add(InventoryOpen);
+			Hotspots.Add (InventoryButton);
 		}
 
 		public GameItem HeldItem;
 
 		protected Player Player;
 		private CameraSingle Camera;
-		private Hotspot InventoryOpen;
-		private bool WasReleased = false;
+		private Hotspot InventoryButton;
+
+		private bool WasReleased;
+		private string hoverString;
+		private Vector2 hoverLocation;
 
 		protected Texture2D Background;
 		protected Texture2D Foreground;
@@ -116,8 +119,16 @@ namespace GGJ2013.States
 			DrawTopLayer (batch);
 
 			G.InventoryManager.Draw(batch);
-			ShowItemHint();
 			G.DialogManager.Draw(batch);
+
+			if (!String.IsNullOrEmpty (hoverString))
+			{
+				var drawDest = new Vector2 (0, G.SCREEN_HEIGHT - G.HoverFont.LineSpacing);
+
+				BeginDraw (batch, BlendState.NonPremultiplied, false);
+				batch.DrawString (G.HoverFont, hoverString, hoverLocation, Color.White);
+				batch.End();
+			}
 
 			if (HeldItem != null && !WasReleased)
 			{
@@ -135,9 +146,24 @@ namespace GGJ2013.States
 				DrawDebug();
 		}
 
-		private void ShowItemHint()
+		public override void Update(GameTime gameTime)
 		{
-			var mouse = Mouse.GetState();
+			Items.ForEach (i => i.Update (gameTime));
+			Player.Update(gameTime);
+			G.DialogManager.Update (gameTime);
+			UpdateItemHint();
+
+			Camera.CenterOnPoint (Player.Location.X, Background.Height/2f);
+
+			InventoryButton.Location = Camera.Location + new Vector2(10, 5)
+				+ ((G.InventoryManager.IsShown)
+				? new Vector2 (0, G.InventoryManager.Bounds.Bottom + 25)
+				: Vector2.Zero);
+		}
+
+		private void UpdateItemHint()
+		{
+			var mouse = Mouse.GetState ();
 			var worldMouse = Camera.ScreenToWorld (new Vector2 (mouse.X, mouse.Y));
 
 			foreach (var i in Hotspots.Concat<IInteractable> (Items))
@@ -149,33 +175,23 @@ namespace GGJ2013.States
 					+ new Vector2 (i.Region.Left, i.Region.Top)
 					+ new Vector2 (i.Region.Width / 2f, -10);
 
-				var worldLoc = Vector2.Transform (msgLoc, Camera.Transformation);
-
-				G.DialogManager.PostMessage (i.Name, worldLoc, TimeSpan.Zero, TimeSpan.Zero, Color.Gray);
+				hoverString = i.Name;
+				hoverLocation = Camera.ScreenToWorld (msgLoc);
 				return;
 			}
+
+			hoverString = "";
+
 			#region levelediting
+
 			/*//TODO: for level editor
 			if (Keyboard.GetState ().IsKeyDown (Keys.Space)) {
 				item.Location = target - new Vector2 (item.CollisionData.Width / 2f, item.CollisionData.Height / 2f);
 			} else if (Keyboard.GetState ().IsKeyDown (Keys.P)) {
 				Trace.WriteLine (string.Format ("new Vector2({0},{1})", item.Location.X, item.Location.Y));
 			}*/
+
 			#endregion
-		}
-
-		public override void Update(GameTime gameTime)
-		{
-			Items.ForEach (i => i.Update (gameTime));
-			Player.Update(gameTime);
-			G.DialogManager.Update (gameTime);
-
-			Camera.CenterOnPoint (Player.Location.X, Background.Height/2f);
-
-			InventoryOpen.Location = Camera.Location + new Vector2(10, 5)
-				+ ((G.InventoryManager.IsShown)
-				? new Vector2 (0, G.InventoryManager.Bounds.Bottom + 25)
-				: Vector2.Zero);
 		}
 
 		public override bool HandleInput(GameTime gameTime)
