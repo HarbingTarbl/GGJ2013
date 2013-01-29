@@ -96,7 +96,6 @@ namespace GGJ2013.Entities
 						if (TargerIsItem)
 						{
 							state.OnItemFound((GameItem) Target);
-							Trace.WriteLine(((GameItem) Target).Location);
 						}
 						else
 							((Hotspot) Target).OnActivate(state, state.HeldItem);
@@ -141,7 +140,7 @@ namespace GGJ2013.Entities
 		public object Target;
 		public bool TargerIsItem;
 
-		private const float SPEED = 1500;//120; // pixel/sec
+		private const float SPEED = 280; // pixel/sec
 		private bool hasTarget;
 		private bool frozen = false;
 		private float moveTime;

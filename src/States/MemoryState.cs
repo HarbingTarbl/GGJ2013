@@ -365,7 +365,6 @@ namespace GGJ2013.States
 				Player.AnimationManager.SetAnimation("Pick Up");
 			}
 
-
 			if (ItemsToLeave.Contains(item.Name)) {
 				ItemsToLeave.Remove(item.Name);
 			}

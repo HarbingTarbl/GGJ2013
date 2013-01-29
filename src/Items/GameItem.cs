@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GGJ2013.States;
@@ -53,6 +54,7 @@ namespace GGJ2013.Items
 
 		public void Clicked(MemoryState ugh)
 		{
+			Trace.WriteLine ("Found clicked " + Name);
 			IsFound = true;
 
 			var handler = OnClick;
