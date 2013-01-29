@@ -16,7 +16,7 @@ namespace GGJ2013.States
 		: MemoryState
 	{
 		public ForestState()
-			: base("Forest", "Camp", "Camp")
+			: base("Forest")
 		{
 			#region Nav Mesh
 			var p1 = new Polygon(

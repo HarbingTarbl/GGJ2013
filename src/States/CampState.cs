@@ -17,7 +17,7 @@ namespace GGJ2013.States
 		: MemoryState
 	{
 		public CampState()
-			: base("Camp", "Forest", "Tent")
+			: base("Camp")
 		{
 			#region NavMesh
 

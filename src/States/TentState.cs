@@ -22,7 +22,7 @@ namespace GGJ2013
 		: MemoryState
 	{
 		public TentState()
-			: base ("Tent", "Camp", "None")
+			: base ("Tent")
 		{
 			Background = G.C.Load<Texture2D> ("TentArea/background");
 			#region NavMesh
@@ -121,7 +121,7 @@ namespace GGJ2013
 							G.FadeOut.Finished = () => {
 								G.FadeOut.Reset();
 								G.LastScreen = "Tent";
-								G.StateManager.Set (NextLevel);
+								G.StateManager.Set ("Camp");
 								G.FadeIn.TriggerStart();
 							};
 							G.FadeOut.TriggerStart();

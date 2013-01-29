@@ -22,7 +22,7 @@ namespace GGJ2013.States
 	public class MemoryState
 		: BaseGameState
 	{
-		public MemoryState(string name, string next, string prev)
+		public MemoryState(string name)
 			: base(name)
 		{
 			Player = G.Player;
@@ -33,8 +33,6 @@ namespace GGJ2013.States
 			ItemsToRemember = new List<string>();
 			Lights = new List<Sprite>();
 
-			NextLevel = next;
-			LastLevel = prev;
 			Camera = new CameraSingle (G.SCREEN_WIDTH, G.SCREEN_HEIGHT);
 
 			InventoryOpen = new Hotspot( //Replace with Sprite
@@ -73,13 +71,6 @@ namespace GGJ2013.States
 		public List<string> ItemsToRemember;
 		public bool IsLevelComplete;
 		public bool CanLeaveLevel;
-		public MemoryItem Reward;
-
-		public string NextLevel;
-		public string LastLevel;
-
-		public string CurrentItem;
-		public string LastItem;
 
 		protected virtual void OnLevelStart (string LastScreen)
 		{
