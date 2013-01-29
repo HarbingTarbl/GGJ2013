@@ -59,33 +59,33 @@ namespace GGJ2013.States
 			Hotspots.Add(InventoryOpen);
 		}
 
-		public Player Player;
-		public CameraSingle Camera;
-		public Hotspot InventoryOpen;
+		public GameItem HeldItem;
 
-		public Texture2D Background;
-		public Texture2D Foreground; 
-		public List<GameItem> Items;
-		public List<Hotspot> Hotspots;
-		public List<PolyNode> Nav;
-		public List<Sprite> Lights;
+		protected Player Player;
+		private CameraSingle Camera;
+		private Hotspot InventoryOpen;
+		private bool WasReleased = false;
+
+		protected Texture2D Background;
+		protected Texture2D Foreground;
+		protected List<GameItem> Items;
+		protected List<Hotspot> Hotspots;
+		protected List<PolyNode> Nav;
+		protected List<Sprite> Lights;
 
 		// I want to get rid of this whole chunk so bad
-		public List<string> ItemsToLeave;
-		public List<string> ItemsToRemember;
-		public bool IsLevelComplete;
-		public bool CanLeaveLevel;
+		protected List<string> ItemsToLeave;
+		private List<string> ItemsToRemember;
+		private bool IsLevelComplete;
+		protected bool CanLeaveLevel;
 
-		protected virtual void OnLevelStart (string LastScreen)
-		{
-			// Show the inventory on the first screen?
-			if (LastScreen != null) {
-				G.InventoryManager.IsShown = false;
-			}
-		}
-		protected virtual void OnLevelComplete()
-		{
-		}
+		private MouseState oldMouse;
+		private KeyboardState oldKey;
+
+		protected virtual void OnLevelStart (string lastScreen) { }
+		protected virtual void OnLevelComplete() { }
+		protected virtual void DrawBottomLayer(SpriteBatch batch) { }
+		protected virtual void DrawTopLayer(SpriteBatch batch) { }
 
 		public override void OnFocus()
 		{
@@ -135,14 +135,6 @@ namespace GGJ2013.States
 				DrawDebug();
 		}
 
-		protected virtual void DrawBottomLayer (SpriteBatch batch)
-		{
-		}
-
-		protected virtual void DrawTopLayer (SpriteBatch batch)
-		{
-		}
-
 		private void ShowItemHint()
 		{
 			var mouse = Mouse.GetState();
@@ -186,7 +178,6 @@ namespace GGJ2013.States
 				: Vector2.Zero);
 		}
 
-
 		public override bool HandleInput(GameTime gameTime)
 		{
 			// Window not focused, ignore
@@ -219,11 +210,11 @@ namespace GGJ2013.States
 				//TODO: take out later
 				Trace.WriteLine(String.Format("new Vector2({0}, {1}),", worldMouse.X, worldMouse.Y));
 
-				var myPoly = Nav.Where(node => CollisionChecker.PointToPoly(
-					Player.Location, node.Poly)).FirstOrDefault();
+				var myPoly = Nav.FirstOrDefault (node => CollisionChecker.PointToPoly(
+					Player.Location, node.Poly));
 
-				var targetPoly = Nav.Where(node => CollisionChecker.PointToPoly(
-					worldMouse, node.Poly)).FirstOrDefault();
+				var targetPoly = Nav.FirstOrDefault(node => CollisionChecker.PointToPoly(
+					worldMouse, node.Poly));
 
 				foreach (GameItem item in Items)
 				{
@@ -330,23 +321,15 @@ namespace GGJ2013.States
 										   (keystate.IsKeyDown (Keys.S) ? 10 : 0 - (keystate.IsKeyDown (Keys.W) ? 10 : 0)));
 
 			if (keystate.IsKeyDown (Keys.F1)
-				&& _oldKey.IsKeyUp (Keys.F1))
+				&& oldKey.IsKeyUp (Keys.F1))
 			{
 				G.DebugCollision = !G.DebugCollision;
 			}
 
-			_oldKey = keystate;
+			oldKey = keystate;
 			oldMouse = mouse;
 			return base.HandleInput (gameTime);
 		}
-
-
-		public GameItem HeldItem;
-		public bool WasReleased = false;
-
-		protected MouseState oldMouse;
-		private KeyboardState _oldKey;
-		private Polygon _insideMesh;
 
 		public void OnItemFound (GameItem item)
 		{

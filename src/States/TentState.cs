@@ -187,10 +187,10 @@ namespace GGJ2013
 		public Hotspot Exit;
 		public Hotspot Bag;
 
-		protected override void OnLevelStart (string LastScreen)
+		protected override void OnLevelStart (string lastScreen)
 		{
 			MediaPlayer.Stop();
-			switch (LastScreen)
+			switch (lastScreen)
 			{
 				case "None":
 					G.Player.Location = new Vector2 (440, 495);
@@ -201,9 +201,9 @@ namespace GGJ2013
 					MediaPlayer.Volume = 0.25f;
 					MediaPlayer.IsRepeating = true;
 					break;
+			}
 
-
-			}		
+			base.OnLevelStart (lastScreen);
 		}
 	}
 }

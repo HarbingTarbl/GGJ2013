@@ -9,6 +9,7 @@ using Jammy.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Jammy.Helpers;
+using Microsoft.Xna.Framework.Input;
 
 namespace GGJ2013.States
 {
@@ -268,9 +269,10 @@ namespace GGJ2013.States
 
 		public override bool HandleInput(GameTime gameTime)
 		{
-			Flashlight.Location = new Vector2(oldMouse.X, oldMouse.Y);
+			var mouse = Mouse.GetState();
+			Flashlight.Location = new Vector2(mouse.X, mouse.Y);
+			
 			return base.HandleInput(gameTime);
-
 		}
 
 		public AnimatedSprite ExitLight;
@@ -291,7 +293,7 @@ namespace GGJ2013.States
 		public Hotspot Bush;
 		public Hotspot TreeBranch;
 
-		protected override void OnLevelStart(string LastScreen)
+		protected override void OnLevelStart(string lastScreen)
 		{
 			Player.Location = new Vector2 (101, 249);
 		}

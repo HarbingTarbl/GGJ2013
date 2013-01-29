@@ -353,9 +353,9 @@ namespace GGJ2013.States
 			FliesAnimation.Update (gameTime);
 		}
 
-		protected override void OnLevelStart (string LastScreen)
+		protected override void OnLevelStart (string lastScreen)
 		{
-			switch (LastScreen)
+			switch (lastScreen)
 			{
 				case null:
 				case "None":
